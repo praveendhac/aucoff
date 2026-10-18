@@ -3,7 +3,7 @@
 | Field | Value |
 |-------|-------|
 | Status | Approved (v1 baseline, owner sign-off 2026-10-19) |
-| Version | 0.7.0 |
+| Version | 0.8.0 |
 | Owner | Praveen Darshanam |
 | Last updated | 2026-10-19 |
 
@@ -168,3 +168,8 @@ frontend/
 - Shell (`src/components/shell/`): collapsible sidebar (deep blue in both themes), top bar (tenant, disabled search placeholder, theme toggle, sign out), breadcrumbs and page header, right-hand detail drawer. Navigation is filtered by the roles in the session (`src/lib/nav.ts`); items not built yet are shown disabled with a "Soon" tag. Hiding is cosmetic; the API enforces access.
 - Dashboard (`/`): loads `/bff/dashboards/posture` in the browser (no token in client code). Hero cards for posture score and coverage, plain cards for findings, approvals and evidence freshness; control status bar and list; severity table (latest vs the two previous scans) with arrow, signed number and the word better/worse; coverage bars with `progressbar` semantics. Every status and severity has an icon and a label. A banner states when the data is synthetic.
 - Charts are hand-written SVG/CSS; no chart library has been added yet (decision still open for the trend charts).
+
+## Implementation status: list screens (Build Session 7, 2026-10-19)
+
+- `/controls` (real catalogue; empty until controls are authored), `/findings` and `/evidence` (synthetic, labelled "Demo data"). Each uses the shared `ListView`: `useCursorList` loads `/bff/<path>?limit=25` and "Load more" follows `next_cursor`; select filters (two at most) reload the list; client-side column sorting with `aria-sort`; comfortable/compact row density remembered in `localStorage` (try/catch); row opens the right-hand detail drawer (Escape closes); empty, loading, error and 403 states.
+- Sorting covers the rows loaded so far. Server-side sorting, saved views and bulk actions are not built.

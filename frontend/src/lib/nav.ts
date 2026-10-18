@@ -36,7 +36,7 @@ export const NAV: NavItem[] = [
     href: "/controls",
     icon: "ShieldCheck",
     roles: [...ALL_CONTENT, "engineer", "auditor"],
-    available: false,
+    available: true,
   },
   {
     key: "findings",
@@ -44,7 +44,7 @@ export const NAV: NavItem[] = [
     href: "/findings",
     icon: "Bug",
     roles: [...ALL_CONTENT, "engineer"],
-    available: false,
+    available: true,
   },
   {
     key: "evidence",
@@ -52,7 +52,7 @@ export const NAV: NavItem[] = [
     href: "/evidence",
     icon: "FileSearch",
     roles: [...ALL_CONTENT, "engineer", "auditor"],
-    available: false,
+    available: true,
   },
   {
     key: "questionnaires",

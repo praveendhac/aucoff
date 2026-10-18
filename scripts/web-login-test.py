@@ -23,6 +23,9 @@ ca = sys.argv[1]
 USER = sys.argv[2] if len(sys.argv) > 2 else "dev.admin"
 EXPECT_HEALTH = int(sys.argv[3]) if len(sys.argv) > 3 else 200
 EXPECT_DASH = int(sys.argv[4]) if len(sys.argv) > 4 else 200
+# finding:write -> compliance_officer, ciso, engineer; evidence:read -> compliance_officer, ciso, engineer, auditor
+ROLE_FINDINGS = USER in ("dev.compliance", "dev.ciso", "dev.engineer")
+ROLE_EVIDENCE = ROLE_FINDINGS or USER == "dev.auditor"
 
 
 class NoRedirect(urllib.request.HTTPRedirectHandler):
@@ -103,6 +106,9 @@ if status == 200:
     check("dashboard data is labelled synthetic", json.loads(text)["data_source"] == "synthetic")
 status, _, text = call(f"{APP}/")
 check("app shell page renders for a signed-in user", status == 200 and "Compliance posture" in text, f"({status})")
+for path, scope_ok in (("/bff/unified-controls", True), ("/bff/findings", ROLE_FINDINGS), ("/bff/evidence", ROLE_EVIDENCE)):
+    status, _, text = call(f"{APP}{path}?limit=5")
+    check(f"{path} {'allowed' if scope_ok else 'forbidden'} for this role", status == (200 if scope_ok else 403), f"({status})")
 status, _, text = call(f"{APP}/bff/openapi.json")
 check("API docs need only a signed-in user (docs:read is in every role)", status == 200, f"({status})")
 

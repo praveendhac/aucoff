@@ -69,6 +69,7 @@ Last updated: 2026-10-19. Status: **T-009 in progress** (first pass; not complet
 | asyncpg | Python | 0.32.0 | Apache-2.0 | Allowed | Installed package metadata, 2026-10-19 (chosen over psycopg, which is LGPL) |
 | alembic | Python | 1.20.0 | MIT | Allowed | Installed package metadata, 2026-10-19 |
 | greenlet | Python | 3.5.6 | MIT AND PSF-2.0 | Allowed (PSF-2.0 approved 2026-10-19) | Installed package metadata, 2026-10-19 (via sqlalchemy[asyncio]) |
+| pyyaml | Python | 6.0.3 | MIT | Allowed | Passed the Python licence gate, 2026-10-19 (reads the control catalogue YAML; now a runtime dependency) |
 | aio-pika | Python | 10.1.1 | Apache-2.0 | Allowed | Passed the Python licence gate, 2026-10-19 (AMQP client; with aiormq 7.2.2, pamqp 4.0.1, yarl, multidict, propcache, idna) |
 | pytest-asyncio | Python | 1.4.0 | Apache-2.0 | Allowed (dev) | Installed package metadata, 2026-10-19 |
 | uvicorn | Python | 0.54.0 | BSD-3-Clause | Allowed | Read from installed package metadata, 2026-10-19 |

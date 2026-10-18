@@ -70,7 +70,7 @@ cluster-down: ## Delete the local kind cluster
 	kind delete cluster --name $(CLUSTER)
 
 images: ## Build the backend and frontend container images
-	docker build -t aucoff-backend:dev backend
+	docker build -f backend/Dockerfile -t aucoff-backend:dev .
 	docker build -t aucoff-frontend:dev frontend
 
 load: ## Load the images into the kind cluster

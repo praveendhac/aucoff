@@ -3,7 +3,7 @@
 | Field | Value |
 |-------|-------|
 | Status | Approved (v1 baseline, owner sign-off 2026-10-19) |
-| Version | 0.6.0 |
+| Version | 0.7.0 |
 | Owner | Praveen Darshanam |
 | Last updated | 2026-10-19 |
 
@@ -231,6 +231,7 @@ OWASP API Security Top 10 mapping in [backend-spec.md](backend-spec.md) section 
 | 0.1.0 | 2026-10-18 | Initial template | - |
 | 0.2.0 | 2026-10-18 | Conventions, documentation requirement, endpoint catalogue, SSE | - |
 | 0.3.0 | 2026-10-19 | Metrics/history, questionnaire, platform, auditor, schedule and notification endpoints | - |
+| 0.7.0 | 2026-10-19 | API-22 `GET /unified-controls` (real catalogue from `data/controls`), API-37 `GET /evidence` and API-47 `GET /findings` implemented with cursor pagination and a `data_source` field (`synthetic` for evidence and findings until scanners run) | No |
 | 0.6.0 | 2026-10-19 | API-70 `GET /dashboards/posture` implemented with a fixed response shape; returns `data_source: synthetic` demo numbers until assessments exist | No |
 | 0.5.0 | 2026-10-19 | Added `GET /metrics` (API-2a, `ops:read`) | No (additive) |
 | 0.4.0 | 2026-10-19 | All endpoints authenticated: health, docs and OpenAPI no longer anonymous (API-2 is now `GET /health`, `ops:read`); `docs:read`, `ops:read`, `svc:*` scopes; webhook HMAC clarified | Yes (probe paths removed; none were consumed yet) |

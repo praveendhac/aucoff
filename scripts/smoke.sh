@@ -93,6 +93,10 @@ python3 scripts/web-login-test.py "$workdir/ca.crt" dev.exec 403 200 || fail=1
 echo "Same flow as an engineer (no report:read: dashboard must be 403):"
 python3 scripts/web-login-test.py "$workdir/ca.crt" dev.engineer 403 403 || fail=1
 
+echo "Same flow as a compliance officer and an auditor (lists differ by scope):"
+python3 scripts/web-login-test.py "$workdir/ca.crt" dev.compliance 403 200 || fail=1
+python3 scripts/web-login-test.py "$workdir/ca.crt" dev.auditor 403 200 || fail=1
+
 echo "Message broker permissions (in-cluster service pod):"
 scripts/run-broker-test.sh 2>&1 | grep -v "error when creating transport" || fail=1
 

@@ -1,0 +1,10 @@
+.git
+build
+frontend
+backend/.venv
+backend/**/__pycache__
+**/node_modules
+**/.next
+docs
+specs
+deploy
