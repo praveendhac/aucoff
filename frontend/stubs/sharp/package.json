@@ -1,0 +1,8 @@
+{
+  "name": "sharp",
+  "version": "0.0.0-aucoff-stub",
+  "description": "Intentional stub: AUCoFF does not use Next.js image optimisation, and the real sharp pulls LGPL libvips (constitution LIC-2). See LICENCES.md.",
+  "license": "MIT",
+  "main": "index.js",
+  "private": true
+}
