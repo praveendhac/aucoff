@@ -3,7 +3,7 @@
 | Field | Value |
 |-------|-------|
 | Status | Draft |
-| Version | 0.3.0 |
+| Version | 0.4.0 |
 | Owner | Praveen Darshanam |
 | Last updated | 2026-10-19 |
 
@@ -22,8 +22,10 @@ Status values: `todo` · `in-progress` · `blocked` · `done`
 | T-004 | Pre-build verification: CloudNativePG supports PostgreSQL 18.6 and a pgvector 0.8.6 image exists or can be built (PostgreSQL 18.6 + pgvector 0.8.6 compatibility is owner-confirmed), Python 3.13 compatibility of LangGraph/asyncpg/SQLAlchemy, RDS 18.x and pgvector support (note for Phase 2) | database-spec.md §1, §12 | Findings recorded in the specs; versions pinned or fallbacks chosen | T-001 | todo |
 | T-005 | Verify owner-supplied framework instruments/versions against official sources | spec.md §4 | Table updated with source links | T-001 | todo |
 | T-006 | Author v1 unified control set (owner) and versioning scheme; decide licensing for source texts | spec.md §10a | Control set v1 reviewed and checked in as data | T-001 | todo |
-| T-007 | Tool vetting for scanners (licence, maintenance, supply chain) and chosen list per source | backend-spec.md §4a, constitution SEC-17 | Approved tool list with versions | T-001 | todo |
+| T-007 | Tool vetting for scanners (maintenance, supply chain; licence per T-009) and chosen list per source | backend-spec.md §4a, constitution SEC-17 | Approved tool list with versions | T-009 | todo |
 | T-008 | Per-connector least-privilege permission policies (AWS, GCP, Azure, Kubernetes, GitHub, Bitbucket, Entra, Metabase) | backend-spec.md §7 | Policies documented and testable | T-007 | todo |
+| T-009 | Licence and provenance audit of every named dependency, tool, container image, font, icon, dataset and content source: verify licence from the official source, apply the permissive allow-list (LIC-1, LIC-2), choose alternatives for failures (object store, observability stack, scanners, Redis if used), create the licence register and NOTICE file | constitution LIC-1 to LIC-8, spec.md NFR-15, R-7 | Licence register committed; no disallowed or unknown licence remains; replacements recorded in the specs | T-001 | todo |
+| T-010 | CI SBOM generation and licence-scan gate that fails on disallowed/unknown licences; originality review step for generated documents | constitution LIC-5, LIC-8 | PR with a disallowed licence fails CI | T-002, T-009 | todo |
 
 ## Phase 1: Backend
 | ID | Task | Spec ref | Acceptance criteria | Depends on | Status |
@@ -87,9 +89,9 @@ Status values: `todo` · `in-progress` · `blocked` · `done`
 | T-402 | Helm chart + values-local.yaml | infrastructure-spec.md §3 | `helm install` brings up stack locally | T-401 | todo |
 | T-403 | PostgreSQL via CloudNativePG in Helm chart (PVC, NetworkPolicy, Secrets, migration hook Job) | infrastructure-spec.md §6, database-spec.md §6, §7 | DB reachable only from backend; migrations run on upgrade | T-402, T-104 | todo |
 | T-404 | Backup/restore procedure for local DB | database-spec.md §11 | Restore drill documented and passes | T-403 | todo |
-| T-405 | RabbitMQ, MinIO, Keycloak in chart; ingress + cert-manager TLS | infrastructure-spec.md §2, §3, §5 | Stack reachable over TLS locally | T-402 | todo |
+| T-405 | RabbitMQ, S3-compatible object store (selected under T-009), Keycloak in chart; ingress + cert-manager TLS | infrastructure-spec.md §2, §3, §5 | Stack reachable over TLS locally | T-402 | todo |
 | T-406 | NetworkPolicies, Pod Security, ServiceAccounts/RBAC | infrastructure-spec.md §4 | Default-deny verified; policy tests pass | T-402 | todo |
-| T-407 | Observability stack (OTel, Prometheus, Grafana, Loki, Tempo) + dashboards | infrastructure-spec.md §8 | Traces, logs, metrics visible for a sample run | T-402 | todo |
+| T-407 | Observability stack (OTel, Prometheus + permissively licensed dashboard/log/trace backends selected under T-009) + dashboards | infrastructure-spec.md §8 | Traces, logs, metrics visible for a sample run | T-402 | todo |
 | T-408 | Makefile local workflow (cluster-up, deploy, seed, e2e) | infrastructure-spec.md §6 | Fresh clone to running stack documented | T-402 | todo |
 | T-409 | GitHub Actions pipelines (PR, build, chart, E2E on kind) | infrastructure-spec.md §7 | All required checks gate merges | T-401 | todo |
 
@@ -101,5 +103,6 @@ Status values: `todo` · `in-progress` · `blocked` · `done`
 
 ## Blockers and Notes
 - T-004 (pre-build verification) can change version pins and the Postgres/pgvector image (pgvector 0.8.6 with PostgreSQL 18.6 is owner-confirmed; image and operator support still to verify); do it before the T-002 scaffold is finalised.
+- T-009 (licence and provenance audit) gates T-007, T-405, T-407 and the scanner choices; no tool or image is adopted until it passes constitution LIC-1 to LIC-5.
 - T-006 (unified control set authored by owner) gates meaningful scanner-to-control mapping and mapping-agent evaluation.
 - Items marked TODO in other specs are tracked in each spec's open-questions section; deferred ones (brand, locales, KEDA, mTLS, image signing, plan limits) do not block the build.

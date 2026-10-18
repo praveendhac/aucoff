@@ -3,7 +3,7 @@
 | Field | Value |
 |-------|-------|
 | Status | Draft |
-| Version | 0.4.0 |
+| Version | 0.5.0 |
 | Owner | Praveen Darshanam |
 | Last updated | 2026-10-19 |
 
@@ -52,7 +52,7 @@ Fintechs must satisfy many overlapping frameworks and regional regulations at on
 
 Note: instrument names and versions above (except where already stated in earlier drafts) were supplied by the owner on 2026-10-19 and MUST be verified against the official sources before the catalogue is loaded.
 
-Licensing note: standard texts (PCI DSS, ISO) are copyrighted; how they are stored and displayed is an open question (see [database-spec.md](database-spec.md) section 13).
+Licensing note: standard texts (PCI DSS, ISO, SOC 2 and others) are copyrighted. Per constitution LIC-6, AUCoFF MUST NOT reproduce them verbatim unless licensed; it stores its own summaries and clause/section references only (see [database-spec.md](database-spec.md) section 13).
 
 ## 5. Scope Overview
 ### 5.1 Core capabilities
@@ -181,6 +181,7 @@ Full definitions in [agent.md](agent.md) section 2.
 | NFR-12 | Portability | Same images and Helm chart for local Kubernetes and AWS (ENV-1) |
 | NFR-13 | Data retention (history) | Scan/assessment snapshots and metric points retained at least 13 months (12 months visible); tenants may extend but never go below 12 months; snapshots are immutable and survive evidence deletion |
 | NFR-14 | UX | Visual design, layout and metrics per [design.md](design.md) section 10 and 11; WCAG 2.2 AA with contrast verified |
+| NFR-15 | Licensing and IP compliance | No FOSS licence issue and no plagiarism/copyright issue in any library, software, container image, font, icon, dataset, content or generated output; only items meeting constitution LIC-1 to LIC-8 are used; if an issue exists, the item is not used and an alternative is chosen |
 
 ## 9. LLM Approach
 Provider-agnostic cloud LLM API behind an interface (ARC-5), with Anthropic Claude as the default provider. v1 uses Anthropic Claude only, via the provider interface, with redacted data only and US-region processing unless a tenant requires otherwise; a fallback provider and residency-pinned options are revisited with the first EU/India tenants.
@@ -213,11 +214,12 @@ Detailed definitions and formulas are in the metrics catalogue ([design.md](desi
 | ID | Item | Mitigation |
 |----|------|-----------|
 | R-1 | **Scope risk:** all listed frameworks in v1 is very large | Phase delivery in [tasks.md](tasks.md) by internal milestones; reuse unified controls to share effort |
-| R-2 | Licensing of standard texts | Legal review; store references/summaries rather than full text where required |
+| R-2 | Copyright of standard and regulatory texts | Own summaries and clause references only (LIC-6); legal review before any verbatim use; no scraping or copying of paywalled standards |
 | R-3 | LLM hallucination in compliance conclusions | Constitution AI rules, citations, approval gates, evaluation suite |
 | R-4 | Customer credentials for scanning are high-value targets | Read-only, scoped, short-lived credentials; secrets management (SEC-3) |
 | R-5 | Data residency vs LLM provider region | Region-pinned deployments or approved providers (SEC-14) |
 | R-6 | Regulation texts change | Versioned catalogues; mapping review process |
+| R-7 | FOSS licence or plagiarism issue from libraries, tools, images, content or generated output | Permissive allow-list (LIC-1, LIC-2), verification before adoption (LIC-3), CI licence scan and SBOM (LIC-5), replacement-first policy (LIC-4), originality review of generated content (LIC-8); licence audit task T-009 |
 | D-1 | Dependencies | LLM provider, identity providers, Jira/ServiceNow, cloud and SaaS APIs |
 
 ## 13. Open Questions
@@ -228,6 +230,7 @@ Detailed definitions and formulas are in the metrics catalogue ([design.md](desi
 - [ ] Report formats and templates per framework.
 - [ ] Pricing/tenant plan limits (if any) affecting quotas.
 - [ ] Which cloud providers and SaaS scanners ship first.
-- [ ] Final list of open-source scanners per source after licence review.
+- [ ] Final list of open-source scanners per source after licence review (Steampipe and ScoutSuite believed AGPL/GPL and not approved; Semgrep rules licence restrictive - verify under T-009).
+- [ ] Licence audit (T-009) results and the replacements chosen for object store and observability stack.
 - [ ] Notification templates and per-event defaults.
 - [ ] Tenant offboarding retention exceptions (legal holds).

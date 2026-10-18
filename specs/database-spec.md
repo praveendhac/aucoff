@@ -3,7 +3,7 @@
 | Field | Value |
 |-------|-------|
 | Status | Draft |
-| Version | 0.3.0 |
+| Version | 0.4.0 |
 | Owner | Praveen Darshanam |
 | Last updated | 2026-10-19 |
 
@@ -223,7 +223,7 @@ No role is superuser; `aucoff_app` has `NOBYPASSRLS`.
 | Restricted | Evidence content, credentials references, audit details | Encrypted, access logged, tenant-scoped, minimal retention |
 | Confidential | User identity, findings, reports | Encrypted, RBAC |
 | Internal | Agent runs metadata, costs | RBAC |
-| Public/reference | Framework text (if licensed for use), unified controls | Read-only; check licensing of standard texts (TODO) |
+| Public/reference | Own summaries and clause references of frameworks (no verbatim copyrighted text unless licensed, LIC-6), unified controls | Read-only |
 
 ## 9. Retention, Deletion and Residency (SEC-5, SEC-10, SEC-14)
 | Data | Retention | Deletion |

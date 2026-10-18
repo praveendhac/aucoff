@@ -3,7 +3,7 @@
 | Field | Value |
 |-------|-------|
 | Status | Draft |
-| Version | 0.7.0 |
+| Version | 0.8.0 |
 | Owner | Praveen Darshanam |
 | Last updated | 2026-10-19 |
 
@@ -77,7 +77,7 @@ Related: [spec.md](spec.md) · [design.md](design.md) · [agent.md](agent.md) ·
 | QA-8 | Tests MUST be deterministic and independent; LLM calls in unit/integration tests are mocked or replayed. |
 | QA-9 | Performance and availability targets come from NFRs in [spec.md](spec.md) and are checked before release. |
 | QA-10 | Accessibility target: WCAG 2.2 AA for all UI. |
-| QA-11 | Definition of done: code reviewed, tests green, spec/docs updated, migrations included, no new scan findings, observability added. |
+| QA-11 | Definition of done: code reviewed, tests green, spec/docs updated, migrations included, no new scan findings, observability added, licence scan clean and licence register updated (LIC-3, LIC-5). |
 
 ## 6. Security and Compliance
 
@@ -99,7 +99,7 @@ Related: [spec.md](spec.md) · [design.md](design.md) · [agent.md](agent.md) ·
 | SEC-14 | Data residency and cross-border transfer constraints MUST be honoured, including where LLM providers process data. |
 | SEC-15 | Platform operators MUST NOT have standing access to tenant data. Access requires a time-limited, approved, audited break-glass grant (reason, approver, expiry), is read-only by default, and the tenant is notified. |
 | SEC-16 | External auditor access MUST be invitation-based, scoped to selected assessments/frameworks, time-boxed with automatic expiry, read-only, and every view audit-logged. |
-| SEC-17 | Third-party scanners and tools MUST be vetted for licence compatibility, maintenance and supply-chain risk, pinned by version/digest, scanned and SBOM'd before use. |
+| SEC-17 | Third-party scanners and tools MUST satisfy LIC-1 to LIC-5 and be vetted for maintenance and supply-chain risk, pinned by version/digest, scanned and SBOM'd before use. |
 
 ## 7. AI Behaviour Constraints
 
@@ -147,12 +147,27 @@ Detail in [api-contract.md](api-contract.md).
 
 | ID | Rule |
 |----|------|
-| API-1 | Every endpoint MUST be documented in the generated OpenAPI 3.1 spec (Swagger UI/ReDoc) with schemas, examples, errors and required scopes; undocumented routes MUST NOT merge. |
-| API-2 | The committed OpenAPI file MUST match the generated one; CI fails on drift, and the frontend client is generated from it. |
-| API-3 | Endpoints are versioned under `/api/v1`; breaking changes need a new major version and deprecation period. |
-| API-4 | State-changing POSTs that create or trigger work MUST support `Idempotency-Key`; list endpoints MUST use cursor pagination. |
-| API-5 | Errors use RFC 9457 problem details with a request ID and never expose internals. |
-| API-6 | The OWASP Top 10 and OWASP API Security Top 10 are release gates (NFR-1). |
+| APIR-1 | Every endpoint MUST be documented in the generated OpenAPI 3.1 spec (Swagger UI/ReDoc) with schemas, examples, errors and required scopes; undocumented routes MUST NOT merge. |
+| APIR-2 | The committed OpenAPI file MUST match the generated one; CI fails on drift, and the frontend client is generated from it. |
+| APIR-3 | Endpoints are versioned under `/api/v1`; breaking changes need a new major version and deprecation period. |
+| APIR-4 | State-changing POSTs that create or trigger work MUST support `Idempotency-Key`; list endpoints MUST use cursor pagination. |
+| APIR-5 | Errors use RFC 9457 problem details with a request ID and never expose internals. |
+| APIR-6 | The OWASP Top 10 and OWASP API Security Top 10 are release gates (NFR-1). |
+
+## 7c. Licensing, Provenance and Content Rules
+
+AUCoFF MUST NOT contain, depend on, or distribute anything that creates a free/open-source (FOSS) licence issue or a plagiarism/copyright issue. Anything freely available on the internet (libraries, tools, container images, fonts, icons, illustrations, datasets, prompts, text, standards) is **not** automatically free to use. If an item has a licence or provenance issue, it MUST NOT be used; an alternative MUST be found instead.
+
+| ID | Rule |
+|----|------|
+| LIC-1 | **Permissive allow-list only.** Third-party code, tools, images and fonts MUST use one of: MIT, Apache-2.0, BSD-2-Clause, BSD-3-Clause, ISC, PostgreSQL licence, MPL-2.0 (unmodified), SIL OFL (fonts), or equivalent permissive terms reviewed by the owner. |
+| LIC-2 | **Disallowed:** AGPL, GPL, LGPL, SSPL, BUSL/BSL, "source-available", non-commercial or field-of-use restricted licences, unlicensed code, and anything with unclear or unverifiable provenance - including transitive dependencies and container base images. |
+| LIC-3 | **Check before adoption.** The licence of every direct and transitive dependency, tool, image, font, icon, dataset and content item MUST be verified from the official source and recorded in the licence register before use. Training-data knowledge or assumptions are not sufficient. |
+| LIC-4 | **Replacement first.** If a licence or provenance issue is found at any time, the item MUST be removed and replaced with an alternative that meets LIC-1; the decision is recorded in the licence register (and an ADR if architectural). |
+| LIC-5 | **Automated enforcement.** CI MUST generate an SBOM and run a licence scan that fails the build on any disallowed or unknown licence; exceptions are not allowed without an owner-approved, time-limited ADR. |
+| LIC-6 | **No copied content.** Code, text, standards and regulatory wording, images, icons, fonts, prompts, test data and documentation MUST NOT be copied from the internet or other sources unless their licence permits it (LIC-1) and attribution requirements are met. Standards text (PCI DSS, ISO, SOC 2, etc.) MUST NOT be reproduced verbatim unless licensed; AUCoFF stores its own summaries and clause references only. |
+| LIC-7 | **Attribution and notices.** Required attributions and licence texts are kept in a NOTICE/licence register that ships with the product. |
+| LIC-8 | **Generated content.** AI-generated code, text, reports, prompts and questionnaire answers MUST NOT reproduce copyrighted or third-party material; generated deliverables are reviewed for originality (similarity checks where practical) before release, and source citations point to references instead of copying wording. |
 
 ## 8. Spec-Driven Development Rules
 
@@ -187,7 +202,8 @@ Detail in [api-contract.md](api-contract.md).
 | 0.1.0 | 2026-10-18 | Initial template |
 | 0.2.0 | 2026-10-18 | Added architectural, design, coding, quality, security and AI rules |
 | 0.3.0 | 2026-10-18 | Added database rules DB-1 to DB-8; frameworks in scope resolved |
-| 0.4.0 | 2026-10-18 | Added API rules API-1 to API-6 |
+| 0.4.0 | 2026-10-18 | Added API rules APIR-1 to APIR-6 |
 | 0.5.0 | 2026-10-18 | Added AI-16 (outputs leaving the tenant) |
 | 0.6.0 | 2026-10-19 | Added DB-9, DB-10 (immutable 12-month history) |
 | 0.7.0 | 2026-10-19 | Added SEC-15 (break-glass), SEC-16 (auditor access), SEC-17 (third-party scanner vetting) |
+| 0.8.0 | 2026-10-19 | Added licensing, provenance and content rules LIC-1 to LIC-8; QA-11 and SEC-17 updated |

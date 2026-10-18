@@ -3,7 +3,7 @@
 | Field | Value |
 |-------|-------|
 | Status | Draft |
-| Version | 0.3.0 |
+| Version | 0.4.0 |
 | Owner | Praveen Darshanam |
 | Last updated | 2026-10-19 |
 
@@ -43,9 +43,9 @@ Next.js frontend (BFF session) -> FastAPI gateway -> PostgreSQL (+ pgvector) and
 | Agent runtime | 13 agents / microservices, LangGraph graphs | Python, LangGraph | [agent.md](agent.md) |
 | Relational DB + vector store | System of record, RLS tenancy, embeddings, history snapshots | PostgreSQL 18.6 + pgvector | [database-spec.md](database-spec.md) |
 | Queue | Job and event transport | RabbitMQ (AWS: Amazon MQ) | [backend-spec.md](backend-spec.md) §5 |
-| Object store | Evidence files, reports, exports | MinIO locally, S3 on AWS | [infrastructure-spec.md](infrastructure-spec.md) |
+| Object store | Evidence files, reports, exports | S3-compatible store locally (MinIO believed AGPL, not approved; permissive candidate TBD under T-009), S3 on AWS | [infrastructure-spec.md](infrastructure-spec.md) |
 | Identity provider | OIDC login, SAML brokering | Keycloak locally; Entra ID/Cognito later | [frontend-spec.md](frontend-spec.md) §5 |
-| Observability | Logs, metrics, traces | OpenTelemetry, Prometheus, Grafana, Loki, Tempo | [infrastructure-spec.md](infrastructure-spec.md) §8 |
+| Observability | Logs, metrics, traces | OpenTelemetry, Prometheus + permissively licensed dashboards/logs/traces (Grafana/Loki/Tempo believed AGPL, not approved; T-009) | [infrastructure-spec.md](infrastructure-spec.md) §8 |
 
 ## 4. Data Model
 Defined in [database-spec.md](database-spec.md) sections 3 to 5 (tables, ER diagram, indexes). Design-level decisions:
@@ -109,7 +109,7 @@ Services publish run events to RabbitMQ; the gateway relays them to the browser 
 | Prompt injection | Malicious document content | Data/instruction separation, validation, injection tests ([agent.md](agent.md) §8, §14) |
 
 ## 7. Observability
-Logs, metrics, traces via OpenTelemetry into Loki, Prometheus and Tempo, shown in Grafana; SLOs from NFR-3/NFR-4 with burn-rate alerts ([infrastructure-spec.md](infrastructure-spec.md) §8). Product-level metrics shown to users are defined in section 11 and are separate from operational telemetry.
+Logs, metrics, traces via OpenTelemetry into Prometheus and permissively licensed log/trace/dashboard backends chosen under T-009; SLOs from NFR-3/NFR-4 with burn-rate alerts ([infrastructure-spec.md](infrastructure-spec.md) §8). Product-level metrics shown to users are defined in section 11 and are separate from operational telemetry.
 
 ## 8. Decision Log (ADRs)
 | ID | Decision | Alternatives | Rationale | Status |
@@ -125,6 +125,7 @@ Logs, metrics, traces via OpenTelemetry into Loki, Prometheus and Tempo, shown i
 | ADR-9 | Light-default theme with dark mode, token-based design system (shadcn/ui + Tailwind) | Single theme, other UI kits | Owner choice; accessibility and consistency | Accepted (owner) |
 | ADR-10 | Wrap vetted open-source scanners behind our adapter interface; map checks to unified controls | Write all rules in OPA/Rego | Broad coverage quickly; keep our control logic and versioning | Accepted (owner) |
 | ADR-11 | Operator-provisioned, invite-based tenants; audited break-glass operator access; time-boxed external auditor access | Self-service signup, standing operator access | Controlled onboarding and least privilege in v1 | Accepted (owner) |
+| ADR-12 | Permissive-licence-only policy (constitution LIC-1 to LIC-8): replace any FOSS-licence or provenance issue with an alternative | Allow copyleft tools as separate services | Avoid licence and plagiarism risk for a commercial SaaS | Accepted (owner) |
 
 ## 9. Trade-offs and Risks
 - Single PostgreSQL for relational, vector and history data simplifies operations but concentrates load; mitigate with partitioning, read replicas and PgBouncer when needed.

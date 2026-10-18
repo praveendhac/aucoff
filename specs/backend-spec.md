@@ -3,7 +3,7 @@
 | Field | Value |
 |-------|-------|
 | Status | Draft |
-| Version | 0.3.0 |
+| Version | 0.4.0 |
 | Owner | Praveen Darshanam |
 | Last updated | 2026-10-19 |
 
@@ -21,7 +21,7 @@ Related: [spec.md](spec.md) · [design.md](design.md) · [agent.md](agent.md) ·
 | Queue | RabbitMQ via `aio-pika` | Jobs from API to agent services |
 | Agent orchestration | LangGraph | Checkpoints in PostgreSQL; interrupt nodes for human approval |
 | LLM access | Provider-agnostic interface; Claude default | ARC-5, AI-8, AI-12 |
-| Object store | S3 API (MinIO locally, S3 on AWS) via `boto3` | Presigned URLs |
+| Object store | S3 API via `boto3` (AWS S3 on AWS; local store TBD - MinIO is believed AGPL and not approved, see constitution LIC-1/LIC-2) | Presigned URLs |
 | Cloud/SaaS SDKs | boto3, Google, Azure, GitHub/Bitbucket, Microsoft Graph, Metabase API | Read-only scopes only |
 | Logging / tracing | structlog (JSON), OpenTelemetry | COD-8 |
 | Tooling | Ruff, mypy, pytest, httpx, testcontainers | COD-1, QA |
@@ -37,7 +37,7 @@ flowchart LR
   ORCH --> MQ
   MQ --> SC[scanner / agent services]
   SC --> DB
-  SC --> OBJ[(S3 / MinIO)]
+  SC --> OBJ[(S3-compatible object store)]
   SC --> LLM[LLM provider]
   SC -->|read-only| EXT[Cloud, K8s, repos, SaaS]
   SC -->|events| MQ
@@ -96,15 +96,15 @@ Decision (owner): **wrap proven open-source scanners behind our own scanner inte
 - **Candidate tools (to be confirmed per source; licence and maintenance reviewed before adoption):**
   | Source | Candidates |
   |--------|-----------|
-  | AWS / GCP / Azure | Prowler, Steampipe (with compliance mods), ScoutSuite |
+  | AWS / GCP / Azure | Prowler (licence to verify); Steampipe (believed AGPL) and ScoutSuite (believed GPL) are NOT approved unless verified otherwise |
   | Kubernetes / containers | kubescape, kube-bench, Trivy |
-  | Repos / CI-CD / IaC | Checkov, Semgrep, GitHub/Bitbucket APIs (custom adapter) |
+  | Repos / CI-CD / IaC | Checkov (licence to verify), Semgrep engine/rules only if their licences pass LIC-1/LIC-2 (rules licence believed restrictive; alternatives such as Opengrep or own rules), GitHub/Bitbucket APIs (custom adapter) |
   | Entra ID, Metabase | Custom adapters (Microsoft Graph, Metabase API) |
 - **Normalised result schema:** `check_id`, `tool`, `tool_version`, `rule_pack_version`, `resource_ref`, `status` (pass/fail/error/not_applicable), `severity`, `evidence_ref`, `raw_ref`, `observed_at`.
 - **Rule metadata:** AUCoFF maintains `check_definitions` (tool check ID -> unified control(s), severity override, rationale, applicability) so scan results roll up into control results ([database-spec.md](database-spec.md) §3.7). Mappings are versioned and reviewed like control mappings.
 - **Rule packs:** pinned tool versions + rule sets per release (`rule_pack_version`); upgrades go through the evaluation suite; results always record tool and rule versions for reproducibility.
 - **Gaps:** controls with no automated check are assessed from documents/evidence uploads or marked `unknown`; custom checks (OPA/Rego or Python) may be added behind the same interface when OSS coverage is missing.
-- **Supply chain:** tools pinned by digest, scanned, SBOM'd; licence compatibility reviewed (some tools have non-OSS or commercial-use restrictions) - constitution SEC-17.
+- **Supply chain:** tools pinned by digest, scanned, SBOM'd; licence verified against the permissive allow-list (constitution LIC-1 to LIC-5); tools failing it are replaced, not used - constitution SEC-17.
 - **Least privilege:** each connector documents the exact read-only permissions it needs (appendix, filled per connector); `validate()` rejects broader grants where detectable.
 
 ## 5. Messaging

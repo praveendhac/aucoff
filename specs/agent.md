@@ -3,7 +3,7 @@
 | Field | Value |
 |-------|-------|
 | Status | Draft |
-| Version | 0.3.0 |
+| Version | 0.4.0 |
 | Owner | Praveen Darshanam |
 | Last updated | 2026-10-19 |
 
@@ -94,7 +94,7 @@ No tool performs writes against customer systems.
 ## 6. Knowledge and Memory
 | Source | Scope | Contents | Notes |
 |--------|-------|----------|-------|
-| Framework/regulation texts and unified controls | Shared, read-only | Requirement text or summaries, control descriptions | Subject to licensing (spec.md R-2) |
+| Framework/regulation texts and unified controls | Shared, read-only | Own summaries and clause references of requirements (no verbatim copyrighted text, LIC-6), control descriptions | Subject to licensing (spec.md R-2) |
 | Tenant documents | Tenant | Policies, SOPs, audit reports | Isolated embeddings (DB-6) |
 | Evidence summaries and prior results | Tenant | Summaries of collected evidence, past assessments, 12-month history snapshots | For consistency and trend context |
 | Remediation playbooks / best practices | Shared or tenant | Curated guidance | Versioned |
