@@ -1,0 +1,73 @@
+components:
+  schemas:
+    HealthStatus:
+      properties:
+        service:
+          description: Service name.
+          examples:
+          - aucoff-gateway
+          title: Service
+          type: string
+        status:
+          description: '`ok` when the check passes.'
+          examples:
+          - ok
+          title: Status
+          type: string
+        version:
+          description: Service version.
+          examples:
+          - 0.1.0
+          title: Version
+          type: string
+      required:
+      - status
+      - service
+      - version
+      title: HealthStatus
+      type: object
+info:
+  contact:
+    name: AUCoFF maintainers
+  description: AgenticAI Unified Compliance Framework for Fintechs. The OpenAPI document
+    is the source of truth for the API contract (specs/api-contract.md).
+  title: AUCoFF API
+  version: 0.1.0
+openapi: 3.1.0
+paths:
+  /api/v1/health/live:
+    get:
+      description: Returns 200 while the process is running. Used by Kubernetes liveness
+        probes.
+      operationId: healthLive
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HealthStatus'
+          description: Successful Response
+      summary: Liveness probe
+      tags:
+      - health
+  /api/v1/health/ready:
+    get:
+      description: Returns 200 when the service can accept traffic. Dependency checks
+        (database, queue) are added as those layers are implemented.
+      operationId: healthReady
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HealthStatus'
+          description: Successful Response
+      summary: Readiness probe
+      tags:
+      - health
+servers:
+- description: Local kind cluster (v1)
+  url: http://aucoff.localtest.me
+tags:
+- description: Liveness and readiness probes.
+  name: health

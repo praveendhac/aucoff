@@ -1,0 +1,36 @@
+[project]
+name = "aucoff-backend"
+version = "0.1.0"
+description = "AUCoFF FastAPI gateway and agent services (see specs/backend-spec.md)"
+requires-python = ">=3.13,<3.14"
+dependencies = [
+  "fastapi>=0.115",
+  "pydantic-settings>=2.6",
+  "uvicorn>=0.32",
+]
+
+[dependency-groups]
+dev = [
+  "httpx>=0.28",
+  "mypy>=1.13",
+  "pip-licenses>=5.0",
+  "pytest>=8.3",
+  "pyyaml>=6.0",
+  "ruff>=0.8",
+  "types-pyyaml>=6.0",
+]
+
+[tool.ruff]
+line-length = 100
+target-version = "py313"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B", "SIM"]
+
+[tool.mypy]
+python_version = "3.13"
+strict = true
+files = ["app", "scripts", "tests"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
