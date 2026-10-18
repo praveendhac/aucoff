@@ -3,7 +3,7 @@
 | Field | Value |
 |-------|-------|
 | Status | Draft |
-| Version | 0.10.0 |
+| Version | 0.11.0 |
 | Owner | Praveen Darshanam |
 | Last updated | 2026-10-19 |
 
@@ -161,7 +161,7 @@ AUCoFF MUST NOT contain, depend on, or distribute anything that creates a free/o
 | ID | Rule |
 |----|------|
 | LIC-1 | **Permissive allow-list only.** Third-party code, tools, images and fonts MUST use one of: MIT, Apache-2.0, BSD-2-Clause, BSD-3-Clause, ISC, PostgreSQL licence, MPL-2.0 (unmodified), SIL OFL (fonts), or equivalent permissive terms reviewed by the owner. |
-| LIC-2 | **Disallowed:** AGPL, GPL, LGPL, SSPL, BUSL/BSL, "source-available", non-commercial or field-of-use restricted licences, unlicensed code, and anything with unclear or unverifiable provenance - including transitive dependencies and container base images. |
+| LIC-2 | **Disallowed:** AGPL, GPL, LGPL, SSPL, BUSL/BSL, "source-available", non-commercial or field-of-use restricted licences, unlicensed code, and anything with unclear or unverifiable provenance - including transitive dependencies and container base images. **Exception for base images (owner decision 2026-10-19):** unmodified operating-system packages that ship inside an *official minimal* base image (for example `python:3.13-slim`, `node:22-slim`) are treated as mere aggregation and do not make AUCoFF a derivative work; the rule still applies in full to AUCoFF's own code and to every language-level (pip/npm/other) dependency. Base images MUST NOT be modified or have copyleft software added to them, MUST be pinned by digest, scanned, and recorded in `LICENCES.md`. |
 | LIC-3 | **Check before adoption.** The licence of every direct and transitive dependency, tool, image, font, icon, dataset and content item MUST be verified from the official source and recorded in the licence register before use. Training-data knowledge or assumptions are not sufficient. |
 | LIC-4 | **Replacement first.** If a licence or provenance issue is found at any time, the item MUST be removed and replaced with an alternative that meets LIC-1; the decision is recorded in the licence register (and an ADR if architectural). |
 | LIC-5 | **Automated enforcement.** CI MUST generate an SBOM and run a licence scan that fails the build on any disallowed or unknown licence; exceptions are not allowed without an owner-approved, time-limited ADR. |
@@ -216,3 +216,4 @@ AUCoFF's own licence:
 | 0.8.0 | 2026-10-19 | Added licensing, provenance and content rules LIC-1 to LIC-8; QA-11 and SEC-17 updated |
 | 0.9.0 | 2026-10-19 | v1 is local-only (kind): ENV-4 added; ARC-11, SEC-3, ENV-1, ENV-3 reworded |
 | 0.10.0 | 2026-10-19 | AUCoFF relicensed from AGPL-3.0 to MIT: LIC-9 added |
+| 0.11.0 | 2026-10-19 | LIC-2: unmodified OS packages in official minimal base images allowed as mere aggregation |

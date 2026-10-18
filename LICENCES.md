@@ -89,6 +89,15 @@ The constitution's allow-list (LIC-1) is: MIT, Apache-2.0, BSD-2/3-Clause, ISC, 
 
 Transitive dependencies (about 30 Python and 550 npm packages) are covered by the automated scans; see section 2 for licences outside the allow-list. Full listings: `cd backend && uv run pip-licenses` and `cd frontend && npx license-checker-rseidelsohn --summary`.
 
+## 5a. Container base images (policy decision 2026-10-19)
+
+Every common base image (Debian, Ubuntu, Alpine, distroless) contains GPL or LGPL system components such as glibc or BusyBox, so the rule cannot be applied literally to OS layers. **Owner decision:** unmodified OS packages inside official minimal base images are treated as mere aggregation (constitution LIC-2 exception). The strict permissive-only rule still applies to AUCoFF's code and all language-level dependencies. Base images must stay unmodified, be pinned by digest, be vulnerability-scanned, and be listed here.
+
+| Image | Used for | Pinned digest | Status |
+|-------|----------|---------------|--------|
+| `python:3.13-slim` | backend | to be recorded when the Dockerfile is built | Planned |
+| `node:22-slim` | frontend | to be recorded when the Dockerfile is built | Planned |
+
 ## 6. Fonts, icons, images and content
 
 | Item | Licence | Status |

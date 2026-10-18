@@ -3,7 +3,7 @@
 | Field | Value |
 |-------|-------|
 | Status | Draft |
-| Version | 0.6.1 |
+| Version | 0.6.2 |
 | Owner | Praveen Darshanam |
 | Last updated | 2026-10-19 |
 
@@ -104,6 +104,7 @@ Status values: `todo` · `in-progress` · `blocked` · `done`
 
 ## Blockers and Notes
 - **v1 scope decision:** v1 (MVP) is local-only on kind; AWS/Terraform/EKS work (T-501, T-502) is deferred to post-v1 and does not gate any v1 task.
+- **Session 2 is waiting on the laptop:** `make doctor` (2026-10-19, after Build Session 1) still reports `kind` missing and the Docker daemon (Colima) stopped; the owner will install kind and run `colima start` before Docker, cluster and database work can start.
 - **Laptop prerequisites found 2026-10-19:** Docker is installed but its Colima daemon is stopped (`colima start`), and `kind` is not installed (`brew install kind`); `make doctor` reports this. T-004 and `make cluster-up` need both.
 - T-004 (pre-build verification) can change version pins and the Postgres/pgvector image (pgvector 0.8.6 with PostgreSQL 18.6 is owner-confirmed; image and operator support still to verify); do it before the T-002 scaffold is finalised.
 - T-009 (licence and provenance audit) gates T-007, T-405, T-407 and the scanner choices; no tool or image is adopted until it passes constitution LIC-1 to LIC-5.
