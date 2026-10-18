@@ -22,6 +22,7 @@ from starlette.responses import JSONResponse
 from starlette.types import ASGIApp, Receive, Scope, Send
 
 from app.core.config import Settings
+from app.core.rbac import effective_scopes
 
 ALLOWED_ALGORITHMS = ["RS256", "ES256"]
 
@@ -116,9 +117,12 @@ class TokenVerifier:
         scopes = frozenset(
             scope_claim.split() if isinstance(scope_claim, str) else list(scope_claim)
         )
+        roles = claims.get("roles", [])
+        if not isinstance(roles, list):
+            roles = []
         return Principal(
             subject=str(claims["sub"]),
-            scopes=scopes,
+            scopes=effective_scopes(scopes, [str(r) for r in roles], claims.get("azp")),
             tenant_id=claims.get("tenant_id"),
             claims=claims,
         )

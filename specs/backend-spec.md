@@ -3,7 +3,7 @@
 | Field | Value |
 |-------|-------|
 | Status | Approved (v1 baseline, owner sign-off 2026-10-19) |
-| Version | 0.6.1 |
+| Version | 0.7.0 |
 | Owner | Praveen Darshanam |
 | Last updated | 2026-10-19 |
 
@@ -127,7 +127,7 @@ Decision (owner): **wrap proven open-source scanners behind our own scanner inte
 
 ## 8. Auth, RBAC and Tenancy
 - JWTs from the external OIDC provider are validated (signature via JWKS, issuer, audience, expiry); tenant and roles mapped from claims.
-- Roles: compliance_officer, auditor, engineer, executive, ciso, admin (database-spec `roles`). Permission matrix (TODO to finalise):
+- Roles: compliance_officer, auditor, engineer, executive, ciso, admin (database-spec `roles`). Permission matrix (implemented as `app/core/rbac.py`; the table below is authoritative and a test keeps every scope of api-contract section 4 granted to some role):
 
 | Capability | compliance_officer | auditor | engineer | executive | ciso | admin |
 |------------|:--:|:--:|:--:|:--:|:--:|:--:|
@@ -142,6 +142,7 @@ Decision (owner): **wrap proven open-source scanners behind our own scanner inte
 | View audit log | | x | | | x | x |
 | Manage users / SSO / integrations | | | | | | x |
 
+- **Role to scope (Session 5):** the web client's token carries every API scope plus a `roles` claim; for tokens whose `azp` is `aucoff-web` the gateway keeps only the scopes that one of the user's roles allows (`effective_scopes`), so a token can never exceed the matrix and a user with no known role gets no scopes. Service identities have no roles and keep the scopes issued to them. Local synthetic users: `dev.admin`, `dev.compliance`, `dev.ciso`, `dev.engineer`, `dev.auditor`, `dev.exec`.
 - Every request opens a transaction with `SET LOCAL app.tenant_id`; missing tenant fails closed (DB-3).
 - Authorisation checks in `domain`/dependencies, never only in routers (SEC-1).
 

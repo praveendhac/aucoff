@@ -27,6 +27,39 @@ smokeClients: false
 
 # Synthetic local login users (password from `make secrets`, never in git). Local only.
 devUsers: false
+# One synthetic user per role (password: DEV_USER_PASSWORD from `make secrets`).
+devUserList:
+  - { username: dev.admin, role: admin }
+  - { username: dev.compliance, role: compliance_officer }
+  - { username: dev.ciso, role: ciso }
+  - { username: dev.engineer, role: engineer }
+  - { username: dev.auditor, role: auditor }
+  - { username: dev.exec, role: executive }
+
+# Roles (backend-spec section 8) and the API scopes of api-contract section 4. Roles travel in the
+# `roles` claim; the gateway turns them into allowed scopes (app/core/rbac.py) and a user token only
+# ever carries the intersection of both.
+roles: [compliance_officer, auditor, engineer, executive, ciso, admin]
+apiScopes:
+  - catalog:read
+  - mapping:write
+  - scope:write
+  - assessment:run
+  - connector:write
+  - evidence:read
+  - evidence:write
+  - result:review
+  - finding:write
+  - report:read
+  - report:generate
+  - audit:read
+  - admin:write
+  - docs:read
+  - ops:read
+  - questionnaire:read
+  - questionnaire:write
+  - questionnaire:approve
+  - copilot:use
 devTenantId: 00000000-0000-4000-8000-000000000001
 
 resources:

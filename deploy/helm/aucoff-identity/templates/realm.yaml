@@ -83,15 +83,21 @@ data:
           ]
         },
         {
-          "name": "ops:read",
+          "name": "aucoff-roles",
           "protocol": "openid-connect",
-          "attributes": { "include.in.token.scope": "true", "display.on.consent.screen": "false" }
-        },
+          "attributes": { "include.in.token.scope": "false", "display.on.consent.screen": "false" },
+          "protocolMappers": [
+            { "name": "roles", "protocol": "openid-connect", "protocolMapper": "oidc-usermodel-realm-role-mapper",
+              "config": { "claim.name": "roles", "multivalued": "true", "jsonType.label": "String", "id.token.claim": "false", "access.token.claim": "true", "introspection.token.claim": "true" } }
+          ]
+        }
+        {{- range .Values.apiScopes }},
         {
-          "name": "docs:read",
+          "name": {{ . | quote }},
           "protocol": "openid-connect",
           "attributes": { "include.in.token.scope": "true", "display.on.consent.screen": "false" }
         }
+        {{- end }}
         {{- if .Values.smokeClients }},
         {
           "name": "smoke-other-audience",
@@ -112,18 +118,26 @@ data:
         }
         {{- end }}
       ],
+      "roles": { "realm": [
+        {{- range $i, $role := .Values.roles }}{{ if $i }},{{ end }}
+        { "name": {{ $role | quote }} }
+        {{- end }}
+      ] },
       "users": [
         {{- if .Values.devUsers }}
+        {{- range $i, $u := .Values.devUserList }}{{ if $i }},{{ end }}
         {
-          "username": "dev.admin",
+          "username": {{ $u.username | quote }},
           "enabled": true,
           "emailVerified": true,
-          "email": "dev.admin@example.test",
+          "email": "{{ $u.username }}@example.test",
           "firstName": "Dev",
-          "lastName": "Admin",
-          "attributes": { "tenant_id": [{{ .Values.devTenantId | quote }}] },
+          "lastName": {{ $u.role | quote }},
+          "realmRoles": [{{ $u.role | quote }}],
+          "attributes": { "tenant_id": [{{ $.Values.devTenantId | quote }}] },
           "credentials": [{ "type": "password", "value": "${DEV_USER_PASSWORD}", "temporary": false }]
         }
+        {{- end }}
         {{- end }}
       ],
       "clients": [
@@ -157,8 +171,8 @@ data:
           "redirectUris": [{{ .Values.webRedirectUri | quote }}],
           "webOrigins": [],
           "attributes": { "pkce.code.challenge.method": "S256" },
-          "defaultClientScopes": ["basic", "profile", "email", "aucoff-tenant", "aucoff-gateway-audience", "ops:read"],
-          "optionalClientScopes": ["docs:read"]
+          "defaultClientScopes": ["basic", "profile", "email", "aucoff-tenant", "aucoff-roles", "aucoff-gateway-audience"{{ range .Values.apiScopes }}, {{ . | quote }}{{ end }}],
+          "optionalClientScopes": []
         }
         {{- if .Values.smokeClients }},
         {

@@ -3,7 +3,7 @@
 | Field | Value |
 |-------|-------|
 | Status | Approved (v1 baseline, owner sign-off 2026-10-19) |
-| Version | 0.17.0 |
+| Version | 0.18.0 |
 | Owner | Praveen Darshanam |
 | Last updated | 2026-10-19 |
 
@@ -75,7 +75,7 @@ Status values: `todo` · `in-progress` · `blocked` · `done`
 ## Phase 3: Frontend
 | ID | Task | Spec ref | Acceptance criteria | Depends on | Status |
 |----|------|----------|---------------------|------------|--------|
-| T-301 | Next.js skeleton + BFF auth shell (Keycloak) | frontend-spec.md §5 | App builds; login flow works | T-002 | in progress: app skeleton builds and tests pass; done for the login shell (2026-10-19): Auth.js v4 login with Keycloak (code + PKCE), default-deny proxy, session-checked BFF proxy, refresh handling; `make smoke` drives a full login as the synthetic user and calls the API through the BFF. TLS done in Session 5 (HTTPS ingress, Secure cookie, gateway over HTTPS). Still to do: app shell, role-to-scope mapping, TLS on the ingress-to-frontend hop |
+| T-301 | Next.js skeleton + BFF auth shell (Keycloak) | frontend-spec.md §5 | App builds; login flow works | T-002 | in progress: app skeleton builds and tests pass; done for the login shell (2026-10-19): Auth.js v4 login with Keycloak (code + PKCE), default-deny proxy, session-checked BFF proxy, refresh handling; `make smoke` drives a full login as the synthetic user and calls the API through the BFF. TLS done in Session 5 (HTTPS ingress, Secure cookie, gateway over HTTPS). Role-to-scope mapping done (Session 5): six realm roles, six synthetic users, `roles` claim, gateway narrows user scopes by role (tests plus live check: admin 200, executive 403 on the same endpoint). Still to do: app shell, TLS on the ingress-to-frontend hop |
 | T-302 | Generated API client + TanStack Query setup | frontend-spec.md §1, §7 | Build fails on contract drift | T-108, T-301 | todo |
 | T-303 | Design system components (DataTable, AiBadge, CitationList, ApprovalDialog) | frontend-spec.md §4 | Component and axe tests pass | T-301 | todo |
 | T-304 | Catalogue, scopes, connectors, evidence screens | frontend-spec.md §2 | E2E covers create/list flows | T-302, T-109 | todo |

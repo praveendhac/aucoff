@@ -117,3 +117,15 @@ def test_no_authentication_bypass_setting_exists() -> None:
     fields = {name.lower() for name in Settings.model_fields}
     assert not {f for f in fields if re.search(r"(auth|security).*(disable|bypass|off|skip)", f)}
     assert not {f for f in fields if re.search(r"(disable|bypass|skip).*(auth|security)", f)}
+
+
+def test_user_token_scopes_are_limited_by_the_users_roles(
+    client: TestClient, make_token: TokenFactory
+) -> None:
+    """A web-client token has ops:read, but only an admin role may use it."""
+    as_exec = make_token("ops:read", extra={"azp": "aucoff-web", "roles": ["executive"]})
+    as_admin = make_token("ops:read", extra={"azp": "aucoff-web", "roles": ["admin"]})
+    as_service = make_token("ops:read", extra={"azp": "svc-gateway"})
+    assert client.get("/api/v1/health", headers=_bearer(as_exec)).status_code == 403
+    assert client.get("/api/v1/health", headers=_bearer(as_admin)).status_code == 200
+    assert client.get("/api/v1/health", headers=_bearer(as_service)).status_code == 200

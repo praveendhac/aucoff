@@ -20,6 +20,8 @@ import urllib.request
 
 APP = "https://aucoff.localtest.me"
 ca = sys.argv[1]
+USER = sys.argv[2] if len(sys.argv) > 2 else "dev.admin"
+EXPECT_HEALTH = int(sys.argv[3]) if len(sys.argv) > 3 else 200
 
 
 class NoRedirect(urllib.request.HTTPRedirectHandler):
@@ -85,7 +87,7 @@ password = subprocess.check_output(
     "kubectl -n aucoff-identity get secret aucoff-keycloak-clients -o jsonpath='{.data.DEV_USER_PASSWORD}' | base64 -d",
     shell=True,
 ).decode()
-status, url, text = follow(html.unescape(action.group(1)), {"username": "dev.admin", "password": password, "credentialId": ""})
+status, url, text = follow(html.unescape(action.group(1)), {"username": USER, "password": password, "credentialId": ""})
 check("login with the synthetic user lands back in the app", url.startswith(APP) and status == 200, f"({status} {url})")
 
 status, _, text = call(f"{APP}/api/auth/session")
@@ -93,9 +95,9 @@ session = json.loads(text)
 check("session exists and carries the tenant", session.get("tenantId") == "00000000-0000-4000-8000-000000000001")
 check("session never contains tokens", "accessToken" not in text and "refreshToken" not in text)
 status, _, text = call(f"{APP}/bff/health")
-check("BFF reaches the API with the user's token", status == 200, f"({status})")
+check(f"BFF reaches the API with the user's token (health expects {EXPECT_HEALTH})", status == EXPECT_HEALTH, f"({status})")
 status, _, text = call(f"{APP}/bff/openapi.json")
-check("user token lacks docs:read (403 through the BFF)", status == 403, f"({status})")
+check("API docs need only a signed-in user (docs:read is in every role)", status == 200, f"({status})")
 
 session_cookies = [c for c in jar if "session-token" in c.name]
 check("session cookie is httpOnly and Secure", bool(session_cookies) and all(c.has_nonstandard_attr("HttpOnly") and c.secure for c in session_cookies))
