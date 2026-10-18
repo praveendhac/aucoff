@@ -36,7 +36,7 @@ ALLOWED = {
 DENIED_PATTERN = re.compile(r"agpl|\bgpl|lgpl|sspl|busl|business source|commons clause", re.I)
 
 # package -> licence accepted as an explicit exception (needs an owner decision, see LICENCES.md)
-EXCEPTIONS: dict[str, str] = {}  # none needed since the owner approved PSF-2.0 and MIT-0 (2026-10-19)
+EXCEPTIONS: dict[str, str] = {}  # none needed: PSF-2.0 and MIT-0 were approved (2026-10-19)
 
 
 def alternatives(expr: str) -> list[list[str]]:

@@ -18,6 +18,6 @@ def test_unknown_licence_fails() -> None:
     assert not ok("x", "UNKNOWN")
 
 
-def test_psf_is_only_accepted_for_the_documented_exception() -> None:
-    assert ok("typing_extensions", "PSF-2.0")
-    assert not ok("other_package", "PSF-2.0")
+def test_owner_approved_licences_pass() -> None:
+    for lic in ("PSF-2.0", "MIT-0", "MIT AND PSF-2.0", "0BSD", "BlueOak-1.0.0", "CC0-1.0"):
+        assert ok("any_package", lic), lic
