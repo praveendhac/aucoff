@@ -16,6 +16,16 @@ class Settings(BaseSettings):
     oidc_audience: str | None = None
     oidc_jwks_url: str | None = None
 
+    # Database connection (constitution ZT-6, DB-5): each service uses its OWN role and password,
+    # always over TLS with the server certificate verified against the cluster CA.
+    db_host: str | None = None
+    db_port: int = 5432
+    db_name: str = "aucoff"
+    db_user: str | None = None
+    db_password: str | None = None
+    db_ca_file: str | None = None
+    db_ssl: bool = True  # only the throwaway test database may turn this off
+
 
 def get_settings() -> Settings:
     return Settings()

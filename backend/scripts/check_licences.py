@@ -32,6 +32,7 @@ DENIED_PATTERN = re.compile(r"agpl|\bgpl|lgpl|sspl|busl|business source|commons 
 EXCEPTIONS: dict[str, str] = {
     "typing_extensions": "psf-2.0",  # required by pydantic; permissive, awaiting owner approval
     "cffi": "mit-0",  # required by cryptography (PyJWT); MIT-0, awaiting owner approval
+    "greenlet": "psf-2.0",  # required by SQLAlchemy asyncio; MIT AND PSF-2.0, awaiting approval
 }
 
 

@@ -14,6 +14,8 @@ RUN useradd --system --uid 10001 --no-create-home --shell /usr/sbin/nologin auco
 WORKDIR /app
 COPY --from=build /app/.venv /app/.venv
 COPY --from=build /app/app /app/app
+COPY alembic.ini /app/alembic.ini
+COPY migrations /app/migrations
 ENV PATH="/app/.venv/bin:$PATH" PYTHONUNBUFFERED=1 PYTHONDONTWRITEBYTECODE=1
 USER 10001
 EXPOSE 8000
