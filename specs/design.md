@@ -3,7 +3,7 @@
 | Field | Value |
 |-------|-------|
 | Status | Draft |
-| Version | 0.6.0 |
+| Version | 0.6.1 |
 | Owner | Praveen Darshanam |
 | Last updated | 2026-10-19 |
 
@@ -124,6 +124,7 @@ Logs, metrics, traces via OpenTelemetry into Prometheus and permissively license
 | ADR-7 | kind + umbrella Helm chart; Terraform + EKS only post-v1 | minikube, per-service charts | Same chart across environments; kind is lighter and matches CI | Accepted (owner) |
 | ADR-13 | **v1 (MVP) is local-only on kind: no AWS or other cloud hosting; everything tested on a laptop** | Early AWS deployment | Faster feedback, no cloud cost or compliance surface in MVP; images and chart stay portable | Accepted (owner) |
 | ADR-14 | **Zero-trust authentication: every API, internal or external, and every service-to-service, service-to-database and service-to-broker call is authenticated; no anonymous health/docs/metrics endpoints; token-based service identity over TLS (no mTLS in v1)** | Network-position trust, anonymous probes, mesh mTLS | Owner requirement; removes the largest class of internal-network attack paths; keeps v1 simple on kind | Accepted (owner) |
+| ADR-15 | Traefik (not ingress-nginx) as the local ingress controller; dashboard and API disabled | ingress-nginx (retired after March 2026), Envoy Gateway | Maintained, MIT-licensed, supports Ingress resources; avoids an unmaintained internet-facing component | Accepted |
 | ADR-8 | Immutable per-assessment snapshots + metric points for 12-month history, rollups for trends | Recompute from live data | Reproducible comparisons independent of later data changes | Proposed |
 | ADR-9 | Light-default theme with dark mode, token-based design system (shadcn/ui + Tailwind) | Single theme, other UI kits | Owner choice; accessibility and consistency | Accepted (owner) |
 | ADR-10 | Wrap vetted open-source scanners behind our adapter interface; map checks to unified controls | Write all rules in OPA/Rego | Broad coverage quickly; keep our control logic and versioning | Accepted (owner) |

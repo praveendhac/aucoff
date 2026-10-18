@@ -3,7 +3,7 @@
 | Field | Value |
 |-------|-------|
 | Status | Draft |
-| Version | 0.8.0 |
+| Version | 0.9.0 |
 | Owner | Praveen Darshanam |
 | Last updated | 2026-10-19 |
 
@@ -19,7 +19,7 @@ Status values: `todo` · `in-progress` · `blocked` · `done`
 | T-001 | Fill in constitution and spec | constitution.md, spec.md | Reviewed and versioned 1.0.0 | - | todo |
 | T-002 | Repo scaffold (frontend/, backend/, deploy/) | design.md | Directories and tooling committed | T-001 | done (2026-10-19; `make check` passes locally) |
 | T-003 | Repo conventions: root README, CLAUDE.md, CODEOWNERS, PR template, branch protection, commit conventions, pre-commit hooks (keep Gitleaks) | constitution.md §4, COD-10 | Files committed; rules documented | T-001 | done (2026-10-19; branch protection to be enabled in GitHub settings by the owner) |
-| T-004 | Pre-build verification: CloudNativePG supports PostgreSQL 18.6 and a pgvector 0.8.6 image exists or can be built (PostgreSQL 18.6 + pgvector 0.8.6 compatibility is owner-confirmed), Python 3.13 compatibility of LangGraph/asyncpg/SQLAlchemy | database-spec.md §1, §12 | Findings recorded in the specs; versions pinned or fallbacks chosen | T-001 | in progress: pgvector 0.8.6 PostgreSQL 18 support and CloudNativePG PG18 image-volume extensions confirmed by web search; still to check: kind node image K8s >= 1.35 / containerd >= 2.1 (kind not installed), CloudNativePG operator version, LangGraph/asyncpg on Python 3.13 |
+| T-004 | Pre-build verification: CloudNativePG supports PostgreSQL 18.6 and a pgvector 0.8.6 image exists or can be built (PostgreSQL 18.6 + pgvector 0.8.6 compatibility is owner-confirmed), Python 3.13 compatibility of LangGraph/asyncpg/SQLAlchemy | database-spec.md §1, §12 | Findings recorded in the specs; versions pinned or fallbacks chosen | T-001 | in progress: verified 2026-10-19 - kind node `kindest/node:v1.37.0` runs Kubernetes v1.37.0 with containerd 2.3.4 (meets CloudNativePG image-volume needs of K8s >= 1.35 / containerd >= 2.1); pgvector 0.8.6 PostgreSQL 18 support and CloudNativePG PG18 extensions confirmed by web search; still to check: CloudNativePG operator version and a pgvector extension image, Python 3.13 compatibility of LangGraph/asyncpg |
 | T-005 | Verify owner-supplied framework instruments/versions against official sources | spec.md §4 | Table updated with source links | T-001 | todo |
 | T-006 | Author v1 unified control set (owner) and versioning scheme; decide licensing for source texts | spec.md §10a | Control set v1 reviewed and checked in as data | T-001 | todo |
 | T-007 | Tool vetting for scanners (maintenance, supply chain; licence per T-009) and chosen list per source | backend-spec.md §4a, constitution SEC-17 | Approved tool list with versions | T-009 | todo |
@@ -90,16 +90,16 @@ Status values: `todo` · `in-progress` · `blocked` · `done`
 ## Phase 4: Infrastructure (local Helm)
 | ID | Task | Spec ref | Acceptance criteria | Depends on | Status |
 |----|------|----------|---------------------|------------|--------|
-| T-401 | Dockerfiles for frontend and backend | infrastructure-spec.md §2 | Images build and run | T-101, T-301 | todo |
-| T-402 | Helm chart + values-local.yaml | infrastructure-spec.md §3 | `helm install` brings up stack locally | T-401 | todo |
+| T-401 | Dockerfiles for frontend and backend | infrastructure-spec.md §2 | Images build and run | T-101, T-301 | done (2026-10-19): backend and frontend Dockerfiles (digest-pinned official minimal bases, non-root, read-only rootfs verified); image scan/SBOM still to add under T-010 |
+| T-402 | Helm chart + values-local.yaml | infrastructure-spec.md §3 | `helm install` brings up stack locally | T-401 | done (2026-10-19): chart deploys to kind, pods Ready via exec probes, `make smoke` passes |
 | T-403 | PostgreSQL via CloudNativePG in Helm chart (PVC, NetworkPolicy, Secrets, migration hook Job) | infrastructure-spec.md §6, database-spec.md §6, §7 | DB reachable only from backend; migrations run on upgrade | T-402, T-104 | todo |
 | T-404 | Backup/restore procedure for local DB | database-spec.md §11 | Restore drill documented and passes | T-403 | todo |
-| T-405 | RabbitMQ, S3-compatible object store (selected under T-009), Keycloak in chart; ingress + cert-manager TLS | infrastructure-spec.md §2, §3, §5 | Stack reachable over TLS locally | T-402 | todo |
+| T-405 | RabbitMQ, S3-compatible object store (selected under T-009), Keycloak in chart; ingress + cert-manager TLS | infrastructure-spec.md §2, §3, §5 | Stack reachable over TLS locally | T-402 | in progress: Traefik ingress (ingress-nginx retired) installed by `make ingress`; RabbitMQ, object store, Keycloak and cert-manager TLS still to do |
 | T-406 | NetworkPolicies, Pod Security, ServiceAccounts/RBAC | infrastructure-spec.md §4 | Default-deny verified; policy tests pass | T-402 | todo |
 | T-407 | Observability stack (OTel, Prometheus + permissively licensed dashboard/log/trace backends selected under T-009) + dashboards | infrastructure-spec.md §8 | Traces, logs, metrics visible for a sample run | T-402 | todo |
 | T-408 | Makefile local workflow (cluster-up, deploy, seed, e2e) | infrastructure-spec.md §6 | Fresh clone to running stack documented | T-402 | todo |
 | T-409 | GitHub Actions pipelines (PR, build, chart, E2E on kind) | infrastructure-spec.md §7 | All required checks gate merges | T-401 | in progress: `.github/workflows/ci.yml` written (backend, frontend, helm, gitleaks); not yet run on GitHub; no deploy job by design |
-| T-410 | Laptop smoke test and resource profile: measure CPU/RAM of the full stack on kind, define `values-local-min.yaml`, document `make` targets and prerequisites; verify cold start from a clean clone on a laptop | infrastructure-spec.md §5a, constitution ENV-4 | Fresh clone to working stack in the documented time on a 16 GB laptop; minimal profile runs on 8 GB | T-408 | todo |
+| T-410 | Laptop smoke test and resource profile: measure CPU/RAM of the full stack on kind, define `values-local-min.yaml`, document `make` targets and prerequisites; verify cold start from a clean clone on a laptop | infrastructure-spec.md §5a, constitution ENV-4 | Fresh clone to working stack in the documented time on a 16 GB laptop; minimal profile runs on 8 GB | T-408 | in progress: `make up`/`make smoke` work from a clean cluster; measured idle usage of the 2-node kind cluster with Traefik and both apps about 1 GB RAM; full-stack measurement and `values-local-min.yaml` still to do |
 
 ## Post-v1 (out of scope for the MVP): AWS
 | ID | Task | Spec ref | Acceptance criteria | Depends on | Status |
@@ -110,7 +110,7 @@ Status values: `todo` · `in-progress` · `blocked` · `done`
 ## Blockers and Notes
 - **Authentication-everywhere (ZT-1) gap in the first scaffold is fixed for the backend and the Helm chart** (T-120 done, T-124 partly done on 2026-10-19). Still open: enforcing the same default-deny in the frontend BFF route handlers (T-301), service identities (T-121), per-service database and broker credentials (T-122, T-123) and authenticated telemetry.
 - **v1 scope decision:** v1 (MVP) is local-only on kind; AWS/Terraform/EKS work (T-501, T-502) is deferred to post-v1 and does not gate any v1 task.
-- **Session 2 is waiting on the laptop:** `make doctor` (2026-10-19, after Build Session 1) still reports `kind` missing and the Docker daemon (Colima) stopped; the owner will install kind and run `colima start` before Docker, cluster and database work can start.
+- **Laptop ready (2026-10-19):** kind v0.33.0 installed, Colima running with 6 CPUs / 12 GiB; the local cluster comes up with `make up` and `make smoke` passes.
 - **Laptop prerequisites found 2026-10-19:** Docker is installed but its Colima daemon is stopped (`colima start`), and `kind` is not installed (`brew install kind`); `make doctor` reports this. T-004 and `make cluster-up` need both.
 - T-004 (pre-build verification) can change version pins and the Postgres/pgvector image (pgvector 0.8.6 with PostgreSQL 18.6 is owner-confirmed; image and operator support still to verify); do it before the T-002 scaffold is finalised.
 - T-009 (licence and provenance audit) gates T-007, T-405, T-407 and the scanner choices; no tool or image is adopted until it passes constitution LIC-1 to LIC-5.

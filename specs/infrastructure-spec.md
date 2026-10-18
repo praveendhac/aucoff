@@ -3,7 +3,7 @@
 | Field | Value |
 |-------|-------|
 | Status | Draft |
-| Version | 0.6.0 |
+| Version | 0.7.0 |
 | Owner | Praveen Darshanam |
 | Last updated | 2026-10-19 |
 
@@ -30,7 +30,7 @@ Same images and chart in all environments, differing only by values (ENV-1).
 | Object store | S3-compatible; **MinIO is AGPL-3.0 (community repo archived April 2026) and is NOT approved**; candidate SeaweedFS (Apache-2.0 per web search 2026-10-19) to be confirmed and tested under T-009 | Evidence/report store |
 | Keycloak | Official chart/image | Local OIDC/SAML IdP |
 | Observability | OpenTelemetry Collector, Prometheus; dashboards/logs/traces on permissively licensed tools (Grafana, Loki and Tempo have been AGPLv3 since 2021 and are NOT approved; candidates Perses and VictoriaLogs are Apache-2.0 per web search, Jaeger and Prometheus still unverified - confirm under T-009) | Section 8 |
-| Ingress + cert-manager | NGINX Ingress + cert-manager | Local CA for TLS |
+| Ingress + cert-manager | Traefik ingress controller (ingress-nginx was retired after March 2026) + cert-manager | Local CA for TLS |
 
 ### Image standards
 - Multi-stage builds, minimal base (distroless or slim), non-root user, read-only root filesystem where possible (SEC-8).
@@ -98,7 +98,7 @@ make seed           # load synthetic seed data and framework catalogue
 make e2e            # Playwright E2E against the cluster
 make logs / make down / make cluster-down
 ```
-- Access via ingress hostnames (`aucoff.localtest.me`, wildcard DNS to 127.0.0.1) or `kubectl port-forward`.
+- Access via ingress hostnames (`aucoff.localtest.me`, wildcard DNS to 127.0.0.1; use `curl --resolve` when offline) or `kubectl port-forward`.
 - Target: cold start of the full stack on a 16 GB laptop in < 10 minutes (proposal); lightweight profile (`values-local-min.yaml`) disables observability and extra scanners.
 - LLM calls: real provider key optional locally; default to a recorded/mock provider for tests (QA-8).
 
@@ -147,7 +147,7 @@ Scanners access customer accounts via customer-granted read-only roles (cross-ac
 Controls referenced from constitution section 6: network policies, image scanning, non-root, RBAC least privilege, encryption in transit and at rest, audit logging of cluster changes (AWS CloudTrail/EKS audit later), no manual changes (ARC-11), dependency and SBOM tracking, regional deployment for data residency (SEC-14).
 
 ## 12. Open Questions
-- [x] Ingress: NGINX; local host `aucoff.localtest.me`.
+- [x] Ingress: Traefik (chart `traefik/traefik` 42.0.0, app v3.7.14), dashboard/API disabled; local host `aucoff.localtest.me`. ingress-nginx was the earlier choice but was retired upstream after March 2026 (no security fixes). Traefik's own `/ping` probe is a third-party platform component and is outside ZT-7, which governs AUCoFF's own components.
 - [x] PostgreSQL via CloudNativePG operator; pgvector 0.8.6 (owner-confirmed with PostgreSQL 18.6). [ ] Image source/build compatible with CloudNativePG still to verify (T-004).
 - [ ] Queue autoscaling approach (KEDA).
 - [x] mTLS/service mesh: not needed in v1; token-based service identity over TLS (ZT-4). Revisit post-v1.

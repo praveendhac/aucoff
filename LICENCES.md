@@ -45,6 +45,7 @@ The constitution's allow-list (LIC-1) is: MIT, Apache-2.0, BSD-2/3-Clause, ISC, 
 | Prowler | Apache-2.0 | Candidate (cloud scanning) - confirm from LICENSE on adoption |
 | Trivy, Checkov, kube-bench | Apache-2.0 | Candidates - confirm from LICENSE on adoption |
 | kubescape | Not found in search | **Unverified** - do not adopt until confirmed |
+| ingress-nginx | Retired by Kubernetes SIG Network: no releases, bug fixes or security updates after March 2026 | **Not approved** (unmaintained, security risk); replaced by Traefik (MIT per web search) |
 | SeaweedFS | Apache-2.0 | Candidate replacement for MinIO (S3-compatible) - confirm and test |
 | Perses | Apache-2.0 | Candidate dashboard tool replacing Grafana |
 | VictoriaLogs | Apache-2.0 (single-node and cluster) | Candidate log store replacing Loki |
@@ -97,8 +98,10 @@ Every common base image (Debian, Ubuntu, Alpine, distroless) contains GPL or LGP
 
 | Image | Used for | Pinned digest | Status |
 |-------|----------|---------------|--------|
-| `python:3.13-slim` | backend | to be recorded when the Dockerfile is built | Planned |
-| `node:22-slim` | frontend | to be recorded when the Dockerfile is built | Planned |
+| `python:3.13-slim` | backend | `sha256:70729b46c69b4f1e97c4822c1af3df53a1476cf5ddc6c087c0c10bc3a5678c2f` (pulled 2026-10-19) | In use; vulnerability scan still to add (T-010) |
+| `node:22-slim` | frontend | `sha256:c3de60bf2f9dd0ac6370e6117950ff62d6e339527e7472301c9c78a017978392` (pulled 2026-10-19) | In use; vulnerability scan still to add (T-010) |
+| `kindest/node:v1.37.0` | kind cluster nodes | `sha256:a1ed56cfb0e7b93589bdf97c8cd566405a265939e3620fc4f5de89adff580ae5` (from the kind v0.33.0 release notes; pulled by digest successfully) | In use (local dev only) |
+| `docker.io/traefik:v3.7.14` (Helm chart `traefik/traefik` 42.0.0) | ingress controller | pulled by the chart | In use; licence MIT per web search 2026-10-19, confirm from LICENSE (T-009) |
 
 ## 6. Fonts, icons, images and content
 
