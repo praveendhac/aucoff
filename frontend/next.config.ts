@@ -1,6 +1,7 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
+  output: "standalone", // minimal self-contained server for the container image
   // Image optimisation needs `sharp`, whose libvips is LGPL (constitution LIC-2); a stub replaces it.
   images: { unoptimized: true },
 };
