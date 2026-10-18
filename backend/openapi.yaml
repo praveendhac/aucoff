@@ -1,5 +1,30 @@
 components:
   schemas:
+    FrameworkCoverage:
+      properties:
+        coverage_pct:
+          title: Coverage Pct
+          type: number
+        delta_vs_previous:
+          title: Delta Vs Previous
+          type: number
+        framework_id:
+          examples:
+          - soc2-2017
+          title: Framework Id
+          type: string
+        name:
+          examples:
+          - SOC 2 (Common Criteria)
+          title: Name
+          type: string
+      required:
+      - framework_id
+      - name
+      - coverage_pct
+      - delta_vs_previous
+      title: FrameworkCoverage
+      type: object
     HealthStatus:
       properties:
         service:
@@ -26,6 +51,136 @@ components:
       - version
       title: HealthStatus
       type: object
+    Kpi:
+      properties:
+        delta_vs_previous:
+          description: Change since the previous scan.
+          examples:
+          - 2.1
+          title: Delta Vs Previous
+          type: number
+        value:
+          description: Current value.
+          examples:
+          - 78.4
+          title: Value
+          type: number
+      required:
+      - value
+      - delta_vs_previous
+      title: Kpi
+      type: object
+    Kpis:
+      properties:
+        coverage_pct:
+          $ref: '#/components/schemas/Kpi'
+          description: Share of in-scope controls with a result (M-02).
+        evidence_freshness_pct:
+          $ref: '#/components/schemas/Kpi'
+          description: Evidence collected within its window (M-09).
+        open_findings:
+          $ref: '#/components/schemas/Kpi'
+          description: Open findings across severities (M-06).
+        pending_approvals:
+          $ref: '#/components/schemas/Kpi'
+          description: Results waiting for human approval (M-14).
+        posture_score:
+          $ref: '#/components/schemas/Kpi'
+          description: Overall compliance posture score, 0-100 (M-01).
+      required:
+      - posture_score
+      - coverage_pct
+      - open_findings
+      - pending_approvals
+      - evidence_freshness_pct
+      title: Kpis
+      type: object
+    PostureDashboard:
+      properties:
+        data_source:
+          description: '`synthetic` means demo numbers, not real results.'
+          enum:
+          - synthetic
+          - assessments
+          title: Data Source
+          type: string
+        frameworks:
+          items:
+            $ref: '#/components/schemas/FrameworkCoverage'
+          title: Frameworks
+          type: array
+        kpis:
+          $ref: '#/components/schemas/Kpis'
+        severity_comparison:
+          items:
+            $ref: '#/components/schemas/SeverityComparison'
+          title: Severity Comparison
+          type: array
+        status_distribution:
+          $ref: '#/components/schemas/StatusDistribution'
+      required:
+      - data_source
+      - kpis
+      - status_distribution
+      - severity_comparison
+      - frameworks
+      title: PostureDashboard
+      type: object
+    SeverityComparison:
+      properties:
+        before_previous:
+          description: Same, two scans before the latest.
+          title: Before Previous
+          type: integer
+        latest:
+          description: Failing controls of this severity in the latest scan.
+          title: Latest
+          type: integer
+        previous:
+          description: Same, in the scan before the latest.
+          title: Previous
+          type: integer
+        severity:
+          enum:
+          - critical
+          - high
+          - medium
+          - low
+          title: Severity
+          type: string
+      required:
+      - severity
+      - latest
+      - previous
+      - before_previous
+      title: SeverityComparison
+      type: object
+    StatusDistribution:
+      properties:
+        fail:
+          title: Fail
+          type: integer
+        not_applicable:
+          title: Not Applicable
+          type: integer
+        partial:
+          title: Partial
+          type: integer
+        pass:
+          description: Controls passing.
+          title: Pass
+          type: integer
+        unknown:
+          title: Unknown
+          type: integer
+      required:
+      - pass
+      - partial
+      - fail
+      - unknown
+      - not_applicable
+      title: StatusDistribution
+      type: object
   securitySchemes:
     HTTPBearer:
       description: OIDC access token
@@ -41,6 +196,25 @@ info:
   version: 0.1.0
 openapi: 3.1.0
 paths:
+  /api/v1/dashboards/posture:
+    get:
+      description: KPI strip, control status distribution, severity counts for the
+        latest scan and the previous two, and coverage per framework, with deltas
+        against the previous scan. Requires scope `report:read`. Until assessments
+        exist the numbers are synthetic and `data_source` is `synthetic`.
+      operationId: postureDashboard
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PostureDashboard'
+          description: Successful Response
+      security:
+      - HTTPBearer: []
+      summary: Posture dashboard
+      tags:
+      - dashboards
   /api/v1/health:
     get:
       description: Authenticated health summary for operators and monitoring (scope
@@ -80,5 +254,7 @@ servers:
 - description: Local kind cluster (v1)
   url: http://aucoff.localtest.me
 tags:
-- description: Authenticated health summary.
+- description: Authenticated health summary and metrics.
   name: health
+- description: Dashboards for signed-in users.
+  name: dashboards
