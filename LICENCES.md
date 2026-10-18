@@ -52,7 +52,8 @@ The constitution's allow-list (LIC-1) is: MIT, Apache-2.0, BSD-2/3-Clause, ISC, 
 | Jaeger | Not found in search | **Unverified** - candidate for traces; confirm |
 | Prometheus | Not checked | **Unverified** - confirm before adopting |
 | RabbitMQ | Server MPL-2.0 (client libraries Apache-2.0/MPL-2.0 dual) | Allowed (MPL-2.0 unmodified) - confirm on adoption |
-| Keycloak | Not found in search | **Unverified** - confirm before adopting |
+| Keycloak 26.8.1 | Apache-2.0 (read from `LICENSE.txt` in the keycloak/keycloak repository, 2026-10-19) | Allowed; in use (identity provider) |
+| cert-manager v1.21.2 | Apache-2.0 (read from `LICENSE` in the cert-manager/cert-manager repository, 2026-10-19) | Allowed; in use (local CA, in-cluster TLS) |
 | PostgreSQL, pgvector, CloudNativePG | PostgreSQL licence (PostgreSQL); pgvector uses the PostgreSQL licence; CloudNativePG Apache-2.0 - **not confirmed in this pass** | **Unverified** - confirm on adoption |
 
 ## 5. Direct dependencies in use
@@ -110,6 +111,8 @@ Every common base image (Debian, Ubuntu, Alpine, distroless) contains GPL or LGP
 | `ghcr.io/cloudnative-pg/postgresql:18.6-minimal-trixie` | PostgreSQL 18.6 operand image | `sha256:c9be7f221a05b18fe65259d9136affbabe3b39ad91c3b68f8f2f990a45f35f38` | In use; PostgreSQL licence expected, confirm (T-009) |
 | `ghcr.io/cloudnative-pg/pgvector:0.8.6-18-trixie` | pgvector 0.8.6 extension image volume | `sha256:2da4ddaf07cec8edf9ea265968c5368a5df4568737964d2a268d9843589e3e42` | In use; image label says licence "PostgreSQL" (read from the image on 2026-10-19) |
 | CloudNativePG operator (chart `cnpg/cloudnative-pg` 0.29.1, app 1.30.1) | PostgreSQL operator | pulled by the chart | In use; Apache-2.0 expected (extensions repo is Apache-2.0 per web fetch); confirm (T-009) |
+| `quay.io/keycloak/keycloak:26.8.1` | identity provider | `sha256:79c623a22abacf3fe6c00a5fb30f5b7843d717b234033b80995891c06116d244` (pulled 2026-10-19) | In use; Apache-2.0 for Keycloak itself; vulnerability scan still to add (T-010) |
+| cert-manager images (chart `jetstack/cert-manager` v1.21.2) | local CA / certificates | pulled by the chart | In use; Apache-2.0; digest pinning to add with T-010 |
 | `docker.io/traefik:v3.7.14` (Helm chart `traefik/traefik` 42.0.0) | ingress controller | pulled by the chart | In use; licence MIT per web search 2026-10-19, confirm from LICENSE (T-009) |
 
 ## 6. Fonts, icons, images and content

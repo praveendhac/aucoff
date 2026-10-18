@@ -3,7 +3,7 @@
 | Field | Value |
 |-------|-------|
 | Status | Draft |
-| Version | 0.7.0 |
+| Version | 0.8.0 |
 | Owner | Praveen Darshanam |
 | Last updated | 2026-10-19 |
 
@@ -154,3 +154,11 @@ Controls referenced from constitution section 6: network policies, image scannin
 - [ ] Image registry and signing.
 - [ ] (Post-v1) Observability on AWS: managed vs self-hosted.
 - [ ] (Post-v1) Multi-region residency model and per-region deployments.
+
+## Implementation status: identity and TLS (Build Session 3, 2026-10-19)
+
+- `make certs` installs cert-manager v1.21.2 and a local CA (`ClusterIssuer aucoff-local-ca`); the CA key stays in the cluster, services get only the public certificate (ConfigMap `aucoff-identity-ca`).
+- `make identity` installs chart `deploy/helm/aucoff-identity` into namespace `aucoff-identity`: Keycloak 26.8.1 pinned by digest, HTTPS only (plain HTTP and the management port are off), database `keycloak` owned by the dedicated role `aucoff_keycloak`, realm `aucoff` imported with client secrets substituted from `aucoff-keycloak-clients`.
+- Realm clients: `svc-gateway` (client credentials), `aucoff-web` (authorization code + PKCE, for the BFF), and local-only `aucoff-smoke*` clients. Scopes `ops:read` and `docs:read`; audience mapper `aucoff-gateway`.
+- Network policies: default deny in `aucoff-identity`; only pods labelled `aucoff.io/idp-client` in `aucoff` may reach Keycloak on 8443; Keycloak may reach DNS and PostgreSQL only. Defence in depth only; every call is also authenticated.
+- `make smoke` obtains real tokens from Keycloak and asserts 200/403/401 as described in tasks T-121.
