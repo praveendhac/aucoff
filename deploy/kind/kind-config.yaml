@@ -1,0 +1,23 @@
+# kind cluster for local v1 development and testing (specs/infrastructure-spec.md section 5a).
+# The node image is intentionally not pinned yet: CloudNativePG image-volume extensions (pgvector)
+# need Kubernetes 1.35+ with containerd 2.1+ (T-004). Pin `image: kindest/node:vX.Y.Z@sha256:...`
+# once a tag meeting that requirement is verified.
+kind: Cluster
+apiVersion: kind.x-k8s.io/v1alpha4
+name: aucoff
+nodes:
+  - role: control-plane
+    kubeadmConfigPatches:
+      - |
+        kind: InitConfiguration
+        nodeRegistration:
+          kubeletExtraArgs:
+            node-labels: "ingress-ready=true"
+    extraPortMappings:
+      - containerPort: 80
+        hostPort: 80
+        protocol: TCP
+      - containerPort: 443
+        hostPort: 443
+        protocol: TCP
+  - role: worker

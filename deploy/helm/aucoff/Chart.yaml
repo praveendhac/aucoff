@@ -1,0 +1,6 @@
+apiVersion: v2
+name: aucoff
+description: "Umbrella chart for AUCoFF (v1 - local kind cluster only)"
+type: application
+version: 0.1.0
+appVersion: "0.1.0"

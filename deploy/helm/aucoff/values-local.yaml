@@ -1,0 +1,3 @@
+# Local kind overrides (the only supported environment in v1).
+global:
+  host: aucoff.localtest.me

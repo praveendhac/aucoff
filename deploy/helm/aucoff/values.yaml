@@ -1,0 +1,32 @@
+# Defaults. Environment-specific overrides live in values-local.yaml (v1 has no other environment).
+global:
+  host: aucoff.localtest.me
+
+backend:
+  image:
+    repository: aucoff-backend
+    tag: dev
+    pullPolicy: IfNotPresent
+  replicas: 1
+  port: 8000
+  resources:
+    requests: { cpu: 100m, memory: 128Mi }
+    limits: { cpu: 500m, memory: 512Mi }
+
+frontend:
+  image:
+    repository: aucoff-frontend
+    tag: dev
+    pullPolicy: IfNotPresent
+  replicas: 1
+  port: 3000
+  resources:
+    requests: { cpu: 100m, memory: 128Mi }
+    limits: { cpu: 500m, memory: 512Mi }
+
+ingress:
+  enabled: true
+  className: nginx
+
+networkPolicy:
+  enabled: true
