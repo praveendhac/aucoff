@@ -7,7 +7,7 @@ Last updated: 2026-10-19. Status: **T-009 in progress** (first pass; not complet
 ## 1. How information in this register was obtained
 
 - **Installed package metadata** (`pip-licenses`, `license-checker-rseidelsohn`): the licence declared by the exact installed version. CI re-checks this on every change (`make licences`).
-- **Web search results of 2026-10-19:** used for tools not yet installed. These are secondary sources and are marked *unconfirmed* until the project's own `LICENSE` file is read when the tool is adopted. Nothing here was read from a lawyer or from the projects' LICENSE files unless stated.
+- **Web search results of 2026-10-19:** used for tools not yet installed. These are secondary sources and are marked *unconfirmed* until the third-party project's own LICENSE file is read when the tool is adopted. Nothing here was read from a lawyer or from the projects' LICENSE files unless stated.
 
 ## 2. Policy decisions that need the owner
 
@@ -23,7 +23,7 @@ The constitution's allow-list (LIC-1) is: MIT, Apache-2.0, BSD-2/3-Clause, ISC, 
 | CC-BY-4.0 / CC-BY-3.0 | npm `caniuse-lite` (data), `spdx-exceptions` | Data licences requiring attribution; attribution must be carried in NOTICE (LIC-7). |
 | Python-2.0 | npm `argparse` | PSF-style, permissive; recommend approving. |
 
-Also for the owner: the repository's own [`LICENSE`](LICENSE) is the **GNU AGPL v3**. The rules above govern what AUCoFF may depend on; they do not say how AUCoFF itself is licensed. Please confirm AGPL-3.0 is intended (it affects how the product can be offered to customers).
+**Project licence (decided 2026-10-19):** AUCoFF itself is licensed under the **MIT License** (see [`LICENSE`](LICENSE)), relicensed by the copyright holder from the GNU AGPL v3. The rules above govern what AUCoFF may depend on; MIT governs what others may do with AUCoFF.
 
 ## 3. Issue found and fixed during scaffolding
 

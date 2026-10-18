@@ -3,7 +3,7 @@
 | Field | Value |
 |-------|-------|
 | Status | Draft |
-| Version | 0.6.1 |
+| Version | 0.7.0 |
 | Owner | Praveen Darshanam |
 | Last updated | 2026-10-19 |
 
@@ -182,6 +182,7 @@ Full definitions in [agent.md](agent.md) section 2.
 | NFR-13 | Data retention (history) | Scan/assessment snapshots and metric points retained at least 13 months (12 months visible); tenants may extend but never go below 12 months; snapshots are immutable and survive evidence deletion |
 | NFR-14 | UX | Visual design, layout and metrics per [design.md](design.md) section 10 and 11; WCAG 2.2 AA with contrast verified |
 | NFR-15 | Licensing and IP compliance | No FOSS licence issue and no plagiarism/copyright issue in any library, software, container image, font, icon, dataset, content or generated output; only items meeting constitution LIC-1 to LIC-8 are used; if an issue exists, the item is not used and an alternative is chosen |
+| NFR-16 | Project licence | AUCoFF is released under the MIT License (constitution LIC-9); the root `LICENSE` and package metadata agree |
 
 ## 9. LLM Approach
 Provider-agnostic cloud LLM API behind an interface (ARC-5), with Anthropic Claude as the default provider. v1 uses Anthropic Claude only, via the provider interface, with redacted data only and US-region processing unless a tenant requires otherwise; a fallback provider and residency-pinned options are revisited with the first EU/India tenants.

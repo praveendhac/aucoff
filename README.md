@@ -52,4 +52,4 @@ make cluster-down
 
 ## Project licence
 
-The repository's [`LICENSE`](LICENSE) is the GNU AGPL v3. Confirm this is the intended licence for AUCoFF before distributing it; the dependency rules above govern what AUCoFF may use, not how AUCoFF itself is licensed.
+AUCoFF is released under the [MIT License](LICENSE) (Copyright (c) 2026 Praveen Darshanam). It was relicensed from the GNU AGPL v3 on 2026-10-19 by the copyright holder; versions of the code obtained earlier remain available under the licence they were received under. The dependency rules above govern what AUCoFF may use; MIT is chosen for AUCoFF itself because it has the fewest obligations of the permissive licences (Apache-2.0 adds a patent grant but also notice and change-statement duties).

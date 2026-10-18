@@ -3,7 +3,7 @@
 | Field | Value |
 |-------|-------|
 | Status | Draft |
-| Version | 0.6.0 |
+| Version | 0.6.1 |
 | Owner | Praveen Darshanam |
 | Last updated | 2026-10-19 |
 

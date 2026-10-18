@@ -3,7 +3,7 @@
 | Field | Value |
 |-------|-------|
 | Status | Draft |
-| Version | 0.9.0 |
+| Version | 0.10.0 |
 | Owner | Praveen Darshanam |
 | Last updated | 2026-10-19 |
 
@@ -169,6 +169,12 @@ AUCoFF MUST NOT contain, depend on, or distribute anything that creates a free/o
 | LIC-7 | **Attribution and notices.** Required attributions and licence texts are kept in a NOTICE/licence register that ships with the product. |
 | LIC-8 | **Generated content.** AI-generated code, text, reports, prompts and questionnaire answers MUST NOT reproduce copyrighted or third-party material; generated deliverables are reviewed for originality (similarity checks where practical) before release, and source citations point to references instead of copying wording. |
 
+AUCoFF's own licence:
+
+| ID | Rule |
+|----|------|
+| LIC-9 | AUCoFF is licensed under the MIT License, Copyright (c) 2026 Praveen Darshanam. The root `LICENSE` file and the `license` metadata in `backend/pyproject.toml` and `frontend/package.json` MUST agree. Changing the project licence needs an owner decision recorded in this constitution and in `LICENCES.md`. Contributions are accepted only under the same licence, and only from people who may license them. |
+
 ## 8. Spec-Driven Development Rules
 
 - **SDD-1** No behaviour change without a spec change in the same PR or earlier.
@@ -209,3 +215,4 @@ AUCoFF MUST NOT contain, depend on, or distribute anything that creates a free/o
 | 0.7.0 | 2026-10-19 | Added SEC-15 (break-glass), SEC-16 (auditor access), SEC-17 (third-party scanner vetting) |
 | 0.8.0 | 2026-10-19 | Added licensing, provenance and content rules LIC-1 to LIC-8; QA-11 and SEC-17 updated |
 | 0.9.0 | 2026-10-19 | v1 is local-only (kind): ENV-4 added; ARC-11, SEC-3, ENV-1, ENV-3 reworded |
+| 0.10.0 | 2026-10-19 | AUCoFF relicensed from AGPL-3.0 to MIT: LIC-9 added |
