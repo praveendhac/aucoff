@@ -39,8 +39,8 @@ ol.toc{columns:2;column-gap:32px;font-size:13px;padding-left:22px}ol.toc li{marg
 <h2>1. Outcome at a glance</h2>
 <div class="grid">
 <div class="card"><div class="kpi">10</div><div class="muted">spec documents in <code>specs/</code></div></div>
-<div class="card"><div class="kpi">56</div><div class="muted">commits on <code>main</code>, including the one adding this page</div></div>
-<div class="card"><div class="kpi">63</div><div class="muted">typed prompts logged (turns 1 to 63)</div></div>
+<div class="card"><div class="kpi">59</div><div class="muted">commits on <code>main</code>, including the one adding this page</div></div>
+<div class="card"><div class="kpi">64</div><div class="muted">typed prompts logged (turns 1 to 64)</div></div>
 <div class="card"><div class="kpi">13</div><div class="muted">agents (microservices) defined</div></div>
 <div class="card"><div class="kpi">70</div><div class="muted">tasks (T-001 to T-502)</div></div>
 <div class="card"><div class="kpi">71</div><div class="muted">API endpoint entries (some cover several methods)</div></div>
@@ -67,11 +67,11 @@ ol.toc{columns:2;column-gap:32px;font-size:13px;padding-left:22px}ol.toc li{marg
 <tr><td><code>design.md</code></td><td>0.6.1</td><td>Architecture, data flows, STRIDE, ADRs, UX/visual design, metrics catalogue, 12-month history</td></tr>
 <tr><td><code>agent.md</code></td><td>0.5.0</td><td>13 agents, LangGraph, models, tools, RAG, guardrails, approvals, questionnaire workflow, evaluation</td></tr>
 <tr><td><code>backend-spec.md</code></td><td>0.7.0</td><td>FastAPI gateway, agent services, RabbitMQ, check engine, RBAC, OWASP API mapping</td></tr>
-<tr><td><code>frontend-spec.md</code></td><td>0.7.0</td><td>Next.js app: routes, screens, components, BFF auth, accessibility</td></tr>
-<tr><td><code>api-contract.md</code></td><td>0.6.0</td><td>REST /api/v1, OpenAPI + Swagger for all endpoints, SSE, endpoint catalogue</td></tr>
+<tr><td><code>frontend-spec.md</code></td><td>0.8.0</td><td>Next.js app: routes, screens, components, BFF auth, accessibility</td></tr>
+<tr><td><code>api-contract.md</code></td><td>0.7.0</td><td>REST /api/v1, OpenAPI + Swagger for all endpoints, SSE, endpoint catalogue</td></tr>
 <tr><td><code>database-spec.md</code></td><td>0.7.0</td><td>PostgreSQL 18.6 + pgvector 0.8.6, tables, RLS, secure config, history, retention</td></tr>
 <tr><td><code>infrastructure-spec.md</code></td><td>0.10.0</td><td>kind + Helm (v1 local-only), laptop profile, CI/CD, observability; AWS notes are post-v1</td></tr>
-<tr><td><code>tasks.md</code></td><td>0.20.0</td><td>Phased task breakdown with traceability and statuses</td></tr></table>
+<tr><td><code>tasks.md</code></td><td>0.21.0</td><td>Phased task breakdown with traceability and statuses</td></tr></table>
 
 <h2>4. Key decisions</h2>
 <ul>
@@ -142,10 +142,13 @@ ol.toc{columns:2;column-gap:32px;font-size:13px;padding-left:22px}ol.toc li{marg
 <tr><td><code>6a025aa</code></td><td>2026-10-19</td><td>Add posture dashboard endpoint (API-70, report:read) returning labelled synthetic demo data</td></tr>
 <tr><td><code>9c26a4e</code></td><td>2026-10-19</td><td>Add design tokens with automated WCAG contrast tests, theme support and lucide-react icons</td></tr>
 <tr><td><code>dbdb0fd</code></td><td>2026-10-19</td><td>Add app shell and posture dashboard: role-filtered sidebar, top bar, drawer, KPI strip, status, severity and coverage panels; smoke checks per role; specs updated</td></tr>
+<tr><td><code>2dc9e0f</code></td><td>2026-10-19</td><td>Regenerate session summary with Build Sessions 5 and 6</td></tr>
+<tr><td><code>8c51318</code></td><td>2026-10-19</td><td>Add list endpoints: unified controls (real catalogue), findings and evidence (synthetic, labelled); cursor pagination; ship data/controls in the backend image</td></tr>
+<tr><td><code>ccd203b</code></td><td>2026-10-19</td><td>Add Controls, Findings and Evidence screens: shared sortable table, filters, density toggle, cursor paging, detail drawer; smoke checks per role; specs updated</td></tr>
 <tr><td>(this commit)</td><td>2026-10-19</td><td>Session summary regenerated</td></tr></table>
 
 <h2>6. Prompt log: every prompt and every response</h2>
-<div class="note"><strong>How to read this.</strong> Built directly from the Claude Code session transcript (<code>c7f7a4c0-58f1-4b88-858c-51774d4f1fc5.jsonl</code>), not reconstructed from memory. Each numbered row is one turn: the prompt as typed is always visible; <strong>Claude's response</strong> underneath is collapsed by default (click to open). It holds Claude's visible messages and, in dark cards, every tool action with its input and result exactly as the transcript captured them. Turns 1 to 63 are all the typed prompts up to the moment this page was generated (the last turn may still be in progress); slash commands, command output and interrupts appear as terminal events inside the surrounding turn. Left out on purpose: Claude's hidden reasoning blocks, and the harness's injected system reminders (stored outside the conversation messages; they contain account details). The long pasted framework table in turn 28 is shown with its wrapper tags replaced by markers. Session name in the transcript metadata: <code>finish-design-md-architecture-ux</code>.</div>
+<div class="note"><strong>How to read this.</strong> Built directly from the Claude Code session transcript (<code>c7f7a4c0-58f1-4b88-858c-51774d4f1fc5.jsonl</code>), not reconstructed from memory. Each numbered row is one turn: the prompt as typed is always visible; <strong>Claude's response</strong> underneath is collapsed by default (click to open). It holds Claude's visible messages and, in dark cards, every tool action with its input and result exactly as the transcript captured them. Turns 1 to 64 are all the typed prompts up to the moment this page was generated (the last turn may still be in progress); slash commands, command output and interrupts appear as terminal events inside the surrounding turn. Left out on purpose: Claude's hidden reasoning blocks, and the harness's injected system reminders (stored outside the conversation messages; they contain account details). The long pasted framework table in turn 28 is shown with its wrapper tags replaced by markers. Session name in the transcript metadata: <code>finish-design-md-architecture-ux</code>.</div>
 <h3 style="margin-top:16px">Turn index</h3>
 <ol class="toc">
 <li><a href="#t1">1. run git status</a></li>
@@ -211,6 +214,7 @@ ol.toc{columns:2;column-gap:32px;font-size:13px;padding-left:22px}ol.toc li{marg
 <li><a href="#t61">61. go</a></li>
 <li><a href="#t62">62. ask me the queries related to "Still waiting on you: the licence exceptions in LICENCES.md...</a></li>
 <li><a href="#t63">63. go</a></li>
+<li><a href="#t64">64. go</a></li>
 </ol>
 <section class="turn" id="t0"><div class="turnhd"><span class="n">Session start</span></div><details class="resp"><summary>Session commands before the first prompt (5)</summary><div class="tool term"><div class="th">Terminal event</div><pre class="out">&lt;command-name&gt;/model&lt;/command-name&gt;
             &lt;command-message&gt;model&lt;/command-message&gt;
@@ -31778,7 +31782,7 @@ Say "go" for Session 5 (CI image scan, TLS on the local ingress, role-to-scope m
 </details></section>
 <section class="turn" id="t63"><div class="turnhd"><span class="n">63</span><span class="ts">2026-10-18 21:46:57.014</span></div>
 <div class="prompt"><div class="k">Prompt</div><pre class="msg">go</pre></div>
-<details class="resp"><summary>Claude's response (1 message, 71 tool actions)</summary>
+<details class="resp"><summary>Claude's response (2 messages, 75 tool actions)</summary>
 <div class="tool"><div class="th"><span>Tool: Bash</span></div><div class="inp"><div class="k">command</div><pre class="v">cat deploy/traefik/values-local.yaml; git status --short | head -3; sed -n 58,75p .github/workflows/ci.yml; grep -n "http://\|:80" scripts/smoke.sh scripts/web-login-test.py | head -20</pre></div><div class="k">result</div><pre class="out"># Traefik ingress controller for the local kind cluster (replaces ingress-nginx, which was retired
 # upstream after March 2026 and no longer receives security fixes; see LICENCES.md / ADR-15).
 # Chart: traefik/traefik 42.0.0 (app v3.7.14), installed by `make ingress`.
@@ -35385,6 +35389,2071 @@ Co-Authored-By: Claude Sonnet 5.5 &lt;noreply@anthropic.com&gt;" 2&gt;&amp;1 | g
 
 Co-Authored-By: Claude Sonnet 5.5 &lt;noreply@anthropic.com&gt;" 2&gt;&amp;1 | grep -E "rror"; git pull --rebase origin main 2&gt;&amp;1 | tail -1; git push origin main 2&gt;&amp;1 | tail -1; sleep 200; gh run list --limit 1 --json conclusion,status --jq '.[]|"\(.status) \(.conclusion)"'</pre><div class="k">timeout</div><pre class="v">400000</pre></div><div class="k">result</div><pre class="out">Current branch main is up to date.
    4b55f14..dbdb0fd  main -&gt; main
+completed success</pre></div>
+<div class="tool"><div class="th"><span>Tool: Bash</span></div><div class="inp"><div class="k">command</div><pre class="v">S=/private/tmp/claude-501/-Users-praveen-da-REPOS-PD-aucoff/c7f7a4c0-58f1-4b88-858c-51774d4f1fc5/scratchpad; python3 $S/gen4.py | tail -1; git add -A &amp;&amp; git commit -q -m "Regenerate session summary with Build Sessions 5 and 6
+
+Co-Authored-By: Claude Sonnet 5.5 &lt;noreply@anthropic.com&gt;" 2&gt;&amp;1 | grep rror; git pull --rebase origin main 2&gt;&amp;1 | tail -1; git push origin main 2&gt;&amp;1 | tail -1</pre><div class="k">timeout</div><pre class="v">100000</pre></div><div class="k">result</div><pre class="out">turns 63 commits 56 bytes 3553705
+Current branch main is up to date.
+   dbdb0fd..2dc9e0f  main -&gt; main</pre></div>
+<div class="tool"><div class="th"><span>Tool: EnterPlanMode</span></div><div class="inp"></div><div class="k">result</div><pre class="out">Entered plan mode. You should now focus on exploring the codebase and designing an implementation approach.
+
+In plan mode, you should:
+1. Thoroughly explore the codebase to understand existing patterns
+2. Identify similar features and architectural approaches
+3. Consider multiple approaches and their trade-offs
+4. Use AskUserQuestion if you need to clarify the approach
+5. Design a concrete implementation strategy
+6. When ready, use ExitPlanMode to present your plan for approval
+
+Remember: DO NOT write or edit any files yet. This is a read-only exploration and planning phase.</pre></div>
+<div class="tool"><div class="th"><span>Tool: Edit</span></div><div class="inp"><div class="k">replace_all</div><pre class="v">false</pre><div class="k">file_path</div><div class="v1">/Users/praveen.da/.claude/plans/making-a-full-stack-serene-lamport.md</div><div class="k">old_string</div><div class="v1">## Next after Session 6 (awaiting owner choice)</div><div class="k">new_string</div><pre class="v">## DONE (pushed 2dc9e0f, CI green) Build Session 6: tokens + WCAG tests, app shell, posture dashboard with synthetic data. UI not yet looked at in a browser.
+## Next after Session 6 (awaiting owner choice)</pre></div><div class="k">result</div><pre class="out">The file /Users/praveen.da/.claude/plans/making-a-full-stack-serene-lamport.md has been updated successfully.</pre></div>
+<div class="tool"><div class="th"><span>Tool: AskUserQuestion</span></div><div class="inp"><div class="k">questions</div><pre class="v">[
+  {
+    "question": "Session 6 is pushed and CI is green. What next?",
+    "header": "Next",
+    "multiSelect": false,
+    "options": [
+      {
+        "label": "You look at the UI first",
+        "description": "Run make idp-forward, trust the local CA, open https://aucoff.localtest.me and sign in as dev.exec; tell me what to change before I build more screens"
+      },
+      {
+        "label": "Scanner + assessment flow",
+        "description": "Scanner adapter interface, first Kubernetes scanner, evidence store, assessment run via RabbitMQ; needs a few of your controls in data/controls/"
+      },
+      {
+        "label": "Hardening",
+        "description": "TLS on the ingress-to-frontend hop, scan the remaining images, OpenTelemetry collector with authenticated push"
+      },
+      {
+        "label": "More screens",
+        "description": "Controls, findings and evidence list pages with data tables, still on synthetic data"
+      }
+    ]
+  }
+]</pre></div><div class="k">result</div><pre class="out">Your questions have been answered: "Session 6 is pushed and CI is green. What next?"="You look at the UI first". You can now continue with these answers in mind.</pre></div>
+<div class="say"><pre class="msg">Session 6 is pushed (last commit `2dc9e0f`, CI green), and nothing more will be built until you've looked at the UI. I verified the screens through tests and HTTP responses only. Nobody has seen them in a browser, so layout and colour problems are possible.
+
+**To look at it**
+1. In a terminal, run `make idp-forward` and leave it running. It exposes Keycloak at `https://idp.localtest.me:8443`.
+2. Trust the local CA in your browser:
+   - Export it with `kubectl -n cert-manager get secret aucoff-local-ca -o jsonpath='{.data.tls\.crt}' | base64 -d`.
+   - Import it into your OS or browser trust store.
+3. Open `https://aucoff.localtest.me` and sign in as `dev.exec`.
+4. Get the shared password with `kubectl -n aucoff-identity get secret aucoff-keycloak-clients -o jsonpath='{.data.DEV_USER_PASSWORD}' | base64 -d`.
+
+Each role shows a different sidebar and API access. These are the users to try:
+
+| User | Sidebar | Dashboard |
+|---|---|---|
+| `dev.exec` | Dashboard, Reports | loads |
+| `dev.auditor` | Dashboard, Controls, Evidence, Reports, Audit log | loads |
+| `dev.engineer` | no Reports | "Your role does not include dashboard access" |
+| `dev.admin` | includes Settings | "Your role does not include dashboard access" |
+
+**What to check**
+- The light and dark theme toggle, and whether it flashes on reload.
+- The yellow "Demo data" banner. Every number on the dashboard is synthetic, and the API labels it that way.
+- The sidebar collapse, and that each status and severity shows an icon plus a word.
+- Contrast and spacing, which feel different on a real screen than in a test.
+
+Tell me what to change, or say "go" with a choice: the scanner and assessment flow (it needs a few of your controls in `data/controls/`), hardening, or more screens. I'm staying in plan mode until then.</pre></div>
+</details></section>
+<section class="turn" id="t64"><div class="turnhd"><span class="n">64</span><span class="ts">2026-10-18 22:42:59.184</span></div>
+<div class="prompt"><div class="k">Prompt</div><pre class="msg">go</pre></div>
+<details class="resp"><summary>Claude's response (1 message, 22 tool actions)</summary>
+<div class="tool"><div class="th"><span>Tool: AskUserQuestion</span></div><div class="inp"><div class="k">questions</div><pre class="v">[
+  {
+    "question": "Which should I build for Session 7?",
+    "header": "Session 7",
+    "multiSelect": false,
+    "options": [
+      {
+        "label": "Hardening (Recommended)",
+        "description": "Needs nothing from you: TLS on the ingress-to-frontend hop, scan the remaining images (cert-manager, Traefik, CloudNativePG, PostgreSQL), OpenTelemetry collector with authenticated push"
+      },
+      {
+        "label": "More screens",
+        "description": "Controls, findings and evidence list pages with data tables, still on synthetic data and labelled as such"
+      },
+      {
+        "label": "Scanner + assessment flow",
+        "description": "Scanner adapter, first Kubernetes scanner, evidence store, assessment run; needs a few of your controls in data/controls/ (none exist yet), so I would use only placeholder fixtures in tests"
+      },
+      {
+        "label": "UI changes first",
+        "description": "You tell me what to change in the shell or dashboard after viewing it"
+      }
+    ]
+  }
+]</pre></div><div class="k">result</div><pre class="out">Your questions have been answered: "Which should I build for Session 7?"="More screens". You can now continue with these answers in mind.</pre></div>
+<div class="tool"><div class="th"><span>Tool: Bash</span></div><div class="inp"><div class="k">command</div><pre class="v">grep -n "API-3[0-9]\|API-4[0-9]\|API-5[0-9]\|/findings\|/controls\|/catalog" specs/api-contract.md | cut -c1-230 | head -30</pre></div><div class="k">result</div><pre class="out">122:| API-30 | GET/POST | `/connectors` | List / create connector | connector:write | 200/201 | US-3, FR-4 |
+123:| API-31 | POST | `/connectors/{id}:test` | Validate read-only access | connector:write | 200 | FR-4 |
+124:| API-32 | PATCH/DELETE | `/connectors/{id}` | Update/remove | connector:write | 200/204 | FR-4 |
+125:| API-33 | GET/POST | `/scopes` | List / create assessment scopes | scope:write | 200/201 | US-2, FR-3 |
+126:| API-34 | GET/PATCH/DELETE | `/scopes/{id}` | Read/update/delete (incl. schedule) | scope:write | 200/204 | US-12 |
+127:| API-35 | POST | `/evidence/uploads` | Create upload (returns presigned URL) | evidence:write | 201 | US-4, FR-5 |
+128:| API-36 | POST | `/evidence/uploads/{id}:complete` | Finalise upload and start analysis | evidence:write | 202 | FR-5 |
+129:| API-37 | GET | `/evidence` | List evidence (filter by scope, source) | evidence:read | 200 | FR-6 |
+130:| API-38 | GET | `/evidence/{id}` | Metadata and short-lived download URL | evidence:read | 200 | US-7 |
+135:| API-40 | POST | `/assessments` | Start assessment (async) | assessment:run | 202 | US-5, FR-3 |
+136:| API-41 | GET | `/assessments` | List assessments | assessment:run / report:read | 200 | FR-3 |
+137:| API-42 | GET | `/assessments/{id}` | Status and summary | same | 200 | FR-3 |
+138:| API-43 | POST | `/assessments/{id}:cancel` | Cancel | assessment:run | 202 | FR-3 |
+139:| API-44 | GET | `/assessments/{id}/control-results` | Results with citations | result:review / evidence:read | 200 | US-5, FR-7 |
+140:| API-45 | GET | `/control-results/{id}` | Detail incl. evidence and run metadata | same | 200 | FR-7 |
+141:| API-46 | POST | `/control-results/{id}/decision` | Approve/reject/edit with comment | result:review | 200 | US-5, FR-7 |
+142:| API-47 | GET | `/findings` | List findings (filter severity, framework, status) | finding:write / read | 200 | US-6, FR-8 |
+143:| API-48 | GET/PATCH | `/findings/{id}` | Read / update status (accept risk requires approval) | finding:write | 200 | FR-8 |
+144:| API-49 | POST | `/findings/{id}/tickets` | Create Jira/ServiceNow ticket | finding:write | 201 | FR-9 |
+149:| API-50 | GET | `/agent-runs/{id}` | Run metadata, model, prompt version, cost | assessment:run | 200 | FR-15 |
+150:| API-51 | GET | `/agent-runs/{id}/events` | SSE stream of run progress (section 6) | assessment:run | 200 | FR-15 |
+151:| API-52 | GET | `/approvals` | Pending/decided approvals | result:review | 200 | FR-7 |
+152:| API-53 | POST | `/approvals/{id}/decision` | Decide an agent action | result:review | 200 | AI-2 |</pre></div>
+<div class="tool"><div class="th"><span>Tool: Bash</span></div><div class="inp"><div class="k">command</div><pre class="v">grep -n "catalog\|frameworks" specs/api-contract.md | cut -c1-200 | head -8; grep -n "cursor\|limit" specs/api-contract.md | head -8 | cut -c1-200; grep -n "Dockerfile\|COPY" backend/Dockerfile | head; sed -n 1,25p backend/tests/conftest.py | grep -n "import\|AUDIENCE"</pre></div><div class="k">result</div><pre class="out">70:| `catalog:read` | Read frameworks, requirements, controls | all |
+112:| API-20 | GET | `/frameworks` | List frameworks (filter by jurisdiction/type) | catalog:read | 200 | US-1, US-13, FR-1 |
+113:| API-21 | GET | `/frameworks/{id}/requirements` | Requirements (paged) | catalog:read | 200 | FR-1 |
+114:| API-22 | GET | `/unified-controls` | Unified controls (filter by framework, domain) | catalog:read | 200 | US-1 |
+115:| API-23 | GET | `/control-mappings` | Mappings with status | catalog:read | 200 | FR-2 |
+176:| API-110 | GET | `/regulatory-changes` | Proposed catalogue/mapping changes | mapping:write | 200 | US-17, FR-20 |
+193:| API-153 | GET | `/rule-packs`, `/check-definitions` | Browse check engine metadata | catalog:read | 200 | FR-29 |
+232:| 0.2.0 | 2026-10-18 | Conventions, documentation requirement, endpoint catalogue, SSE | - |
+24:| Pagination | Cursor-based: `?limit=` (default 25, max 100) and `?cursor=`; response `{ "items": [], "next_cursor": "..." \| null }` |
+27:| Rate limiting | Per tenant and user; headers `RateLimit-Limit`, `RateLimit-Remaining`, `RateLimit-Reset`; 429 with `Retry-After` |
+64:| 429 | Rate limited |
+161:| API-76 | GET | `/assessments/snapshots` | List snapshots (cursor-paginated) for pickers | report:read | 200 | FR-22 |
+191:| API-151 | GET | `/notifications` | In-app notifications (cursor-paginated) | any | 200 | FR-30 |
+200:- Stream ends after a terminal status; server enforces per-user connection limits.
+206:| `Page&lt;T&gt;` | items[], next_cursor |
+223:Jira/ServiceNow status callbacks to `POST /integrations/{id}/webhook` are authenticated: the HMAC signature over the body and a timestamp (the per-integration shared secret is the credential) is v
+8:COPY pyproject.toml uv.lock ./
+10:COPY app ./app
+18:COPY --from=build /app/.venv /app/.venv
+19:COPY --from=build /app/app /app/app
+20:COPY alembic.ini /app/alembic.ini
+21:COPY migrations /app/migrations
+7:import time
+8:from collections.abc import Callable
+9:from typing import Any
+11:import jwt
+12:import pytest
+13:from cryptography.hazmat.primitives.asymmetric import rsa
+14:from fastapi import FastAPI
+15:from fastapi.testclient import TestClient
+17:from app.core.security import StaticKeyResolver, TokenVerifier
+18:from app.main import create_app
+21:AUDIENCE = "aucoff-gateway"</pre></div>
+<div class="tool"><div class="th"><span>Tool: Edit</span></div><div class="inp"><div class="k">replace_all</div><pre class="v">false</pre><div class="k">file_path</div><div class="v1">/Users/praveen.da/.claude/plans/making-a-full-stack-serene-lamport.md</div><div class="k">old_string</div><div class="v1">## Next after Session 6 (awaiting owner choice)</div><div class="k">new_string</div><pre class="v">## OWNER CHOSE (2026-10-19): Build Session 7 = more screens (Controls, Findings, Evidence list pages)
+Scope: backend `GET /api/v1/unified-controls` (API-22, catalog:read; REAL data read from data/controls/*.yaml via app.domain.controls, empty today -&gt; honest empty state; image build context becomes repo root so data/ ships), `GET /api/v1/findings` (API-47, finding:write; synthetic, filters severity/status) and `GET /api/v1/evidence` (API-37, evidence:read; synthetic, filter source), cursor pagination `{items,next_cursor}`, `data_source` label, OpenAPI + Spectral + tests; frontend reusable DataTable (client sort, filter selects, density toggle comfortable/compact in localStorage, "Load more" via cursor, row -&gt; DetailDrawer, empty/loading/error states, caption + th scope for a11y), pages /controls /findings /evidence enabled in nav; vitest tests; smoke checks per role through the BFF; specs/tasks/api-contract updated; CI check; session summary. Not in scope: writes, real evidence/findings, filters beyond two per list. Never present synthetic rows as real.
+
+## Next after Session 7 (awaiting owner choice)</pre></div><div class="k">result</div><pre class="out">The file /Users/praveen.da/.claude/plans/making-a-full-stack-serene-lamport.md has been updated successfully.</pre></div>
+<div class="tool"><div class="th"><span>Tool: ExitPlanMode</span></div><div class="inp"><div class="k">plan</div><pre class="v"># Plan: finish design.md (architecture + UX/visual design)
+
+## Context
+design.md (v0.1.0) has architecture, components, data-model pointer, ADR-1..7 but still has TODO sections (system context, data flows, security architecture, observability, risks) and no UX/visual design. Owner wants it finished and wants closure on colour usage, page layout, and the information/metrics shown in the frontend. Owner stays in plan mode until they say go. After writing: align frontend-spec.md (link to design tokens/screens), spec.md metrics (if new ones), tasks.md, then commit, `git pull --rebase origin main`, push.
+
+## Owner decisions (this round)
+- Theme: light default + dark mode, clean enterprise; professional with a Gen-Z feel.
+- Palette (from owner): deep blue, blue, teal, red, yellow, green, amber, gray. Brand primary = deep blue; teal secondary/accent; status semantics: Pass green, Partial amber, Fail red, Unknown grey, N/A slate; yellow for warnings/highlights; always icon + text (never colour alone).
+- Style traits: rounded corners 8-12px, soft shadows, generous whitespace; subtle gradients/glass only on hero KPI cards; micro-interactions and friendly empty-state illustrations (respect reduced-motion); bold typography with large KPI numerals.
+- Layout: left collapsible sidebar + top bar (tenant switcher, global search, notifications, user) + content area with breadcrumbs, page header/actions, right detail drawer.
+- Density/responsive: comfortable default with compact table toggle; desktop-first, tablet OK, mobile for dashboard and approvals (read/decide).
+- Dashboard priority: metrics and quantified data first. Landing shows: overall compliance posture score + per-framework coverage %; open findings by severity + aging; pending approvals + agent activity; jurisdiction heatmap + upcoming audits.
+- Metrics/charts: control coverage % and pass/partial/fail distribution; time to audit readiness and remediation cycle time; agent quality (citation correctness, confidence, review override rate); LLM cost/tokens vs budget, scan duration, evidence freshness; control severity (critical/high/medium/low) current counts compared with the last 2 scans.
+
+## DONE (pushed d1e9947) Build Session 4: web login (Auth.js v4 + Keycloak, BFF), RabbitMQ per-service users, Trivy scan + SBOM
+## PROPOSED Build Session 5 (awaiting owner "go")
+(A) CI: make GitHub Actions run `make scan`, smoke-free checks; verify the workflow on first run. (B) TLS for the local ingress (cert for aucoff.localtest.me from the local CA) so session cookies can be `Secure`, plus backend TLS for the in-cluster hop. (C) Role-to-scope mapping (realm roles -&gt; scopes) and tenant/user tables wired to the token (T-105/T-107). (D) Authenticated metrics/telemetry (T-124 remainder). (E) First scanner adapter + assessment flow (needs owner control set T-006). Owner follow-ups open: licence exceptions in LICENCES.md, branch protection, T-001 sign-off, T-006, T-005, T-009.
+
+## DONE (pushed 4b55f14, CI green) Build Session 5: HTTPS ingress + Secure cookie + gateway TLS, role-&gt;scope mapping, CI image-scan job, authenticated metrics
+## OWNER CHOSE (2026-10-19): Build Session 6 = App shell + dashboard (T-303/T-308 start; design.md §10, §11)
+Scope: (1) design tokens from design.md §10.2 as CSS variables (light/dark, user override stored in localStorage via try/catch) in `frontend/src/app/globals.css` + a `tokens.ts` single source and an automated WCAG contrast test (vitest) over every documented pair; (2) app shell: collapsible sidebar (role-filtered nav), top bar (tenant label from session, theme toggle, user menu with sign-out, command-search placeholder), breadcrumbs, page header, right detail drawer component; session callback exposes `roles` (from access-token claim, no tokens); (3) backend `GET /api/v1/dashboards/posture` (API-70, scope `report:read`) returning clearly-labelled SYNTHETIC demo data (`"data_source": "synthetic"`) with KPI strip, status distribution, severity now vs last 2 scans, per-framework coverage for the four first-scope frameworks; OpenAPI + Spectral + tests (401/403/200); (4) dashboard page via the BFF (`/bff/dashboards/posture`): KPI hero cards, status distribution, severity comparison with delta arrows, framework coverage bars — hand-written SVG/CSS (no new chart dependency), icon+label never colour alone, "Demo data" banner; (5) tests: vitest component tests, contrast test, nav-by-role test; extend `make smoke` (executive sees the dashboard, auditor lacks `report:read`? — per matrix auditor HAS report:read; engineer gets 403); (6) specs: frontend-spec/design/tasks/api-contract status, session summary; commit in logical commits, check CI. Out of scope: real scan data, other screens, copilot panel, i18n. Stop and report if blocked; never present synthetic numbers as real.
+
+## DONE (pushed 2dc9e0f, CI green) Build Session 6: tokens + WCAG tests, app shell, posture dashboard with synthetic data. UI not yet looked at in a browser.
+## Next after Session 6 (awaiting owner choice): scanner + assessment flow (needs owner control YAML), hardening (ingress-to-frontend TLS, OTel collector, scan remaining images)
+
+## GAP REVIEW 2026-10-19 (before build) - findings to fix in specs
+Consistency checks run: all US/FR/NFR/API/T/ADR/PER/AG/M/R IDs and constitution rule IDs referenced are defined; all cross-file links resolve. Real gaps:
+A. Missing decisions/specs
+ 1. Deterministic check engine: how scanner rules ("policy-as-code") are authored/stored/run (build own vs integrate Prowler/ScoutSuite/Steampipe, kube-bench/Trivy/kubescape, Checkov, OPA/Rego), rule-to-unified-control mapping, rule versioning. Not specified anywhere.
+ 2. Unified control catalogue seed: who authors the initial unified controls + requirement mappings (own, SCF-style open set, expert-reviewed), licensing, versioning.
+ 3. Platform operator role &amp; tenant lifecycle: tenant provisioning/onboarding, offboarding/data export/deletion, support/break-glass access, platform super-admin (PER-6 is only tenant admin).
+ 4. External auditor access: invited, time-boxed read-only access to a tenant.
+ 5. Connector permissions: exact least-privilege read-only policies per source (AWS SecurityAudit-style roles, GCP/Azure roles, GitHub app scopes, Entra Graph scopes, Metabase), per-tenant secret storage at scale (K8s Secrets not suitable for many tenants).
+ 6. Scan scheduling/drift: cron model, schedule storage (US-12), drift detection rules.
+ 7. Notification catalogue (events x channels), templates.
+ 8. Report templates/formats per framework (open), evidence upload malware scanning (TODO).
+B. Inconsistencies / missing detail
+ 1. DB lacks tables for APIs: scope schedules (column), notification_preferences, copilot conversations/messages, regulatory_changes (proposals), evidence_uploads, sso_settings/connectors naming (API `connectors` vs DB `integrations`), tenant_settings (retention, budgets, detail level, region).
+ 2. embeddings RLS: shared rows have tenant_id NULL but policy is equality -&gt; need explicit policy for shared rows.
+ 3. frontend-spec route table lacks questionnaires, answer library, regulatory changes, compare/history, copilot, notifications routes; backend RBAC matrix lacks questionnaire/copilot/regulatory-change/history permissions.
+ 4. tasks.md header (owner/date/version 0.1.0) and "Blockers and Notes" TODO; no tasks for rule engine, control catalogue seeding, tenant provisioning, connector permission policies, repo conventions.
+ 5. Repo conventions not specified: monorepo layout, CODEOWNERS, PR template, branch strategy, README/CLAUDE.md.
+C. Verify-before-build: PostgreSQL 18.6 + pgvector PG18 support; CloudNativePG PG18 support; owner-supplied framework instruments; Python 3.13 compatibility of LangGraph/asyncpg etc.
+D. Deferred is fine: brand, locales, KEDA, mTLS, image signing, plan limits, concurrency numbers.
+
+## OWNER SAID "go" (2026-10-19): Build Session 3 - identity and authenticated end-to-end (v1 local kind)
+Scope: (A) verify licences (Keycloak, cert-manager) then install cert-manager with a local CA issuer so in-cluster identity traffic is TLS (ZT-4); (B) Keycloak (own database + role in the CNPG cluster, realm `aucoff` imported from a ConfigMap, clients: gateway audience, `aucoff-web` (auth code + PKCE, for the BFF later), per-service confidential clients incl. a smoke-test client; client secrets generated by `make secrets`; scopes ops:read/docs:read/svc:*); (C) backend: JWKS fetch over TLS with CA bundle (new setting AUCOFF_OIDC_CA_FILE), chart OIDC env pointing at Keycloak; network policies (gateway -&gt; Keycloak, Keycloak -&gt; its DB); (D) authenticated smoke test: obtain a client-credentials token and call GET /api/v1/health through the ingress (expect 200) plus wrong-audience/wrong-scope/expired negative cases against real Keycloak; (E) T-121 `ServiceClient` (client credentials, cache, scope check) with tests; (F) update specs/tasks/LICENCES.md/infrastructure; commit in logical commits; push; regenerate session summary; re-enter plan mode. NOT in this session: frontend BFF login (Auth.js) and RabbitMQ (T-123) - Session 4. Stop and report if blocked; never fake results.
+
+## (done) OWNER SAID "go" (2026-10-19): execute Build Session 2 now (kind v0.33.0 + Colima 6 CPU/12 GiB running, `make doctor` all ok)
+Order: (0) pin kind node image from kind v0.33.0 release notes (K8s &gt;= 1.35, containerd &gt;= 2.1); (1) Dockerfiles + `make images`/`load` (pin base image digests, record in LICENCES.md 5a); (2) `make cluster-up`, ingress controller (verify maintenance/licence; ingress-nginx may be retired), `make deploy`, smoke test with a test token (auth-everywhere: smoke test must mint/obtain a token or use exec/kubectl, no anonymous calls); (3) CloudNativePG + PostgreSQL 18.6 + pgvector 0.8.6, per-service roles, secrets via `make secrets`; (4) Alembic baseline migrations + RLS + isolation tests; (5) update specs/tasks/LICENCES.md; commit in small logical commits; push; regenerate session summary; re-enter plan mode. Stop and report if a step is blocked (never fake a result).
+
+## (done) OWNER ASKED (2026-10-19): install kind and Colima
+Plan: check `brew list`/versions; `brew install kind` (colima appears installed already - `colima status` ran); `colima start` (resources: 4+ CPUs, 8 GB RAM, 60 GB disk suitable for the stack; machine has 12 CPUs / 24 GB); verify `docker info`, `kind version`, `make doctor`. No repo changes expected except noting versions in tasks T-004/infra spec if useful. Then re-enter plan mode.
+
+## (done) OWNER SAID "go" (2026-10-19) after the auth specs: implement T-120 (and the exec-probe part of T-124) now, no Docker needed
+Plan: add PyJWT[crypto]; `app/core/security.py` (TokenVerifier with RS256/ES256 allow-list, JWKS resolver, Principal, fail-closed config, RejectAllVerifier for schema export only); pure-ASGI default-deny `AuthMiddleware` covering every HTTP route incl. /docs, /redoc, openapi (scope docs:read; websockets denied); `require_scope` dependency (adds OpenAPI security); remove anonymous /health/live|ready, add authenticated GET /api/v1/health (ops:read); `app/healthcheck.py` CLI; app factory (no module-level app; uvicorn --factory); tests with a test key pair/JWKS (no bypass flag): 401/403 matrix, route-enumeration test, OpenAPI security test, fail-closed config test; Helm: exec probes (backend `python -m app.healthcheck`, frontend node fetch of the static shell), `make helm-lint` fails on httpGet probes; regenerate openapi.yaml; Spectral; licence gates; update LICENCES.md (PyJWT, cryptography), tasks (T-120 done, T-124 partial, T-101 note, blockers), backend-spec/README notes; commit in logical commits; `make check`; push; re-enter plan mode. Docker/kind work remains for after the owner installs them.
+
+## (done) NEW OWNER REQUIREMENT (2026-10-19, supersedes starting Session 2 for now): authenticate everything
+Owner: every REST API call must use an auth token; NO unauthenticated internal or external API anywhere; microservice-to-microservice and microservice-to-DB calls must be authenticated. Update all required specs, commit, push.
+Design decisions to record (specs only; code gap flagged, fixed as first task of Session 2):
+- Constitution: new "Authentication Everywhere (zero trust)" rules ZT-1..ZT-9: default-deny on every HTTP/SSE endpoint incl. health, docs/openapi, metrics, webhooks (webhooks authenticated by HMAC signature + timestamp); only carve-out = the OIDC authorization-code login/callback and the IdP's own endpoints (they establish authentication; PKCE/state/nonce; no data), plus static UI shell assets; user calls = OIDC access tokens (Bearer), BFF session cookies; service-to-service = per-service identities via OAuth2 client credentials (short-lived, audience-scoped JWTs) over TLS, authorise by scope, no shared secrets, no trust by network position; messaging = per-service RabbitMQ users, TLS, least privilege, no guest; DB/object store = per-service credentials/roles (scram-sha-256 or client certs), TLS, no trust auth, secret-store sourced and rotated; probes = exec probes (healthcheck CLI), never anonymous HTTP; metrics scraping authenticated; automated route-enumeration test asserting 401 without credentials and CI gate; no auth-bypass/debug flags in any environment including local kind.
+- spec.md NFR-17 + FR-31/32; api-contract (Auth section, API-2 health -&gt; authenticated ops scope, /docs /redoc /openapi require auth, webhook HMAC); backend-spec (auth middleware, service identity, messaging/DB auth, healthcheck CLI, metrics auth); database-spec (per-service roles, no trust auth); infrastructure-spec (Keycloak service clients, per-service secrets, exec probes, metrics scrape auth, NetworkPolicy as defence in depth only); frontend-spec (BFF route handlers authenticated except OIDC callback); agent.md (internal tool calls use service identity); design.md (security architecture + ADR-14); tasks.md (T-107 widened; new T-120..T-124; note current scaffold health/docs endpoints violate the rule -&gt; fix first in Session 2); CLAUDE.md rule; version bumps; consistency check; commit; rebase; push; re-enter plan mode.
+
+## OWNER SAID "go" (2026-10-19): execute Build Session 2 below (now after the auth requirement above); first run `make doctor`; if kind/Colima are still missing stop and report. Base-image decision already recorded (62aef97).
+
+## TASK NOW (owner 2026-10-19): Build Session 2 - "local stack up" (v1 local-only on kind)
+Owner decisions: (1) base images: unmodified OS packages inside official minimal base images are allowed as mere aggregation; LIC rules still apply to our code and to language-level dependencies; record base images + scan results in LICENCES.md and amend the constitution (LIC-1/LIC-2 wording) accordingly. (2) Owner installs kind (`brew install kind`) and starts Colima (`colima start`) before the session; `make doctor` must be green.
+Scope (in order, small commits, `make check` green before each push):
+0. Preconditions: `make doctor` all ok; pin kind node image (K8s &gt;= 1.35, containerd &gt;= 2.1) and record in deploy/kind/kind-config.yaml + T-004 notes.
+1. T-401 Dockerfiles: backend (python:3.13-slim, multi-stage, uv, non-root, read-only rootfs compatible), frontend (node:22-slim, Next standalone output, non-root); `make images`, `make load` (kind load docker-image); image scan + SBOM tool chosen with permissive licence (T-010).
+2. T-402/T-405 cluster bring-up: `make cluster-up`, ingress controller (verify maintenance status/licence of ingress-nginx first; fall back to another permissive ingress), `helm upgrade --install` with values-local.yaml, `make deploy`, smoke test `curl http://aucoff.localtest.me/api/v1/health/live` (T-410 smoke script + resource measurements).
+3. T-403 PostgreSQL: CloudNativePG operator (verify licence/PG18 support), Cluster with PostgreSQL 18.6 + pgvector 0.8.6 via image-volume extension; secrets via Kubernetes Secrets (generated by `make secrets`); NetworkPolicy so only backend/migration job reach it.
+4. T-102/T-103/T-104 baseline migrations (Alembic): schemas app/ref/audit, tenants, users, roles, user_roles, audit_log (hash chain), roles/grants (aucoff_migrator/app/readonly), RLS policies + tenant context helper; backend /health/ready checks DB; integration tests (testcontainers or the kind DB) proving cross-tenant isolation, missing tenant context returns no rows, audit_log append-only.
+5. Update specs/tasks statuses, LICENCES.md, session-summary regeneration at the end.
+Exit criteria: from a clean clone with kind+Colima: `make setup &amp;&amp; make check &amp;&amp; make cluster-up &amp;&amp; make images load deploy smoke` all pass; RLS tests green; no cloud resources used.
+Not in this session: RabbitMQ, Keycloak/Auth, scanners, LangGraph, frontend features (next sessions: Session 3 auth+messaging, Session 4 first scanner + assessment flow).
+
+## (done) owner 2026-10-19: regenerate docs/session-summary.html (full rebuild from repo state + the session transcript up to this request), validate, commit, `git pull --rebase origin main`, push, re-enter plan mode. Include build session 1 results, MIT relicensing, current spec versions, current commit timeline, all prompts/responses so far.
+
+## (done) owner 2026-10-19: relicense AUCoFF itself from AGPL-3.0 to the more permissive of Apache-2.0 / MIT
+Decision: MIT (fewest obligations: only keep the copyright + permission notice; Apache-2.0 adds a patent grant but also notice/NOTICE and change-statement duties). Copyright holder: Praveen Darshanam, 2026 (owner is sole author; relicensing is the owner's right; earlier commits already published under AGPL stay available under AGPL to anyone who obtained them).
+Edits: replace LICENSE with MIT text; README project-licence section; LICENCES.md (section 2 note resolved + project licence row); constitution.md (new rule on AUCoFF's own licence, version 0.10.0, changelog); spec.md (note + version); CLAUDE.md; backend/pyproject.toml `license = "MIT"` and frontend/package.json `"license": "MIT"`; tasks.md note/blocker cleanup; consistency check; commit; `git pull --rebase origin main`; push; re-enter plan mode.
+
+## (done) owner 2026-10-19: start the implementation - Build Session 1 ("Milestone 0": repo foundation + walking-skeleton prerequisites), v1 local-only on kind
+Scope for this session (specs only change if a finding contradicts them; code goes in backend/, frontend/, deploy/, root files):
+1. T-003 repo conventions: root README.md, CLAUDE.md (project rules distilled from the constitution: licence rules, no secrets, plan/spec-first), CODEOWNERS, PR template, .gitignore, .editorconfig, pre-commit config (keep the existing Gitleaks hook), Makefile with documented targets, commit conventions.
+2. T-004 pre-build verification: check local toolchain versions (docker, kind, kubectl, helm, python, node) read-only; verify pgvector 0.8.6 + PostgreSQL 18.6 + CloudNativePG support and Python 3.13 library compatibility from official sources (WebSearch/WebFetch); record findings in database-spec/infrastructure-spec/tasks and pin versions or choose fallbacks.
+3. T-009 start: licence register (LICENCES.md / NOTICE), verify licences of the flagged tools (MinIO, Grafana/Loki/Tempo, Steampipe, ScoutSuite, Semgrep rules, Redis, Keycloak, RabbitMQ) from official sources, pick permissive replacements, update specs; choose a permissive licence-scan + SBOM tool for CI (T-010).
+4. T-002 scaffold: backend/ (pyproject with pinned Python 3.13, FastAPI app with layered packages, pytest, ruff, mypy, /health/live and /health/ready, OpenAPI export to backend/openapi.yaml, Spectral config), frontend/ (Next.js App Router TypeScript strict, Tailwind, shadcn/ui setup, ESLint/Prettier, Vitest), deploy/kind (cluster config) and deploy/helm/aucoff (umbrella chart skeleton with values-local.yaml, no AWS values).
+5. T-108/T-409 start: GitHub Actions workflows (lint, type check, tests, OpenAPI drift + Spectral, licence/SBOM, Gitleaks); make targets cluster-up/down.
+Exit criteria: clean clone -&gt; `make setup`/lint/test pass locally; `make cluster-up` creates kind cluster; backend health endpoint tested; OpenAPI committed and linted; CI workflow files present and valid; licence register exists; versions pinned. Owner actions needed: T-001 sign-off and later T-006 control set (can proceed in parallel). Commit in small logical commits, `git pull --rebase origin main`, push; then re-enter plan mode.
+Risks: tool availability on the laptop (Docker/kind), network access for verification, licence findings forcing tool swaps.
+
+## (done, superseded) owner 2026-10-19: regenerate docs/session-summary.html FROM THE REAL SESSION TRANSCRIPT
+Source: /Users/praveen.da/.claude/projects/-Users-praveen-da-REPOS-PD-aucoff/c7f7a4c0-58f1-4b88-858c-51774d4f1fc5.jsonl (read-only). Generate with a Python script (scratchpad) producing static HTML: numbered turns (47 typed prompts before the current request; commands/interrupts shown as events), prompt always visible, "Claude's response" in a collapsed &lt;details&gt; containing assistant text verbatim and dark cards for tool actions (tool name, input, result exactly as captured, errors marked). Exclude hidden thinking blocks and system-reminder/email content; escape all HTML; keep existing summary sections (outcome, specs, decisions, commits, next steps) and replace the old reconstructed prompt log; add a corrections note: my earlier reconstructed log was approximate and mis-numbered, and I said the session had no name whereas the transcript metadata shows the session name "finish-design-md-architecture-ux" (auto-generated; first title "Git status"). Then validate HTML, commit, `git pull --rebase origin main`, push, re-enter plan mode.
+
+## (done, superseded) owner 2026-10-19: rebuild docs/session-summary.html to include ALL user prompts executed in the session and their outputs (reconstructed chronologically from the conversation: verbatim prompts, condensed outputs, commit hashes, notable corrections/rejected actions), plus pending updates (v1 local-only on kind, commit count). Then commit + `git pull --rebase origin main` + push; re-enter plan mode. Note on the page that outputs are condensed (not verbatim tool logs).
+
+## (done) owner 2026-10-19: v1/MVP is local-only (kind or minikube; choose kind) - NO AWS deployment in v1
+Decision: v1 runs and is tested entirely on a developer laptop with kind (easier/lighter than minikube; Docker-based, fast multi-node, good CI parity); minikube not used. AWS/EKS/Terraform/RDS etc. become post-v1 (informational migration notes kept). Cloud scanners still scan customer AWS/GCP/Azure accounts read-only; locally they are tested with recorded fixtures/emulation (licence-checked) and optionally real read-only accounts - this is scanning, not hosting. LLM = Anthropic API over internet (optional recorded mode offline).
+Edits: spec.md (NFR-3/NFR-7/NFR-12 reworded for v1 local, out-of-scope item, deployment decision, v0.6.0); constitution.md (ARC-11, ENV-1 reworded, ENV-3 informational, new ENV-4 laptop-only v1, SEC-3 wording, v0.9.0); infrastructure-spec.md (purpose, env table AWS -&gt; post-v1, values-aws placeholder, CI deploy phase 2, section 10 relabelled post-v1, local profile/resources, kind decision, open questions); tasks.md (Phase 5 -&gt; Post-v1 deferred, T-004 RDS note removed, new T-410 laptop smoke test/resource profile, blockers); design.md (ADR-7 text, ADR-13 local-only v1, queue/secrets AWS mentions marked post-v1); database-spec.md (aws row/§12/backup/AWS lines marked post-v1; pg_audit local only); backend-spec.md (object store and secret store AWS mentions post-v1); docs/session-summary.html (platform row + commit count). Run ID/link consistency check; commit; `git pull --rebase origin main`; push; re-enter plan mode.
+
+## (done) owner approved 2026-10-19: fix counts in docs/session-summary.html using real counts (API rows, task IDs/count, commit count), regenerate if needed, then commit + `git pull --rebase origin main` + push docs/session-summary.html; re-enter plan mode.
+
+## (done) owner 2026-10-19: dump session/plan details into a self-contained HTML file
+- Write `docs/session-summary.html` in the repo (untracked, NOT committed unless owner asks): goal, decisions by area, spec inventory with versions, commit timeline, task overview, licence flags, open items, next steps. Self-contained (inline CSS, light/dark, no external assets). Requires leaving plan mode (file write); then re-enter plan mode.
+
+## (done) owner 2026-10-19: spec.md small update then commit+push
+- spec.md §4 framework table: ISO 20022 version -&gt; "ISO 20022-1:2026 (Edition 3)"; FFIEC BSA/AML Examination Manual edition -&gt; "2026 reference version"; mark owner-supplied/verify; update open questions and version/date; commit, `git pull --rebase origin main`, push; re-enter plan mode.
+
+## (done) owner 2026-10-19: licence and provenance rule (no FOSS-licence or plagiarism issues)
+Owner instruction: update constitution and spec so there must be NO FOSS licence issue or plagiarism issue when using any library, software or content freely available on the internet; if an item has such an issue, do not use it - find an alternative.
+Decisions: strict permissive allow-list (MIT, Apache-2.0, BSD-2/3, ISC, PostgreSQL licence, MPL-2.0 unmodified, OFL fonts, CC0 / CC-BY content with attribution); disallowed: AGPL, GPL, LGPL, SSPL, BUSL/BSL, non-commercial or "source-available" restrictive licences, content with unclear provenance. Existing named tools to mark "licence review required - find permissive alternative" (from assistant recollection, MUST be verified): MinIO (AGPL-3.0), Grafana/Loki/Tempo (AGPL-3.0), Steampipe (AGPL-3.0), ScoutSuite (GPL-2.0), Semgrep rules (restrictive rules licence), possibly Redis (licence changes), Keycloak/RabbitMQ/others to confirm. Candidate alternatives (unvetted): SeaweedFS or filesystem-backed S3 shim (Apache-2.0) for MinIO; Jaeger/OpenTelemetry + VictoriaMetrics/VictoriaLogs/Prometheus/Perses for Grafana stack; Prowler/kubescape/kube-bench/Trivy/Checkov (Apache-2.0, to confirm) instead of Steampipe/ScoutSuite; Opengrep/own rules instead of Semgrep rules.
+Edits:
+1. constitution.md: new section "Licensing, Provenance and Content Rules" with rules LIC-1..LIC-8 (allow-list/deny-list; licence check before adoption incl. transitive deps; automated licence scanning + SBOM in CI blocking disallowed licences; no copying of copyrighted/standards text, code, images, fonts, prompts or datasets without a permissive licence or written permission; attribution/NOTICE file; AI-generated content must not reproduce copyrighted material - plagiarism/similarity checks for generated docs, reports, prompts; third-party framework texts (PCI DSS, ISO, etc.) stored only as own summaries/references with clause IDs unless licensed; replacement-first policy: if an issue is found, remove and choose an alternative, record in licence register/ADR); extend SEC-17 cross-reference; QA/definition-of-done gets licence check; bump version 0.8.0 + changelog; resolve/link spec R-2.
+2. spec.md: NFR-15 (licence and IP compliance), NFR for content provenance; update R-2 (licensing of standard texts -&gt; own summaries/references only, legal review) and add R-7 (OSS licence/plagiarism risk, mitigation: allow-list + scanning + alternatives); US/FR: FR-31 licence register/SBOM report available to admins? (keep minimal: licence register maintained in repo, CI gate); update section 4 licensing note; open questions: licence audit results; version 0.5.0.
+3. backend-spec.md §4a, infrastructure-spec.md §2/§8 (MinIO, Grafana/Loki/Tempo), design.md components table, database-spec (Steampipe/others none): annotate affected tools "licence review required; permissive alternative to be selected" and remove hard commitments (keep as candidates pending T-009); agent.md tools unaffected except `web.fetch` sources (content terms) and prompts/datasets provenance.
+4. tasks.md: T-009 licence &amp; provenance audit of every named dependency/tool/font/icon/dataset (verify licence from official source; choose alternatives; create licence register `docs/licences.md` or `LICENCES.md`; CI licence scanner choice with permissive tooling), T-010 CI licence/SBOM gate; make T-007 depend on T-009; add to Blockers.
+5. Consistency check, commit, `git pull --rebase`, push (owner has standing instruction to commit/push after changes? -&gt; commit locally and push since owner said previously "commit/push"; here: commit and push unless owner says otherwise). Then re-enter plan mode.
+
+### (previous) OWNER APPROVED EXECUTION 2026-10-19: apply pgvector 0.8.6 change below, bump versions/dates across all specs so they are consistent and up to date, run consistency checks, commit, `git pull --rebase origin main`, push; then re-enter plan mode.
+
+### Owner-supplied fact (2026-10-19, to record in specs on next execution)
+- pgvector 0.8.6 is compatible with PostgreSQL 18.6 (owner statement; not verified by assistant). Record in database-spec.md §1 (Vector extension row: `pgvector` 0.8.6), §13 open question (exact pgvector version -&gt; resolved), infrastructure-spec.md §2/§12 (image: PostgreSQL 18.6 + pgvector 0.8.6; image source/CloudNativePG compatibility still to verify), tasks.md T-004 (narrow to: confirm CloudNativePG supports PG 18.6 and a pgvector 0.8.6 image exists; Python 3.13 library compatibility; RDS 18.x note).
+
+### Owner decisions on gaps (2026-10-19)
+- A1 Check engine: wrap proven open-source scanners behind our scanner interface (Prowler/Steampipe cloud; kubescape/kube-bench/Trivy K8s; Checkov/Semgrep repos; custom adapters for Entra/Metabase); our rule metadata maps checks -&gt; unified controls; rule/pack versioning; normalised result schema; licence review per tool.
+- A2 Control seed: owner authors v1 unified control set; mapping-agent proposes remaining mappings for expert approval.
+- A3 Tenant lifecycle: operator-provisioned, invite-based tenants in v1; platform admin role with audited, time-limited break-glass access; offboarding = export + deletion workflow; no self-service signup in v1.
+- A4 External auditors: time-boxed read-only invitations scoped to selected assessments/frameworks; all access audit-logged.
+
+### Fix list to execute after owner approves (specs only, then commit locally, push after review)
+1. backend-spec.md: add "Scanner adapters / check engine" section (adapter interface, normalised result schema, OSS tool candidates, rule metadata -&gt; unified control mapping, versioning, licence review); extend RBAC matrix (platform_admin, questionnaire, copilot, regulatory change, history/compare, external auditor scoped access); connector least-privilege permission appendix (to be filled per connector); per-tenant secret store design (Secrets Manager/Vault-style; K8s Secrets only for local).
+2. spec.md: add PER-7 platform operator, PER-8 external auditor (time-boxed); US/FR for tenant provisioning/offboarding and auditor invitations; control catalogue authorship; scheduling (US-12) details; notification event catalogue stub; updated open questions.
+3. database-spec.md: add tables `check_definitions`/`rule_packs`, `check_results`, `scope_schedules` (or schedule columns), `notification_preferences`, `copilot_conversations`/`copilot_messages`, `regulatory_changes`, `evidence_uploads`, `tenant_settings`, `auditor_invitations`, `operator_access_grants` (break-glass); fix embeddings RLS for shared rows (separate shared table or explicit policy); rename/clarify connectors vs integrations; retention for new tables.
+4. api-contract.md: platform/operator endpoints (tenants provisioning, break-glass), auditor invitations, notification events, connectors vs integrations naming, schedules.
+5. frontend-spec.md: complete route table (questionnaires, answer library, regulatory changes, compare/history, copilot, notifications, auditor invitations, platform admin console); idle-timeout etc. stay open.
+6. agent.md: scanner agents reference the check engine/adapters; remove ambiguity on deterministic checks.
+7. infrastructure-spec.md: scanner images bundle/call OSS tools; licence + image scanning; per-tenant secret store; platform admin access controls.
+8. constitution.md: rules for break-glass (audited, time-limited), auditor access, third-party scanner licence/supply-chain review; bump version.
+9. tasks.md: header owner/date/version; add tasks for check engine/adapters, control catalogue authoring (owner), tenant provisioning/offboarding, auditor invitations, connector permission policies, repo conventions (README/CLAUDE.md/CODEOWNERS/PR template), pre-build verification tasks (PG 18.6 + pgvector + CloudNativePG support, framework instruments); fill "Blockers and Notes".
+10. design.md: add platform operator/auditor to context diagram and persona dashboards; ADR-10 (wrap OSS scanners), ADR-11 (operator-provisioned tenants).
+Then run the ID/link consistency script again.
+
+## STATUS: decisions recorded and committed locally; owner approved push -&gt; run `git pull --rebase origin main` then `git push origin main`, then re-enter plan mode.
+
+## (done) record open-question decisions in specs (owner answered 2026-10-19), commit locally, DO NOT push until owner approves after review
+Decisions:
+1. Python 3.13 + latest stable FastAPI (pin exact at scaffold) -&gt; backend-spec.md §1, Open Questions; infrastructure-spec image notes.
+2. Local PostgreSQL via CloudNativePG operator with pgvector-enabled image -&gt; database-spec.md §1 envs + open Q, infrastructure-spec.md §2/§6/§12, design.md components.
+3. Ingress: NGINX Ingress; local host `aucoff.localtest.me` -&gt; infrastructure-spec.md §2/§6/§12, tasks T-405.
+4. BFF auth: Auth.js (NextAuth) with OIDC provider, server-side session (encrypted httpOnly cookie; optional Redis/DB store) -&gt; frontend-spec.md §1/§5/§14.
+5. OpenAPI file at `backend/openapi.yaml`, linted with Spectral -&gt; api-contract.md §2/§11, infrastructure CI, tasks T-108.
+6. LLM policy: Anthropic Claude only for v1 via provider interface; redacted data only; US region unless tenant requires otherwise; fallback provider and residency options revisited with first EU/India tenants -&gt; constitution open items, agent.md §4/§15, spec.md §9.
+7. Embeddings: hosted embedding API via provider interface, 1024 dims (placeholder; re-embed via migration if model changes) -&gt; database-spec.md (`embeddings.embedding vector(1024)`), agent.md §4/§6/§15, backend-spec open Q.
+Mark the corresponding open-question checkboxes `[x]` with the decision; bump minor versions where decisions change content; update Last updated 2026-10-19.
+
+## (previous) STATUS 2026-10-19: design/history/framework work DONE and committed locally (1 commit ahead). Owner approved: run `git pull --rebase origin main` then `git push origin main`, then re-enter plan mode.
+
+## (done) PENDING (from owner paste, 2026-10-19): framework instrument/version updates for spec.md section 4
+Apply to the framework table (mark "per owner; verify against official source"):
+- PCI 3DS: PCI 3DS Core Security Standard (aligned with EMV 3-D Secure v2.x); Part 1 baseline + Part 2 3DS requirements.
+- SOC 2: AICPA 2017 Trust Services Criteria with revised points of focus (2022/2023); Common Criteria (Security) + optional Availability, Confidentiality, Processing Integrity, Privacy.
+- RBI DPSC: RBI (Commercial Banks - Digital Payment Security Controls) Directions, 2026 (updated as on 1 Oct 2026).
+- RBI PPI: RBI Master Directions on Prepaid Payment Instruments (MD-PPI), under PSS Act 2007.
+- DPDP: DPDP Rules, 2025 (G.S.R. 846(E), 13 Nov 2025), phased compliance timeline; Act 2023.
+- FFIEC: owner paste says "FFIEC IT Examination Handbook" (2026 updates) - differs from spec's "FFIEC BSA/AML Examination Manual"; ask owner whether to list both.
+- GLBA: FTC Safeguards Rule (16 CFR Part 314) - already listed separately as "FTC Safeguards Rule"; merge/clarify GLBA row.
+- NYDFS: 23 NYCRR Part 500 incl. Second Amendment (fully phased in).
+- PSD2: Directive (EU) 2015/2366; track PSD3 + PSR as pending successors (future watch item for regulatory-change-agent).
+Also update spec.md open question (versions) and DORA row version stays Regulation (EU) 2022/2554. I cannot verify these from here; flag as owner-supplied.
+
+## NEW TASK (previous, done): complete agent.md (owner chose to do this first, then design.md below)
+Pending state: repo clean at c3dd93f, pushed. agent.md is still the v0.1.0 template (22 TODOs). Execute agent.md + its alignment edits first, commit/push, then design.md work.
+
+### Owner decisions for agent.md
+- Roster: the 9 services from spec.md 5.6 PLUS `reviewer-agent` (independent verifier of citations/conclusions before human review), `regulatory-change-agent`, `copilot-agent` (user Q&amp;A with citations), and `questionnaire-agent` (due-diligence).
+- Scanners: deterministic policy-as-code checks first (produce facts); LLM interprets, maps, explains, handles documents.
+- Models: tiered - strong model for assessment/mapping/questionnaire answers/review; small model for extraction/classification/routing; provider-agnostic, Claude default; model IDs in config.
+- Knowledge/RAG: shared framework texts + unified controls (read-only, licensing caveat); tenant documents (policies, SOPs, audit reports); collected evidence summaries + prior assessment results (history); remediation playbooks/best-practice library; the tenant's already-answered due-diligence questionnaires (answer library). Tenant embeddings strictly isolated (DB-6).
+- Questionnaire agent: accepts uploaded Excel/Word/PDF, standard templates (SIG, CAIQ, HECVAT, VSA), and link/portal questionnaires (drafts answers for manual entry; no auto-submit); answer-library reuse first with freshness checks; grounds answers in real environment: prefer fresh scan evidence, trigger read-only re-scan when stale, cite evidence IDs + timestamps; every answer gets confidence + sources; human approval per answer or batch; export only approved answers; sensitive details (resource IDs, IPs, account numbers, internal hostnames) redacted by default with reviewer override; every export audit-logged; tenant-configurable "shareable detail level".
+- Regulatory change agent: monitors allow-listed official sources, proposes catalogue/mapping diffs for human approval; never auto-changes the catalogue.
+
+### Additional numeric decisions (owner, initial/tunable)
+- Eval CI gates: citation correctness &gt;= 98%; hallucination rate &lt;= 1%; control-result agreement with reviewers &gt;= 90%; redaction recall &gt;= 99%.
+- Budgets: USD 25 per assessment run, USD 10 per questionnaire, tenant monthly cap configurable; alert at 80%, hard stop at 100% (state `budget_exceeded`).
+- Approvals expire after 7 days (then item returns to queue and notifies; never auto-approved).
+- Retrieval: provider-agnostic embedding interface; hybrid search (pgvector + Postgres full-text) with reranking; embedding model/dimension decided at build.
+
+### agent.md structure (v0.2.0)
+1. Overview, principles (link constitution AI-1..AI-15), deterministic-first rule.
+2. Agent roster table (AG-1..AG-13): purpose, trigger, inputs, outputs, tools, model tier, autonomy level, approval gate, queue name, spec/FR refs.
+3. Orchestration (LangGraph graphs per workflow: assessment, mapping, questionnaire, regulatory change, report, copilot); state schema; interrupts; checkpointing; retries; budgets.
+4. Model strategy: tiers, routing rules, fallbacks, temperature/params, structured output, caching, cost budgets per run/tenant, provider interface.
+5. Tools registry: tool name, read/write, side effects, permissions, approval, rate limits (cloud/k8s/repo/saas read-only tools; evidence store; vector search (tenant-filtered); ticketing create (approval); notifications; document parsers).
+6. Knowledge and memory: sources, chunking, embedding model/dimension (TODO), refresh, citation format, answer library lifecycle (approved, stale, retired), tenant isolation, history (12-month snapshots) as retrieval source.
+7. Prompts: repo layout, versioning, templating, change control, prompt-injection-safe structure (evidence as data).
+8. Guardrails: input validation, injection defence, output schemas (Pydantic), citation validator (reject uncited claims), PII/secret redaction before LLM, disallowed actions, refusal/uncertainty behaviour, rate and budget limits.
+9. Human-in-the-loop matrix: action -&gt; trigger -&gt; approver role -&gt; timeout/default (finalise control result, accept risk, approve mapping, publish report, export questionnaire answers, catalogue change, ticket creation).
+10. Questionnaire workflow (detailed): ingest -&gt; parse/normalise questions -&gt; classify/map to unified controls -&gt; retrieve answer library + evidence -&gt; freshness check/re-scan -&gt; draft answer + confidence + citations -&gt; reviewer agent check -&gt; human approval -&gt; redaction -&gt; export (Excel/Word/PDF) -&gt; save to answer library; Mermaid sequence; data model hints (questionnaires, questions, answers, answer_library) for database-spec.
+11. Evaluation: golden datasets per agent, metrics (accuracy, citation correctness &gt;= target, hallucination rate, override rate, answer reuse accuracy, redaction recall), thresholds (proposal), CI regression gate, human feedback loop, red-team/prompt-injection suite.
+12. Audit logging and traceability: run records, steps, redacted inputs, model/prompt versions, tokens/cost, approvals (maps to agent_runs/agent_steps/approvals).
+13. Failure handling and degradation (provider outage, scan failure -&gt; unknown, budget exceeded, kill switch), cost controls.
+14. Security/threat table for agents (prompt injection, data exfiltration via questionnaires, cross-tenant leakage, over-privileged tools).
+15. Open questions.
+
+### agent.md alignment edits
+- spec.md: add persona/US/FR for due-diligence questionnaires (US-14.., FR-16..) and agents list 5.6 updated (13 agents); out-of-scope: auto-submission to external portals.
+- database-spec.md: questionnaire tables (`questionnaires`, `questionnaire_questions`, `questionnaire_answers`, `answer_library`) with RLS, retention, redaction flags.
+- api-contract.md: questionnaire endpoints (upload, list, answer review/decision, export), copilot chat endpoint (SSE), regulatory-change proposals endpoints.
+- backend-spec.md: service table + queue names for the 4 new agents.
+- design.md / frontend-spec.md: questionnaire screens (queue, side-by-side question/answer/evidence/approval), copilot panel; tasks.md: new tasks T-208..; constitution: add AI rule for externally shared outputs (AI-16: outputs leaving the tenant require approval and redaction).
+- Commit, `git pull --rebase origin main`, push.
+
+## Historical data requirement (added by owner)
+- Retain and expose 1 year (12 months, rolling) of historical scan/assessment results so any scan can be compared with previous scans, not only the last 2.
+- Design: immutable per-assessment snapshots (control results, severity counts, coverage, scores) kept for &gt;= 13 months (1 month buffer) regardless of live-data retention; rollup tables/materialised views for daily/weekly/monthly trends; partitioning by month; exempt from agent_steps' shorter retention.
+- UI: time-range selector (last 2 scans, 30/90 days, 12 months, custom), trend lines and delta arrows, side-by-side scan comparison view (any two scans: new, resolved, regressed, unchanged controls/findings), per-control history timeline, framework/jurisdiction history.
+- API: `/metrics/{id}?from=&amp;to=&amp;granularity=`, `/assessments/compare?base=&amp;target=`, `/control-results/{id}/history`; cursor-paginated; export of history (CSV/JSON).
+- database-spec.md: new `assessment_snapshots`, `severity_counts`/`metric_points` (tenant_id, metric_id, assessment_id, scope_id, framework_id, value, captured_at), monthly partitions, retention row (&gt;= 13 months, tenant-configurable up, never below 12), RLS, backup coverage; ensure results of deleted evidence keep metadata so history stays comparable.
+- spec.md: new FR (history/compare) and NFR (12-month history retention); metrics catalogue entries gain a "history window" column; constitution: add DB rule for snapshot immutability/retention.
+
+## design.md changes
+1. Fill System Context (users/personas, IdP, LLM provider, evidence sources, ticketing, notifications) with Mermaid context diagram.
+2. Key Data Flows: evidence ingestion -&gt; analysis -&gt; approval -&gt; findings -&gt; report (Mermaid sequence); assessment run via RabbitMQ/LangGraph; SSE progress.
+3. Security Architecture: authN/authZ, tenancy, encryption, secrets, trust boundaries, LLM data boundary, threat model summary (STRIDE table) referencing constitution SEC/AI rules.
+4. Observability summary + SLOs link to infrastructure-spec.
+5. Trade-offs/risks and open questions (replace TODO).
+6. NEW section "UX &amp; Visual Design":
+   - Design principles (number-first, evidence-first, trust through transparency, calm by default, accessible).
+   - Colour tokens (CSS variables, light and dark): brand (deep blue 900-50 scale, blue, teal), neutrals (gray/slate), semantic status (pass, partial, fail, unknown, n/a, pending-approval in blue), severity scale (critical red, high orange/amber, medium yellow, low blue/teal, info gray), data-viz palette (colour-blind-safe categorical + sequential/diverging), chart rules; concrete hex values proposed with WCAG AA contrast checks for text/UI; usage rules (colour never sole indicator, status icons, max accent usage, gradients only on hero KPI cards).
+   - Typography (e.g. Inter or Geist; scale; tabular numerals for KPIs), spacing (4/8 grid), radius, elevation, motion (durations, reduced-motion), iconography (Lucide), illustrations.
+   - Layout &amp; grid: app shell wireframes (ASCII), sidebar items by role, top bar, page header pattern, drawer pattern, breakpoints (desktop-first; tablet; mobile subset), density toggle.
+   - Screen specs with wireframes and data shown: Executive/Posture dashboard (KPI strip, coverage by framework, severity trend vs last 2 scans, regional heatmap, approvals/agent activity, upcoming audits), Assessments, Control result review, Findings, Evidence, Reports, Audit log, Agent run timeline, Admin.
+   - Metrics catalogue: table of each metric with ID (M-01...), definition/formula, data source (table/endpoint), chart type, refresh, drill-down, roles, thresholds/colour rules. Include: posture score, framework coverage %, pass/partial/fail distribution, control severity counts vs last 2 scans (delta arrows), open findings by severity + aging buckets, MTTR/remediation cycle time, time to audit readiness, evidence freshness, scan duration, agent citation correctness, avg confidence, reviewer override rate, LLM tokens/cost vs budget, pending approvals, jurisdiction coverage matrix.
+   - Persona-to-dashboard mapping (executive, CISO, compliance officer, engineer, auditor, admin).
+   - Empty/loading/error state patterns; AI content presentation (AiBadge, citations, confidence).
+   - Accessibility: contrast, focus, keyboard, chart alternatives (data table toggle), reduced motion.
+7. Update header version to 0.2.0, owner/date; Related links.
+
+## Alignment edits
+- frontend-spec.md: reference design.md tokens, layout and metrics catalogue; add chart library decision (proposal Recharts or visx) and dark-mode support; dashboard component list.
+- api-contract.md: add dashboard/metrics endpoints (e.g. `/dashboards/posture`, `/metrics/{id}`, `/metrics/severity-trend?compare_last=2`) mapped to M- IDs.
+- database-spec.md: add snapshot/rollup tables or materialised views for metric history (assessment snapshots, severity counts per assessment) so "compared to last 2 scans" is queryable.
+- spec.md: success metrics reference M- IDs; tasks.md: design-system/dashboard tasks.
+
+## Execution (after owner says go)
+Exit plan mode, write/edit files, `git add specs`, commit with Co-Authored-By trailer, `git pull --rebase origin main`, `git push origin main`, then re-enter plan mode.
+
+## Verification
+- design.md has no TODO-only sections except marked open questions; metrics catalogue IDs unique and referenced from frontend-spec/api-contract.
+- Hex colour pairs listed with computed contrast ratios &gt;= 4.5:1 (text) / 3:1 (UI) in both themes.
+- Mermaid/ASCII blocks well-formed; `git status` clean and push confirmed.
+</pre><div class="k">planFilePath</div><div class="v1">/Users/praveen.da/.claude/plans/making-a-full-stack-serene-lamport.md</div></div><div class="k">result</div><pre class="out">User has approved your plan. You can now start coding. Start with updating your todo list if applicable
+
+Your plan has been saved to: /Users/praveen.da/.claude/plans/making-a-full-stack-serene-lamport.md
+You can refer back to it if needed during implementation.
+
+## Approved Plan:
+# Plan: finish design.md (architecture + UX/visual design)
+
+## Context
+design.md (v0.1.0) has architecture, components, data-model pointer, ADR-1..7 but still has TODO sections (system context, data flows, security architecture, observability, risks) and no UX/visual design. Owner wants it finished and wants closure on colour usage, page layout, and the information/metrics shown in the frontend. Owner stays in plan mode until they say go. After writing: align frontend-spec.md (link to design tokens/screens), spec.md metrics (if new ones), tasks.md, then commit, `git pull --rebase origin main`, push.
+
+## Owner decisions (this round)
+- Theme: light default + dark mode, clean enterprise; professional with a Gen-Z feel.
+- Palette (from owner): deep blue, blue, teal, red, yellow, green, amber, gray. Brand primary = deep blue; teal secondary/accent; status semantics: Pass green, Partial amber, Fail red, Unknown grey, N/A slate; yellow for warnings/highlights; always icon + text (never colour alone).
+- Style traits: rounded corners 8-12px, soft shadows, generous whitespace; subtle gradients/glass only on hero KPI cards; micro-interactions and friendly empty-state illustrations (respect reduced-motion); bold typography with large KPI numerals.
+- Layout: left collapsible sidebar + top bar (tenant switcher, global search, notifications, user) + content area with breadcrumbs, page header/actions, right detail drawer.
+- Density/responsive: comfortable default with compact table toggle; desktop-first, tablet OK, mobile for dashboard and approvals (read/decide).
+- Dashboard priority: metrics and quantified data first. Landing shows: overall compliance posture score + per-framework coverage %; open findings by severity + aging; pending approvals + agent activity; jurisdiction heatmap + upcoming audits.
+- Metrics/charts: control coverage % and pass/partial/fail distribution; time to audit readiness and remediation cycle time; agent quality (citation correctness, confidence, review override rate); LLM cost/tokens vs budget, scan duration, evidence freshness; control severity (critical/high/medium/low) current counts compared with the last 2 scans.
+
+## DONE (pushed d1e9947) Build Session 4: web login (Auth.js v4 + Keycloak, BFF), RabbitMQ per-service users, Trivy scan + SBOM
+## PROPOSED Build Session 5 (awaiting owner "go")
+(A) CI: make GitHub Actions run `make scan`, smoke-free checks; verify the workflow on first run. (B) TLS for the local ingress (cert for aucoff.localtest.me from the local CA) so session cookies can be `Secure`, plus backend TLS for the in-cluster hop. (C) Role-to-scope mapping (realm roles -&gt; scopes) and tenant/user tables wired to the token (T-105/T-107). (D) Authenticated metrics/telemetry (T-124 remainder). (E) First scanner adapter + assessment flow (needs owner control set T-006). Owner follow-ups open: licence exceptions in LICENCES.md, branch protection, T-001 sign-off, T-006, T-005, T-009.
+
+## DONE (pushed 4b55f14, CI green) Build Session 5: HTTPS ingress + Secure cookie + gateway TLS, role-&gt;scope mapping, CI image-scan job, authenticated metrics
+## OWNER CHOSE (2026-10-19): Build Session 6 = App shell + dashboard (T-303/T-308 start; design.md §10, §11)
+Scope: (1) design tokens from design.md §10.2 as CSS variables (light/dark, user override stored in localStorage via try/catch) in `frontend/src/app/globals.css` + a `tokens.ts` single source and an automated WCAG contrast test (vitest) over every documented pair; (2) app shell: collapsible sidebar (role-filtered nav), top bar (tenant label from session, theme toggle, user menu with sign-out, command-search placeholder), breadcrumbs, page header, right detail drawer component; session callback exposes `roles` (from access-token claim, no tokens); (3) backend `GET /api/v1/dashboards/posture` (API-70, scope `report:read`) returning clearly-labelled SYNTHETIC demo data (`"data_source": "synthetic"`) with KPI strip, status distribution, severity now vs last 2 scans, per-framework coverage for the four first-scope frameworks; OpenAPI + Spectral + tests (401/403/200); (4) dashboard page via the BFF (`/bff/dashboards/posture`): KPI hero cards, status distribution, severity comparison with delta arrows, framework coverage bars — hand-written SVG/CSS (no new chart dependency), icon+label never colour alone, "Demo data" banner; (5) tests: vitest component tests, contrast test, nav-by-role test; extend `make smoke` (executive sees the dashboard, auditor lacks `report:read`? — per matrix auditor HAS report:read; engineer gets 403); (6) specs: frontend-spec/design/tasks/api-contract status, session summary; commit in logical commits, check CI. Out of scope: real scan data, other screens, copilot panel, i18n. Stop and report if blocked; never present synthetic numbers as real.
+
+## DONE (pushed 2dc9e0f, CI green) Build Session 6: tokens + WCAG tests, app shell, posture dashboard with synthetic data. UI not yet looked at in a browser.
+## OWNER CHOSE (2026-10-19): Build Session 7 = more screens (Controls, Findings, Evidence list pages)
+Scope: backend `GET /api/v1/unified-controls` (API-22, catalog:read; REAL data read from data/controls/*.yaml via app.domain.controls, empty today -&gt; honest empty state; image build context becomes repo root so data/ ships), `GET /api/v1/findings` (API-47, finding:write; synthetic, filters severity/status) and `GET /api/v1/evidence` (API-37, evidence:read; synthetic, filter source), cursor pagination `{items,next_cursor}`, `data_source` label, OpenAPI + Spectral + tests; frontend reusable DataTable (client sort, filter selects, density toggle comfortable/compact in localStorage, "Load more" via cursor, row -&gt; DetailDrawer, empty/loading/error states, caption + th scope for a11y), pages /controls /findings /evidence enabled in nav; vitest tests; smoke checks per role through the BFF; specs/tasks/api-contract updated; CI check; session summary. Not in scope: writes, real evidence/findings, filters beyond two per list. Never present synthetic rows as real.
+
+## Next after Session 7 (awaiting owner choice): scanner + assessment flow (needs owner control YAML), hardening (ingress-to-frontend TLS, OTel collector, scan remaining images)
+
+## GAP REVIEW 2026-10-19 (before build) - findings to fix in specs
+Consistency checks run: all US/FR/NFR/API/T/ADR/PER/AG/M/R IDs and constitution rule IDs referenced are defined; all cross-file links resolve. Real gaps:
+A. Missing decisions/specs
+ 1. Deterministic check engine: how scanner rules ("policy-as-code") are authored/stored/run (build own vs integrate Prowler/ScoutSuite/Steampipe, kube-bench/Trivy/kubescape, Checkov, OPA/Rego), rule-to-unified-control mapping, rule versioning. Not specified anywhere.
+ 2. Unified control catalogue seed: who authors the initial unified controls + requirement mappings (own, SCF-style open set, expert-reviewed), licensing, versioning.
+ 3. Platform operator role &amp; tenant lifecycle: tenant provisioning/onboarding, offboarding/data export/deletion, support/break-glass access, platform super-admin (PER-6 is only tenant admin).
+ 4. External auditor access: invited, time-boxed read-only access to a tenant.
+ 5. Connector permissions: exact least-privilege read-only policies per source (AWS SecurityAudit-style roles, GCP/Azure roles, GitHub app scopes, Entra Graph scopes, Metabase), per-tenant secret storage at scale (K8s Secrets not suitable for many tenants).
+ 6. Scan scheduling/drift: cron model, schedule storage (US-12), drift detection rules.
+ 7. Notification catalogue (events x channels), templates.
+ 8. Report templates/formats per framework (open), evidence upload malware scanning (TODO).
+B. Inconsistencies / missing detail
+ 1. DB lacks tables for APIs: scope schedules (column), notification_preferences, copilot conversations/messages, regulatory_changes (proposals), evidence_uploads, sso_settings/connectors naming (API `connectors` vs DB `integrations`), tenant_settings (retention, budgets, detail level, region).
+ 2. embeddings RLS: shared rows have tenant_id NULL but policy is equality -&gt; need explicit policy for shared rows.
+ 3. frontend-spec route table lacks questionnaires, answer library, regulatory changes, compare/history, copilot, notifications routes; backend RBAC matrix lacks questionnaire/copilot/regulatory-change/history permissions.
+ 4. tasks.md header (owner/date/version 0.1.0) and "Blockers and Notes" TODO; no tasks for rule engine, control catalogue seeding, tenant provisioning, connector permission policies, repo conventions.
+ 5. Repo conventions not specified: monorepo layout, CODEOWNERS, PR template, branch strategy, README/CLAUDE.md.
+C. Verify-before-build: PostgreSQL 18.6 + pgvector PG18 support; CloudNativePG PG18 support; owner-supplied framework instruments; Python 3.13 compatibility of LangGraph/asyncpg etc.
+D. Deferred is fine: brand, locales, KEDA, mTLS, image signing, plan limits, concurrency numbers.
+
+## OWNER SAID "go" (2026-10-19): Build Session 3 - identity and authenticated end-to-end (v1 local kind)
+Scope: (A) verify licences (Keycloak, cert-manager) then install cert-manager with a local CA issuer so in-cluster identity traffic is TLS (ZT-4); (B) Keycloak (own database + role in the CNPG cluster, realm `aucoff` imported from a ConfigMap, clients: gateway audience, `aucoff-web` (auth code + PKCE, for the BFF later), per-service confidential clients incl. a smoke-test client; client secrets generated by `make secrets`; scopes ops:read/docs:read/svc:*); (C) backend: JWKS fetch over TLS with CA bundle (new setting AUCOFF_OIDC_CA_FILE), chart OIDC env pointing at Keycloak; network policies (gateway -&gt; Keycloak, Keycloak -&gt; its DB); (D) authenticated smoke test: obtain a client-credentials token and call GET /api/v1/health through the ingress (expect 200) plus wrong-audience/wrong-scope/expired negative cases against real Keycloak; (E) T-121 `ServiceClient` (client credentials, cache, scope check) with tests; (F) update specs/tasks/LICENCES.md/infrastructure; commit in logical commits; push; regenerate session summary; re-enter plan mode. NOT in this session: frontend BFF login (Auth.js) and RabbitMQ (T-123) - Session 4. Stop and report if blocked; never fake results.
+
+## (done) OWNER SAID "go" (2026-10-19): execute Build Session 2 now (kind v0.33.0 + Colima 6 CPU/12 GiB running, `make doctor` all ok)
+Order: (0) pin kind node image from kind v0.33.0 release notes (K8s &gt;= 1.35, containerd &gt;= 2.1); (1) Dockerfiles + `make images`/`load` (pin base image digests, record in LICENCES.md 5a); (2) `make cluster-up`, ingress controller (verify maintenance/licence; ingress-nginx may be retired), `make deploy`, smoke test with a test token (auth-everywhere: smoke test must mint/obtain a token or use exec/kubectl, no anonymous calls); (3) CloudNativePG + PostgreSQL 18.6 + pgvector 0.8.6, per-service roles, secrets via `make secrets`; (4) Alembic baseline migrations + RLS + isolation tests; (5) update specs/tasks/LICENCES.md; commit in small logical commits; push; regenerate session summary; re-enter plan mode. Stop and report if a step is blocked (never fake a result).
+
+## (done) OWNER ASKED (2026-10-19): install kind and Colima
+Plan: check `brew list`/versions; `brew install kind` (colima appears installed already - `colima status` ran); `colima start` (resources: 4+ CPUs, 8 GB RAM, 60 GB disk suitable for the stack; machine has 12 CPUs / 24 GB); verify `docker info`, `kind version`, `make doctor`. No repo changes expected except noting versions in tasks T-004/infra spec if useful. Then re-enter plan mode.
+
+## (done) OWNER SAID "go" (2026-10-19) after the auth specs: implement T-120 (and the exec-probe part of T-124) now, no Docker needed
+Plan: add PyJWT[crypto]; `app/core/security.py` (TokenVerifier with RS256/ES256 allow-list, JWKS resolver, Principal, fail-closed config, RejectAllVerifier for schema export only); pure-ASGI default-deny `AuthMiddleware` covering every HTTP route incl. /docs, /redoc, openapi (scope docs:read; websockets denied); `require_scope` dependency (adds OpenAPI security); remove anonymous /health/live|ready, add authenticated GET /api/v1/health (ops:read); `app/healthcheck.py` CLI; app factory (no module-level app; uvicorn --factory); tests with a test key pair/JWKS (no bypass flag): 401/403 matrix, route-enumeration test, OpenAPI security test, fail-closed config test; Helm: exec probes (backend `python -m app.healthcheck`, frontend node fetch of the static shell), `make helm-lint` fails on httpGet probes; regenerate openapi.yaml; Spectral; licence gates; update LICENCES.md (PyJWT, cryptography), tasks (T-120 done, T-124 partial, T-101 note, blockers), backend-spec/README notes; commit in logical commits; `make check`; push; re-enter plan mode. Docker/kind work remains for after the owner installs them.
+
+## (done) NEW OWNER REQUIREMENT (2026-10-19, supersedes starting Session 2 for now): authenticate everything
+Owner: every REST API call must use an auth token; NO unauthenticated internal or external API anywhere; microservice-to-microservice and microservice-to-DB calls must be authenticated. Update all required specs, commit, push.
+Design decisions to record (specs only; code gap flagged, fixed as first task of Session 2):
+- Constitution: new "Authentication Everywhere (zero trust)" rules ZT-1..ZT-9: default-deny on every HTTP/SSE endpoint incl. health, docs/openapi, metrics, webhooks (webhooks authenticated by HMAC signature + timestamp); only carve-out = the OIDC authorization-code login/callback and the IdP's own endpoints (they establish authentication; PKCE/state/nonce; no data), plus static UI shell assets; user calls = OIDC access tokens (Bearer), BFF session cookies; service-to-service = per-service identities via OAuth2 client credentials (short-lived, audience-scoped JWTs) over TLS, authorise by scope, no shared secrets, no trust by network position; messaging = per-service RabbitMQ users, TLS, least privilege, no guest; DB/object store = per-service credentials/roles (scram-sha-256 or client certs), TLS, no trust auth, secret-store sourced and rotated; probes = exec probes (healthcheck CLI), never anonymous HTTP; metrics scraping authenticated; automated route-enumeration test asserting 401 without credentials and CI gate; no auth-bypass/debug flags in any environment including local kind.
+- spec.md NFR-17 + FR-31/32; api-contract (Auth section, API-2 health -&gt; authenticated ops scope, /docs /redoc /openapi require auth, webhook HMAC); backend-spec (auth middleware, service identity, messaging/DB auth, healthcheck CLI, metrics auth); database-spec (per-service roles, no trust auth); infrastructure-spec (Keycloak service clients, per-service secrets, exec probes, metrics scrape auth, NetworkPolicy as defence in depth only); frontend-spec (BFF route handlers authenticated except OIDC callback); agent.md (internal tool calls use service identity); design.md (security architecture + ADR-14); tasks.md (T-107 widened; new T-120..T-124; note current scaffold health/docs endpoints violate the rule -&gt; fix first in Session 2); CLAUDE.md rule; version bumps; consistency check; commit; rebase; push; re-enter plan mode.
+
+## OWNER SAID "go" (2026-10-19): execute Build Session 2 below (now after the auth requirement above); first run `make doctor`; if kind/Colima are still missing stop and report. Base-image decision already recorded (62aef97).
+
+## TASK NOW (owner 2026-10-19): Build Session 2 - "local stack up" (v1 local-only on kind)
+Owner decisions: (1) base images: unmodified OS packages inside official minimal base images are allowed as mere aggregation; LIC rules still apply to our code and to language-level dependencies; record base images + scan results in LICENCES.md and amend the constitution (LIC-1/LIC-2 wording) accordingly. (2) Owner installs kind (`brew install kind`) and starts Colima (`colima start`) before the session; `make doctor` must be green.
+Scope (in order, small commits, `make check` green before each push):
+0. Preconditions: `make doctor` all ok; pin kind node image (K8s &gt;= 1.35, containerd &gt;= 2.1) and record in deploy/kind/kind-config.yaml + T-004 notes.
+1. T-401 Dockerfiles: backend (python:3.13-slim, multi-stage, uv, non-root, read-only rootfs compatible), frontend (node:22-slim, Next standalone output, non-root); `make images`, `make load` (kind load docker-image); image scan + SBOM tool chosen with permissive licence (T-010).
+2. T-402/T-405 cluster bring-up: `make cluster-up`, ingress controller (verify maintenance status/licence of ingress-nginx first; fall back to another permissive ingress), `helm upgrade --install` with values-local.yaml, `make deploy`, smoke test `curl http://aucoff.localtest.me/api/v1/health/live` (T-410 smoke script + resource measurements).
+3. T-403 PostgreSQL: CloudNativePG operator (verify licence/PG18 support), Cluster with PostgreSQL 18.6 + pgvector 0.8.6 via image-volume extension; secrets via Kubernetes Secrets (generated by `make secrets`); NetworkPolicy so only backend/migration job reach it.
+4. T-102/T-103/T-104 baseline migrations (Alembic): schemas app/ref/audit, tenants, users, roles, user_roles, audit_log (hash chain), roles/grants (aucoff_migrator/app/readonly), RLS policies + tenant context helper; backend /health/ready checks DB; integration tests (testcontainers or the kind DB) proving cross-tenant isolation, missing tenant context returns no rows, audit_log append-only.
+5. Update specs/tasks statuses, LICENCES.md, session-summary regeneration at the end.
+Exit criteria: from a clean clone with kind+Colima: `make setup &amp;&amp; make check &amp;&amp; make cluster-up &amp;&amp; make images load deploy smoke` all pass; RLS tests green; no cloud resources used.
+Not in this session: RabbitMQ, Keycloak/Auth, scanners, LangGraph, frontend features (next sessions: Session 3 auth+messaging, Session 4 first scanner + assessment flow).
+
+## (done) owner 2026-10-19: regenerate docs/session-summary.html (full rebuild from repo state + the session transcript up to this request), validate, commit, `git pull --rebase origin main`, push, re-enter plan mode. Include build session 1 results, MIT relicensing, current spec versions, current commit timeline, all prompts/responses so far.
+
+## (done) owner 2026-10-19: relicense AUCoFF itself from AGPL-3.0 to the more permissive of Apache-2.0 / MIT
+Decision: MIT (fewest obligations: only keep the copyright + permission notice; Apache-2.0 adds a patent grant but also notice/NOTICE and change-statement duties). Copyright holder: Praveen Darshanam, 2026 (owner is sole author; relicensing is the owner's right; earlier commits already published under AGPL stay available under AGPL to anyone who obtained them).
+Edits: replace LICENSE with MIT text; README project-licence section; LICENCES.md (section 2 note resolved + project licence row); constitution.md (new rule on AUCoFF's own licence, version 0.10.0, changelog); spec.md (note + version); CLAUDE.md; backend/pyproject.toml `license = "MIT"` and frontend/package.json `"license": "MIT"`; tasks.md note/blocker cleanup; consistency check; commit; `git pull --rebase origin main`; push; re-enter plan mode.
+
+## (done) owner 2026-10-19: start the implementation - Build Session 1 ("Milestone 0": repo foundation + walking-skeleton prerequisites), v1 local-only on kind
+Scope for this session (specs only change if a finding contradicts them; code goes in backend/, frontend/, deploy/, root files):
+1. T-003 repo conventions: root README.md, CLAUDE.md (project rules distilled from the constitution: licence rules, no secrets, plan/spec-first), CODEOWNERS, PR template, .gitignore, .editorconfig, pre-commit config (keep the existing Gitleaks hook), Makefile with documented targets, commit conventions.
+2. T-004 pre-build verification: check local toolchain versions (docker, kind, kubectl, helm, python, node) read-only; verify pgvector 0.8.6 + PostgreSQL 18.6 + CloudNativePG support and Python 3.13 library compatibility from official sources (WebSearch/WebFetch); record findings in database-spec/infrastructure-spec/tasks and pin versions or choose fallbacks.
+3. T-009 start: licence register (LICENCES.md / NOTICE), verify licences of the flagged tools (MinIO, Grafana/Loki/Tempo, Steampipe, ScoutSuite, Semgrep rules, Redis, Keycloak, RabbitMQ) from official sources, pick permissive replacements, update specs; choose a permissive licence-scan + SBOM tool for CI (T-010).
+4. T-002 scaffold: backend/ (pyproject with pinned Python 3.13, FastAPI app with layered packages, pytest, ruff, mypy, /health/live and /health/ready, OpenAPI export to backend/openapi.yaml, Spectral config), frontend/ (Next.js App Router TypeScript strict, Tailwind, shadcn/ui setup, ESLint/Prettier, Vitest), deploy/kind (cluster config) and deploy/helm/aucoff (umbrella chart skeleton with values-local.yaml, no AWS values).
+5. T-108/T-409 start: GitHub Actions workflows (lint, type check, tests, OpenAPI drift + Spectral, licence/SBOM, Gitleaks); make targets cluster-up/down.
+Exit criteria: clean clone -&gt; `make setup`/lint/test pass locally; `make cluster-up` creates kind cluster; backend health endpoint tested; OpenAPI committed and linted; CI workflow files present and valid; licence register exists; versions pinned. Owner actions needed: T-001 sign-off and later T-006 control set (can proceed in parallel). Commit in small logical commits, `git pull --rebase origin main`, push; then re-enter plan mode.
+Risks: tool availability on the laptop (Docker/kind), network access for verification, licence findings forcing tool swaps.
+
+## (done, superseded) owner 2026-10-19: regenerate docs/session-summary.html FROM THE REAL SESSION TRANSCRIPT
+Source: /Users/praveen.da/.claude/projects/-Users-praveen-da-REPOS-PD-aucoff/c7f7a4c0-58f1-4b88-858c-51774d4f1fc5.jsonl (read-only). Generate with a Python script (scratchpad) producing static HTML: numbered turns (47 typed prompts before the current request; commands/interrupts shown as events), prompt always visible, "Claude's response" in a collapsed &lt;details&gt; containing assistant text verbatim and dark cards for tool actions (tool name, input, result exactly as captured, errors marked). Exclude hidden thinking blocks and system-reminder/email content; escape all HTML; keep existing summary sections (outcome, specs, decisions, commits, next steps) and replace the old reconstructed prompt log; add a corrections note: my earlier reconstructed log was approximate and mis-numbered, and I said the session had no name whereas the transcript metadata shows the session name "finish-design-md-architecture-ux" (auto-generated; first title "Git status"). Then validate HTML, commit, `git pull --rebase origin main`, push, re-enter plan mode.
+
+## (done, superseded) owner 2026-10-19: rebuild docs/session-summary.html to include ALL user prompts executed in the session and their outputs (reconstructed chronologically from the conversation: verbatim prompts, condensed outputs, commit hashes, notable corrections/rejected actions), plus pending updates (v1 local-only on kind, commit count). Then commit + `git pull --rebase origin main` + push; re-enter plan mode. Note on the page that outputs are condensed (not verbatim tool logs).
+
+## (done) owner 2026-10-19: v1/MVP is local-only (kind or minikube; choose kind) - NO AWS deployment in v1
+Decision: v1 runs and is tested entirely on a developer laptop with kind (easier/lighter than minikube; Docker-based, fast multi-node, good CI parity); minikube not used. AWS/EKS/Terraform/RDS etc. become post-v1 (informational migration notes kept). Cloud scanners still scan customer AWS/GCP/Azure accounts read-only; locally they are tested with recorded fixtures/emulation (licence-checked) and optionally real read-only accounts - this is scanning, not hosting. LLM = Anthropic API over internet (optional recorded mode offline).
+Edits: spec.md (NFR-3/NFR-7/NFR-12 reworded for v1 local, out-of-scope item, deployment decision, v0.6.0); constitution.md (ARC-11, ENV-1 reworded, ENV-3 informational, new ENV-4 laptop-only v1, SEC-3 wording, v0.9.0); infrastructure-spec.md (purpose, env table AWS -&gt; post-v1, values-aws placeholder, CI deploy phase 2, section 10 relabelled post-v1, local profile/resources, kind decision, open questions); tasks.md (Phase 5 -&gt; Post-v1 deferred, T-004 RDS note removed, new T-410 laptop smoke test/resource profile, blockers); design.md (ADR-7 text, ADR-13 local-only v1, queue/secrets AWS mentions marked post-v1); database-spec.md (aws row/§12/backup/AWS lines marked post-v1; pg_audit local only); backend-spec.md (object store and secret store AWS mentions post-v1); docs/session-summary.html (platform row + commit count). Run ID/link consistency check; commit; `git pull --rebase origin main`; push; re-enter plan mode.
+
+## (done) owner approved 2026-10-19: fix counts in docs/session-summary.html using real counts (API rows, task IDs/count, commit count), regenerate if needed, then commit + `git pull --rebase origin main` + push docs/session-summary.html; re-enter plan mode.
+
+## (done) owner 2026-10-19: dump session/plan details into a self-contained HTML file
+- Write `docs/session-summary.html` in the repo (untracked, NOT committed unless owner asks): goal, decisions by area, spec inventory with versions, commit timeline, task overview, licence flags, open items, next steps. Self-contained (inline CSS, light/dark, no external assets). Requires leaving plan mode (file write); then re-enter plan mode.
+
+## (done) owner 2026-10-19: spec.md small update then commit+push
+- spec.md §4 framework table: ISO 20022 version -&gt; "ISO 20022-1:2026 (Edition 3)"; FFIEC BSA/AML Examination Manual edition -&gt; "2026 reference version"; mark owner-supplied/verify; update open questions and version/date; commit, `git pull --rebase origin main`, push; re-enter plan mode.
+
+## (done) owner 2026-10-19: licence and provenance rule (no FOSS-licence or plagiarism issues)
+Owner instruction: update constitution and spec so there must be NO FOSS licence issue or plagiarism issue when using any library, software or content freely available on the internet; if an item has such an issue, do not use it - find an alternative.
+Decisions: strict permissive allow-list (MIT, Apache-2.0, BSD-2/3, ISC, PostgreSQL licence, MPL-2.0 unmodified, OFL fonts, CC0 / CC-BY content with attribution); disallowed: AGPL, GPL, LGPL, SSPL, BUSL/BSL, non-commercial or "source-available" restrictive licences, content with unclear provenance. Existing named tools to mark "licence review required - find permissive alternative" (from assistant recollection, MUST be verified): MinIO (AGPL-3.0), Grafana/Loki/Tempo (AGPL-3.0), Steampipe (AGPL-3.0), ScoutSuite (GPL-2.0), Semgrep rules (restrictive rules licence), possibly Redis (licence changes), Keycloak/RabbitMQ/others to confirm. Candidate alternatives (unvetted): SeaweedFS or filesystem-backed S3 shim (Apache-2.0) for MinIO; Jaeger/OpenTelemetry + VictoriaMetrics/VictoriaLogs/Prometheus/Perses for Grafana stack; Prowler/kubescape/kube-bench/Trivy/Checkov (Apache-2.0, to confirm) instead of Steampipe/ScoutSuite; Opengrep/own rules instead of Semgrep rules.
+Edits:
+1. constitution.md: new section "Licensing, Provenance and Content Rules" with rules LIC-1..LIC-8 (allow-list/deny-list; licence check before adoption incl. transitive deps; automated licence scanning + SBOM in CI blocking disallowed licences; no copying of copyrighted/standards text, code, images, fonts, prompts or datasets without a permissive licence or written permission; attribution/NOTICE file; AI-generated content must not reproduce copyrighted material - plagiarism/similarity checks for generated docs, reports, prompts; third-party framework texts (PCI DSS, ISO, etc.) stored only as own summaries/references with clause IDs unless licensed; replacement-first policy: if an issue is found, remove and choose an alternative, record in licence register/ADR); extend SEC-17 cross-reference; QA/definition-of-done gets licence check; bump version 0.8.0 + changelog; resolve/link spec R-2.
+2. spec.md: NFR-15 (licence and IP compliance), NFR for content provenance; update R-2 (licensing of standard texts -&gt; own summaries/references only, legal review) and add R-7 (OSS licence/plagiarism risk, mitigation: allow-list + scanning + alternatives); US/FR: FR-31 licence register/SBOM report available to admins? (keep minimal: licence register maintained in repo, CI gate); update section 4 licensing note; open questions: licence audit results; version 0.5.0.
+3. backend-spec.md §4a, infrastructure-spec.md §2/§8 (MinIO, Grafana/Loki/Tempo), design.md components table, database-spec (Steampipe/others none): annotate affected tools "licence review required; permissive alternative to be selected" and remove hard commitments (keep as candidates pending T-009); agent.md tools unaffected except `web.fetch` sources (content terms) and prompts/datasets provenance.
+4. tasks.md: T-009 licence &amp; provenance audit of every named dependency/tool/font/icon/dataset (verify licence from official source; choose alternatives; create licence register `docs/licences.md` or `LICENCES.md`; CI licence scanner choice with permissive tooling), T-010 CI licence/SBOM gate; make T-007 depend on T-009; add to Blockers.
+5. Consistency check, commit, `git pull --rebase`, push (owner has standing instruction to commit/push after changes? -&gt; commit locally and push since owner said previously "commit/push"; here: commit and push unless owner says otherwise). Then re-enter plan mode.
+
+### (previous) OWNER APPROVED EXECUTION 2026-10-19: apply pgvector 0.8.6 change below, bump versions/dates across all specs so they are consistent and up to date, run consistency checks, commit, `git pull --rebase origin main`, push; then re-enter plan mode.
+
+### Owner-supplied fact (2026-10-19, to record in specs on next execution)
+- pgvector 0.8.6 is compatible with PostgreSQL 18.6 (owner statement; not verified by assistant). Record in database-spec.md §1 (Vector extension row: `pgvector` 0.8.6), §13 open question (exact pgvector version -&gt; resolved), infrastructure-spec.md §2/§12 (image: PostgreSQL 18.6 + pgvector 0.8.6; image source/CloudNativePG compatibility still to verify), tasks.md T-004 (narrow to: confirm CloudNativePG supports PG 18.6 and a pgvector 0.8.6 image exists; Python 3.13 library compatibility; RDS 18.x note).
+
+### Owner decisions on gaps (2026-10-19)
+- A1 Check engine: wrap proven open-source scanners behind our scanner interface (Prowler/Steampipe cloud; kubescape/kube-bench/Trivy K8s; Checkov/Semgrep repos; custom adapters for Entra/Metabase); our rule metadata maps checks -&gt; unified controls; rule/pack versioning; normalised result schema; licence review per tool.
+- A2 Control seed: owner authors v1 unified control set; mapping-agent proposes remaining mappings for expert approval.
+- A3 Tenant lifecycle: operator-provisioned, invite-based tenants in v1; platform admin role with audited, time-limited break-glass access; offboarding = export + deletion workflow; no self-service signup in v1.
+- A4 External auditors: time-boxed read-only invitations scoped to selected assessments/frameworks; all access audit-logged.
+
+### Fix list to execute after owner approves (specs only, then commit locally, push after review)
+1. backend-spec.md: add "Scanner adapters / check engine" section (adapter interface, normalised result schema, OSS tool candidates, rule metadata -&gt; unified control mapping, versioning, licence review); extend RBAC matrix (platform_admin, questionnaire, copilot, regulatory change, history/compare, external auditor scoped access); connector least-privilege permission appendix (to be filled per connector); per-tenant secret store design (Secrets Manager/Vault-style; K8s Secrets only for local).
+2. spec.md: add PER-7 platform operator, PER-8 external auditor (time-boxed); US/FR for tenant provisioning/offboarding and auditor invitations; control catalogue authorship; scheduling (US-12) details; notification event catalogue stub; updated open questions.
+3. database-spec.md: add tables `check_definitions`/`rule_packs`, `check_results`, `scope_schedules` (or schedule columns), `notification_preferences`, `copilot_conversations`/`copilot_messages`, `regulatory_changes`, `evidence_uploads`, `tenant_settings`, `auditor_invitations`, `operator_access_grants` (break-glass); fix embeddings RLS for shared rows (separate shared table or explicit policy); rename/clarify connectors vs integrations; retention for new tables.
+4. api-contract.md: platform/operator endpoints (tenants provisioning, break-glass), auditor invitations, notification events, connectors vs integrations naming, schedules.
+5. frontend-spec.md: complete route table (questionnaires, answer library, regulatory changes, compare/history, copilot, notifications, auditor invitations, platform admin console); idle-timeout etc. stay open.
+6. agent.md: scanner agents reference the check engine/adapters; remove ambiguity on deterministic checks.
+7. infrastructure-spec.md: scanner images bundle/call OSS tools; licence + image scanning; per-tenant secret store; platform admin access controls.
+8. constitution.md: rules for break-glass (audited, time-limited), auditor access, third-party scanner licence/supply-chain review; bump version.
+9. tasks.md: header owner/date/version; add tasks for check engine/adapters, control catalogue authoring (owner), tenant provisioning/offboarding, auditor invitations, connector permission policies, repo conventions (README/CLAUDE.md/CODEOWNERS/PR template), pre-build verification tasks (PG 18.6 + pgvector + CloudNativePG support, framework instruments); fill "Blockers and Notes".
+10. design.md: add platform operator/auditor to context diagram and persona dashboards; ADR-10 (wrap OSS scanners), ADR-11 (operator-provisioned tenants).
+Then run the ID/link consistency script again.
+
+## STATUS: decisions recorded and committed locally; owner approved push -&gt; run `git pull --rebase origin main` then `git push origin main`, then re-enter plan mode.
+
+## (done) record open-question decisions in specs (owner answered 2026-10-19), commit locally, DO NOT push until owner approves after review
+Decisions:
+1. Python 3.13 + latest stable FastAPI (pin exact at scaffold) -&gt; backend-spec.md §1, Open Questions; infrastructure-spec image notes.
+2. Local PostgreSQL via CloudNativePG operator with pgvector-enabled image -&gt; database-spec.md §1 envs + open Q, infrastructure-spec.md §2/§6/§12, design.md components.
+3. Ingress: NGINX Ingress; local host `aucoff.localtest.me` -&gt; infrastructure-spec.md §2/§6/§12, tasks T-405.
+4. BFF auth: Auth.js (NextAuth) with OIDC provider, server-side session (encrypted httpOnly cookie; optional Redis/DB store) -&gt; frontend-spec.md §1/§5/§14.
+5. OpenAPI file at `backend/openapi.yaml`, linted with Spectral -&gt; api-contract.md §2/§11, infrastructure CI, tasks T-108.
+6. LLM policy: Anthropic Claude only for v1 via provider interface; redacted data only; US region unless tenant requires otherwise; fallback provider and residency options revisited with first EU/India tenants -&gt; constitution open items, agent.md §4/§15, spec.md §9.
+7. Embeddings: hosted embedding API via provider interface, 1024 dims (placeholder; re-embed via migration if model changes) -&gt; database-spec.md (`embeddings.embedding vector(1024)`), agent.md §4/§6/§15, backend-spec open Q.
+Mark the corresponding open-question checkboxes `[x]` with the decision; bump minor versions where decisions change content; update Last updated 2026-10-19.
+
+## (previous) STATUS 2026-10-19: design/history/framework work DONE and committed locally (1 commit ahead). Owner approved: run `git pull --rebase origin main` then `git push origin main`, then re-enter plan mode.
+
+## (done) PENDING (from owner paste, 2026-10-19): framework instrument/version updates for spec.md section 4
+Apply to the framework table (mark "per owner; verify against official source"):
+- PCI 3DS: PCI 3DS Core Security Standard (aligned with EMV 3-D Secure v2.x); Part 1 baseline + Part 2 3DS requirements.
+- SOC 2: AICPA 2017 Trust Services Criteria with revised points of focus (2022/2023); Common Criteria (Security) + optional Availability, Confidentiality, Processing Integrity, Privacy.
+- RBI DPSC: RBI (Commercial Banks - Digital Payment Security Controls) Directions, 2026 (updated as on 1 Oct 2026).
+- RBI PPI: RBI Master Directions on Prepaid Payment Instruments (MD-PPI), under PSS Act 2007.
+- DPDP: DPDP Rules, 2025 (G.S.R. 846(E), 13 Nov 2025), phased compliance timeline; Act 2023.
+- FFIEC: owner paste says "FFIEC IT Examination Handbook" (2026 updates) - differs from spec's "FFIEC BSA/AML Examination Manual"; ask owner whether to list both.
+- GLBA: FTC Safeguards Rule (16 CFR Part 314) - already listed separately as "FTC Safeguards Rule"; merge/clarify GLBA row.
+- NYDFS: 23 NYCRR Part 500 incl. Second Amendment (fully phased in).
+- PSD2: Directive (EU) 2015/2366; track PSD3 + PSR as pending successors (future watch item for regulatory-change-agent).
+Also update spec.md open question (versions) and DORA row version stays Regulation (EU) 2022/2554. I cannot verify these from here; flag as owner-supplied.
+
+## NEW TASK (previous, done): complete agent.md (owner chose to do this first, then design.md below)
+Pending state: repo clean at c3dd93f, pushed. agent.md is still the v0.1.0 template (22 TODOs). Execute agent.md + its alignment edits first, commit/push, then design.md work.
+
+### Owner decisions for agent.md
+- Roster: the 9 services from spec.md 5.6 PLUS `reviewer-agent` (independent verifier of citations/conclusions before human review), `regulatory-change-agent`, `copilot-agent` (user Q&amp;A with citations), and `questionnaire-agent` (due-diligence).
+- Scanners: deterministic policy-as-code checks first (produce facts); LLM interprets, maps, explains, handles documents.
+- Models: tiered - strong model for assessment/mapping/questionnaire answers/review; small model for extraction/classification/routing; provider-agnostic, Claude default; model IDs in config.
+- Knowledge/RAG: shared framework texts + unified controls (read-only, licensing caveat); tenant documents (policies, SOPs, audit reports); collected evidence summaries + prior assessment results (history); remediation playbooks/best-practice library; the tenant's already-answered due-diligence questionnaires (answer library). Tenant embeddings strictly isolated (DB-6).
+- Questionnaire agent: accepts uploaded Excel/Word/PDF, standard templates (SIG, CAIQ, HECVAT, VSA), and link/portal questionnaires (drafts answers for manual entry; no auto-submit); answer-library reuse first with freshness checks; grounds answers in real environment: prefer fresh scan evidence, trigger read-only re-scan when stale, cite evidence IDs + timestamps; every answer gets confidence + sources; human approval per answer or batch; export only approved answers; sensitive details (resource IDs, IPs, account numbers, internal hostnames) redacted by default with reviewer override; every export audit-logged; tenant-configurable "shareable detail level".
+- Regulatory change agent: monitors allow-listed official sources, proposes catalogue/mapping diffs for human approval; never auto-changes the catalogue.
+
+### Additional numeric decisions (owner, initial/tunable)
+- Eval CI gates: citation correctness &gt;= 98%; hallucination rate &lt;= 1%; control-result agreement with reviewers &gt;= 90%; redaction recall &gt;= 99%.
+- Budgets: USD 25 per assessment run, USD 10 per questionnaire, tenant monthly cap configurable; alert at 80%, hard stop at 100% (state `budget_exceeded`).
+- Approvals expire after 7 days (then item returns to queue and notifies; never auto-approved).
+- Retrieval: provider-agnostic embedding interface; hybrid search (pgvector + Postgres full-text) with reranking; embedding model/dimension decided at build.
+
+### agent.md structure (v0.2.0)
+1. Overview, principles (link constitution AI-1..AI-15), deterministic-first rule.
+2. Agent roster table (AG-1..AG-13): purpose, trigger, inputs, outputs, tools, model tier, autonomy level, approval gate, queue name, spec/FR refs.
+3. Orchestration (LangGraph graphs per workflow: assessment, mapping, questionnaire, regulatory change, report, copilot); state schema; interrupts; checkpointing; retries; budgets.
+4. Model strategy: tiers, routing rules, fallbacks, temperature/params, structured output, caching, cost budgets per run/tenant, provider interface.
+5. Tools registry: tool name, read/write, side effects, permissions, approval, rate limits (cloud/k8s/repo/saas read-only tools; evidence store; vector search (tenant-filtered); ticketing create (approval); notifications; document parsers).
+6. Knowledge and memory: sources, chunking, embedding model/dimension (TODO), refresh, citation format, answer library lifecycle (approved, stale, retired), tenant isolation, history (12-month snapshots) as retrieval source.
+7. Prompts: repo layout, versioning, templating, change control, prompt-injection-safe structure (evidence as data).
+8. Guardrails: input validation, injection defence, output schemas (Pydantic), citation validator (reject uncited claims), PII/secret redaction before LLM, disallowed actions, refusal/uncertainty behaviour, rate and budget limits.
+9. Human-in-the-loop matrix: action -&gt; trigger -&gt; approver role -&gt; timeout/default (finalise control result, accept risk, approve mapping, publish report, export questionnaire answers, catalogue change, ticket creation).
+10. Questionnaire workflow (detailed): ingest -&gt; parse/normalise questions -&gt; classify/map to unified controls -&gt; retrieve answer library + evidence -&gt; freshness check/re-scan -&gt; draft answer + confidence + citations -&gt; reviewer agent check -&gt; human approval -&gt; redaction -&gt; export (Excel/Word/PDF) -&gt; save to answer library; Mermaid sequence; data model hints (questionnaires, questions, answers, answer_library) for database-spec.
+11. Evaluation: golden datasets per agent, metrics (accuracy, citation correctness &gt;= target, hallucination rate, override rate, answer reuse accuracy, redaction recall), thresholds (proposal), CI regression gate, human feedback loop, red-team/prompt-injection suite.
+12. Audit logging and traceability: run records, steps, redacted inputs, model/prompt versions, tokens/cost, approvals (maps to agent_runs/agent_steps/approvals).
+13. Failure handling and degradation (provider outage, scan failure -&gt; unknown, budget exceeded, kill switch), cost controls.
+14. Security/threat table for agents (prompt injection, data exfiltration via questionnaires, cross-tenant leakage, over-privileged tools).
+15. Open questions.
+
+### agent.md alignment edits
+- spec.md: add persona/US/FR for due-diligence questionnaires (US-14.., FR-16..) and agents list 5.6 updated (13 agents); out-of-scope: auto-submission to external portals.
+- database-spec.md: questionnaire tables (`questionnaires`, `questionnaire_questions`, `questionnaire_answers`, `answer_library`) with RLS, retention, redaction flags.
+- api-contract.md: questionnaire endpoints (upload, list, answer review/decision, export), copilot chat endpoint (SSE), regulatory-change proposals endpoints.
+- backend-spec.md: service table + queue names for the 4 new agents.
+- design.md / frontend-spec.md: questionnaire screens (queue, side-by-side question/answer/evidence/approval), copilot panel; tasks.md: new tasks T-208..; constitution: add AI rule for externally shared outputs (AI-16: outputs leaving the tenant require approval and redaction).
+- Commit, `git pull --rebase origin main`, push.
+
+## Historical data requirement (added by owner)
+- Retain and expose 1 year (12 months, rolling) of historical scan/assessment results so any scan can be compared with previous scans, not only the last 2.
+- Design: immutable per-assessment snapshots (control results, severity counts, coverage, scores) kept for &gt;= 13 months (1 month buffer) regardless of live-data retention; rollup tables/materialised views for daily/weekly/monthly trends; partitioning by month; exempt from agent_steps' shorter retention.
+- UI: time-range selector (last 2 scans, 30/90 days, 12 months, custom), trend lines and delta arrows, side-by-side scan comparison view (any two scans: new, resolved, regressed, unchanged controls/findings), per-control history timeline, framework/jurisdiction history.
+- API: `/metrics/{id}?from=&amp;to=&amp;granularity=`, `/assessments/compare?base=&amp;target=`, `/control-results/{id}/history`; cursor-paginated; export of history (CSV/JSON).
+- database-spec.md: new `assessment_snapshots`, `severity_counts`/`metric_points` (tenant_id, metric_id, assessment_id, scope_id, framework_id, value, captured_at), monthly partitions, retention row (&gt;= 13 months, tenant-configurable up, never below 12), RLS, backup coverage; ensure results of deleted evidence keep metadata so history stays comparable.
+- spec.md: new FR (history/compare) and NFR (12-month history retention); metrics catalogue entries gain a "history window" column; constitution: add DB rule for snapshot immutability/retention.
+
+## design.md changes
+1. Fill System Context (users/personas, IdP, LLM provider, evidence sources, ticketing, notifications) with Mermaid context diagram.
+2. Key Data Flows: evidence ingestion -&gt; analysis -&gt; approval -&gt; findings -&gt; report (Mermaid sequence); assessment run via RabbitMQ/LangGraph; SSE progress.
+3. Security Architecture: authN/authZ, tenancy, encryption, secrets, trust boundaries, LLM data boundary, threat model summary (STRIDE table) referencing constitution SEC/AI rules.
+4. Observability summary + SLOs link to infrastructure-spec.
+5. Trade-offs/risks and open questions (replace TODO).
+6. NEW section "UX &amp; Visual Design":
+   - Design principles (number-first, evidence-first, trust through transparency, calm by default, accessible).
+   - Colour tokens (CSS variables, light and dark): brand (deep blue 900-50 scale, blue, teal), neutrals (gray/slate), semantic status (pass, partial, fail, unknown, n/a, pending-approval in blue), severity scale (critical red, high orange/amber, medium yellow, low blue/teal, info gray), data-viz palette (colour-blind-safe categorical + sequential/diverging), chart rules; concrete hex values proposed with WCAG AA contrast checks for text/UI; usage rules (colour never sole indicator, status icons, max accent usage, gradients only on hero KPI cards).
+   - Typography (e.g. Inter or Geist; scale; tabular numerals for KPIs), spacing (4/8 grid), radius, elevation, motion (durations, reduced-motion), iconography (Lucide), illustrations.
+   - Layout &amp; grid: app shell wireframes (ASCII), sidebar items by role, top bar, page header pattern, drawer pattern, breakpoints (desktop-first; tablet; mobile subset), density toggle.
+   - Screen specs with wireframes and data shown: Executive/Posture dashboard (KPI strip, coverage by framework, severity trend vs last 2 scans, regional heatmap, approvals/agent activity, upcoming audits), Assessments, Control result review, Findings, Evidence, Reports, Audit log, Agent run timeline, Admin.
+   - Metrics catalogue: table of each metric with ID (M-01...), definition/formula, data source (table/endpoint), chart type, refresh, drill-down, roles, thresholds/colour rules. Include: posture score, framework coverage %, pass/partial/fail distribution, control severity counts vs last 2 scans (delta arrows), open findings by severity + aging buckets, MTTR/remediation cycle time, time to audit readiness, evidence freshness, scan duration, agent citation correctness, avg confidence, reviewer override rate, LLM tokens/cost vs budget, pending approvals, jurisdiction coverage matrix.
+   - Persona-to-dashboard mapping (executive, CISO, compliance officer, engineer, auditor, admin).
+   - Empty/loading/error state patterns; AI content presentation (AiBadge, citations, confidence).
+   - Accessibility: contrast, focus, keyboard, chart alternatives (data table toggle), reduced motion.
+7. Update header version to 0.2.0, owner/date; Related links.
+
+## Alignment edits
+- frontend-spec.md: reference design.md tokens, layout and metrics catalogue; add chart library decision (proposal Recharts or visx) and dark-mode support; dashboard component list.
+- api-contract.md: add dashboard/metrics endpoints (e.g. `/dashboards/posture`, `/metrics/{id}`, `/metrics/severity-trend?compare_last=2`) mapped to M- IDs.
+- database-spec.md: add snapshot/rollup tables or materialised views for metric history (assessment snapshots, severity counts per assessment) so "compared to last 2 scans" is queryable.
+- spec.md: success metrics reference M- IDs; tasks.md: design-system/dashboard tasks.
+
+## Execution (after owner says go)
+Exit plan mode, write/edit files, `git add specs`, commit with Co-Authored-By trailer, `git pull --rebase origin main`, `git push origin main`, then re-enter plan mode.
+
+## Verification
+- design.md has no TODO-only sections except marked open questions; metrics catalogue IDs unique and referenced from frontend-spec/api-contract.
+- Hex colour pairs listed with computed contrast ratios &gt;= 4.5:1 (text) / 3:1 (UI) in both themes.
+- Mermaid/ASCII blocks well-formed; `git status` clean and push confirmed.</pre></div>
+<div class="tool"><div class="th"><span>Tool: Bash</span></div><div class="inp"><div class="k">command</div><pre class="v">cd /Users/praveen.da/REPOS-PD/aucoff/backend &amp;&amp; python3 - &lt;&lt;'EOF'
+p='app/domain/controls.py'
+s=open(p).read()
+s+='''
+
+def load_catalogue(directory: Path) -&gt; list[Control]:
+    """All controls in the catalogue, ordered by id. Raises ValueError if any file is invalid."""
+    errors = validate_directory(directory)
+    if errors:
+        raise ValueError("; ".join(errors))
+    controls: list[Control] = []
+    for path in sorted(directory.glob("*.yaml")):
+        parsed, _ = validate_file(path)
+        if parsed:
+            controls.extend(parsed.controls)
+    return sorted(controls, key=lambda c: c.id)
+'''
+open(p,'w').write(s)
+p='app/core/config.py'
+s=open(p).read()
+s=s.replace("    # Database connection","    # Directory holding the owner-authored control catalogue (data/controls in the repository).\n    controls_dir: str = \"data/controls\"\n\n    # Database connection",1)
+open(p,'w').write(s)
+EOF
+cat &gt; app/api/pagination.py &lt;&lt;'EOF'
+"""Cursor pagination shared by list endpoints (api-contract.md section 2: `limit`, `cursor`).
+
+The cursor is opaque to clients. These helpers page over an in-memory sequence; the database-backed
+implementations will keep the same request and response shape.
+"""
+
+import base64
+import binascii
+from typing import Annotated, Generic, Literal, TypeVar
+
+from fastapi import HTTPException, Query
+from pydantic import BaseModel, Field
+
+T = TypeVar("T")
+
+DataSource = Literal["synthetic", "catalogue", "assessments"]
+
+
+class Page(BaseModel, Generic[T]):  # noqa: UP046 - pydantic generic model
+    items: list[T]
+    next_cursor: str | None = Field(description="Pass as `cursor` for the next page; null at the end.")
+    data_source: DataSource = Field(
+        description="`synthetic` marks demo rows that are not real results."
+    )
+
+
+Limit = Annotated[int, Query(ge=1, le=100, description="Page size (default 25, maximum 100).")]
+Cursor = Annotated[str | None, Query(description="Opaque cursor from a previous page.")]
+
+
+def _decode(cursor: str | None) -&gt; int:
+    if not cursor:
+        return 0
+    try:
+        offset = int(base64.urlsafe_b64decode(cursor.encode()).decode())
+    except (ValueError, binascii.Error) as exc:
+        raise HTTPException(status_code=400, detail="invalid cursor") from exc
+    if offset &lt; 0:
+        raise HTTPException(status_code=400, detail="invalid cursor")
+    return offset
+
+
+def paginate(rows: list[T], limit: int, cursor: str | None) -&gt; tuple[list[T], str | None]:
+    start = _decode(cursor)
+    end = start + limit
+    nxt = base64.urlsafe_b64encode(str(end).encode()).decode() if end &lt; len(rows) else None
+    return rows[start:end], nxt
+EOF
+cat &gt; app/api/lists.py &lt;&lt;'EOF'
+"""List endpoints for the first screens: unified controls, findings and evidence.
+
+* `GET /unified-controls` (API-22) returns the REAL owner-authored catalogue from `data/controls`;
+  an empty catalogue yields an empty list.
+* `GET /findings` (API-47) and `GET /evidence` (API-37) return fixed SYNTHETIC demo rows
+  (`data_source: synthetic`) until scanners and assessments exist. Nothing here is a real result.
+"""
+
+from datetime import date, timedelta
+from pathlib import Path
+from typing import Literal
+
+from fastapi import APIRouter, Depends, HTTPException
+from pydantic import BaseModel, Field
+
+from app.api.pagination import Cursor, Limit, Page, paginate
+from app.core.config import get_settings
+from app.core.security import Principal, require_scope
+from app.domain.controls import Control, load_catalogue
+
+router = APIRouter(tags=["lists"])
+catalog_read = require_scope("catalog:read")
+finding_write = require_scope("finding:write")
+evidence_read = require_scope("evidence:read")
+
+SeverityName = Literal["critical", "high", "medium", "low"]
+FindingStatus = Literal["open", "in_progress", "accepted_risk", "resolved"]
+EvidenceSource = Literal["aws", "kubernetes", "github", "entra", "upload"]
+
+
+class RequirementRef(BaseModel):
+    framework: str = Field(examples=["soc2-2017"])
+    ref: str = Field(examples=["CC6.1"])
+
+
+class UnifiedControl(BaseModel):
+    id: str = Field(examples=["UC-IAM-001"])
+    title: str
+    description: str
+    domain: str
+    severity: SeverityName
+    check_type: Literal["automated", "manual", "hybrid"]
+    status: Literal["draft", "approved"]
+    requirements: list[RequirementRef]
+
+
+class Finding(BaseModel):
+    id: str = Field(examples=["F-0001"])
+    title: str
+    severity: SeverityName
+    status: FindingStatus
+    framework_id: str
+    control_id: str
+    first_seen: date
+    age_days: int
+
+
+class EvidenceItem(BaseModel):
+    id: str = Field(examples=["E-0001"])
+    title: str
+    source: EvidenceSource
+    collected_at: date
+    fresh: bool = Field(description="Collected within its freshness window.")
+
+
+def _to_api(control: Control) -&gt; UnifiedControl:
+    return UnifiedControl(
+        id=control.id,
+        title=control.title,
+        description=control.description,
+        domain=control.domain,
+        severity=control.severity.value,  # type: ignore[arg-type]
+        check_type=control.check_type,
+        status=control.status,
+        requirements=[RequirementRef(framework=r.framework, ref=r.ref) for r in control.requirements],
+    )
+
+
+@router.get(
+    "/unified-controls",
+    operation_id="listUnifiedControls",
+    summary="List unified controls",
+    description=(
+        "The owner-authored unified control catalogue (scope `catalog:read`). Filter by "
+        "`framework` (a requirement maps to it) or `domain`. An empty catalogue returns no items."
+    ),
+    response_model=Page[UnifiedControl],
+)
+def list_unified_controls(
+    limit: Limit = 25,
+    cursor: Cursor = None,
+    framework: str | None = None,
+    domain: str | None = None,
+    _principal: Principal = Depends(catalog_read),
+) -&gt; Page[UnifiedControl]:
+    try:
+        controls = load_catalogue(Path(get_settings().controls_dir))
+    except ValueError as exc:
+        raise HTTPException(status_code=503, detail="the control catalogue is invalid") from exc
+    rows = [
+        _to_api(c)
+        for c in controls
+        if (domain is None or c.domain == domain)
+        and (framework is None or any(r.framework == framework for r in c.requirements))
+    ]
+    items, nxt = paginate(rows, limit, cursor)
+    return Page[UnifiedControl](items=items, next_cursor=nxt, data_source="catalogue")
+
+
+_SEVERITIES: list[SeverityName] = ["critical", "high", "medium", "low", "medium", "low", "high"]
+_STATUSES: list[FindingStatus] = ["open", "in_progress", "open", "accepted_risk", "resolved"]
+_FRAMEWORKS = ["soc2-2017", "pci-dss-4.0.1", "rbi-dpsc-2026", "iso27001-2022"]
+_TOPICS = [
+    "Administrator accounts without a second authentication factor",
+    "Storage bucket allows public read access",
+    "Audit logging disabled for a production account",
+    "Encryption at rest not enforced on a database volume",
+    "Container image runs as root",
+    "Access review overdue for privileged roles",
+    "TLS 1.0 still enabled on a public endpoint",
+    "Backup restore test older than policy",
+]
+_ANCHOR = date(2026, 10, 19)
+
+
+def _synthetic_findings() -&gt; list[Finding]:
+    rows: list[Finding] = []
+    for i in range(40):
+        age = 3 + (i * 7) % 120
+        rows.append(
+            Finding(
+                id=f"F-{i + 1:04d}",
+                title=_TOPICS[i % len(_TOPICS)],
+                severity=_SEVERITIES[i % len(_SEVERITIES)],
+                status=_STATUSES[i % len(_STATUSES)],
+                framework_id=_FRAMEWORKS[i % len(_FRAMEWORKS)],
+                control_id=f"UC-DEMO-{(i % 12) + 1:03d}",
+                first_seen=_ANCHOR - timedelta(days=age),
+                age_days=age,
+            )
+        )
+    return rows
+
+
+_SOURCES: list[EvidenceSource] = ["aws", "kubernetes", "github", "entra", "upload"]
+_EVIDENCE_TITLES = [
+    "IAM credential report",
+    "Cluster RBAC configuration",
+    "Branch protection settings",
+    "Conditional access policies",
+    "Information security policy (PDF)",
+]
+
+
+def _synthetic_evidence() -&gt; list[EvidenceItem]:
+    rows: list[EvidenceItem] = []
+    for i in range(30):
+        age = (i * 5) % 70
+        rows.append(
+            EvidenceItem(
+                id=f"E-{i + 1:04d}",
+                title=f"{_EVIDENCE_TITLES[i % len(_EVIDENCE_TITLES)]} #{i // 5 + 1}",
+                source=_SOURCES[i % len(_SOURCES)],
+                collected_at=_ANCHOR - timedelta(days=age),
+                fresh=age &lt;= 30,
+            )
+        )
+    return rows
+
+
+@router.get(
+    "/findings",
+    operation_id="listFindings",
+    summary="List findings",
+    description=(
+        "Findings (scope `finding:write`), filterable by `severity` and `status`. Until scanners "
+        "run, rows are synthetic demo data and `data_source` is `synthetic`."
+    ),
+    response_model=Page[Finding],
+)
+def list_findings(
+    limit: Limit = 25,
+    cursor: Cursor = None,
+    severity: SeverityName | None = None,
+    status: FindingStatus | None = None,
+    _principal: Principal = Depends(finding_write),
+) -&gt; Page[Finding]:
+    rows = [
+        f
+        for f in _synthetic_findings()
+        if (severity is None or f.severity == severity) and (status is None or f.status == status)
+    ]
+    items, nxt = paginate(rows, limit, cursor)
+    return Page[Finding](items=items, next_cursor=nxt, data_source="synthetic")
+
+
+@router.get(
+    "/evidence",
+    operation_id="listEvidence",
+    summary="List evidence",
+    description=(
+        "Evidence items (scope `evidence:read`), filterable by `source`. Until collectors run, "
+        "rows are synthetic demo data and `data_source` is `synthetic`."
+    ),
+    response_model=Page[EvidenceItem],
+)
+def list_evidence(
+    limit: Limit = 25,
+    cursor: Cursor = None,
+    source: EvidenceSource | None = None,
+    _principal: Principal = Depends(evidence_read),
+) -&gt; Page[EvidenceItem]:
+    rows = [e for e in _synthetic_evidence() if source is None or e.source == source]
+    items, nxt = paginate(rows, limit, cursor)
+    return Page[EvidenceItem](items=items, next_cursor=nxt, data_source="synthetic")
+EOF
+python3 - &lt;&lt;'EOF'
+p='app/main.py'
+s=open(p).read()
+s=s.replace("from app.api import dashboards, health, metrics","from app.api import dashboards, health, lists, metrics")
+s=s.replace('    app.include_router(dashboards.router, prefix="/api/v1")','    app.include_router(dashboards.router, prefix="/api/v1")\n    app.include_router(lists.router, prefix="/api/v1")')
+s=s.replace('{"name": "dashboards", "description": "Dashboards for signed-in users."},','{"name": "dashboards", "description": "Dashboards for signed-in users."},\n            {"name": "lists", "description": "Controls, findings and evidence lists."},')
+open(p,'w').write(s)
+EOF
+cat &gt; tests/test_lists.py &lt;&lt;'EOF'
+"""List endpoints: scopes, pagination, filters, labelling (API-22, API-37, API-47)."""
+
+from collections.abc import Callable
+from pathlib import Path
+
+import pytest
+from fastapi.testclient import TestClient
+
+from app.core.config import Settings
+from tests.test_controls import GOOD
+
+
+def _bearer(token: str) -&gt; dict[str, str]:
+    return {"Authorization": f"Bearer {token}"}
+
+
+@pytest.mark.parametrize(
+    ("path", "scope"),
+    [
+        ("/api/v1/unified-controls", "catalog:read"),
+        ("/api/v1/findings", "finding:write"),
+        ("/api/v1/evidence", "evidence:read"),
+    ],
+)
+def test_scopes_are_enforced(
+    client: TestClient, make_token: Callable[..., str], path: str, scope: str
+) -&gt; None:
+    assert client.get(path).status_code == 401
+    assert client.get(path, headers=_bearer(make_token("ops:read"))).status_code == 403
+    assert client.get(path, headers=_bearer(make_token(scope))).status_code == 200
+
+
+def test_findings_are_labelled_synthetic_and_paginate(
+    client: TestClient, make_token: Callable[..., str]
+) -&gt; None:
+    h = _bearer(make_token("finding:write"))
+    first = client.get("/api/v1/findings?limit=15", headers=h).json()
+    assert first["data_source"] == "synthetic"
+    assert len(first["items"]) == 15 and first["next_cursor"]
+    seen = {f["id"] for f in first["items"]}
+    cursor = first["next_cursor"]
+    while cursor:
+        page = client.get(f"/api/v1/findings?limit=15&amp;cursor={cursor}", headers=h).json()
+        assert not seen &amp; {f["id"] for f in page["items"]}
+        seen |= {f["id"] for f in page["items"]}
+        cursor = page["next_cursor"]
+    assert len(seen) == 40
+
+
+def test_findings_filters(client: TestClient, make_token: Callable[..., str]) -&gt; None:
+    h = _bearer(make_token("finding:write"))
+    body = client.get("/api/v1/findings?severity=critical&amp;status=open&amp;limit=100", headers=h).json()
+    assert body["items"]
+    assert all(f["severity"] == "critical" and f["status"] == "open" for f in body["items"])
+
+
+def test_evidence_filter_and_bad_input(client: TestClient, make_token: Callable[..., str]) -&gt; None:
+    h = _bearer(make_token("evidence:read"))
+    items = client.get("/api/v1/evidence?source=aws&amp;limit=100", headers=h).json()["items"]
+    assert items and all(e["source"] == "aws" for e in items)
+    assert client.get("/api/v1/evidence?cursor=%%%", headers=h).status_code == 400
+    assert client.get("/api/v1/evidence?limit=0", headers=h).status_code == 422
+    assert client.get("/api/v1/evidence?limit=101", headers=h).status_code == 422
+    assert client.get("/api/v1/evidence?source=bogus", headers=h).status_code == 422
+
+
+def test_controls_come_from_the_real_catalogue(
+    client: TestClient,
+    make_token: Callable[..., str],
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+) -&gt; None:
+    h = _bearer(make_token("catalog:read"))
+    (tmp_path / "iam.yaml").write_text(GOOD, encoding="utf-8")
+    monkeypatch.setattr("app.api.lists.get_settings", lambda: Settings(controls_dir=str(tmp_path)))
+    body = client.get("/api/v1/unified-controls", headers=h).json()
+    assert body["data_source"] == "catalogue"
+    assert [c["id"] for c in body["items"]] == ["UC-IAM-001"]
+    assert client.get("/api/v1/unified-controls?framework=pci-dss-4.0.1", headers=h).json()["items"]
+    assert not client.get("/api/v1/unified-controls?framework=soc2-2017&amp;domain=x", headers=h).json()["items"]
+
+
+def test_an_empty_or_invalid_catalogue(
+    client: TestClient,
+    make_token: Callable[..., str],
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+) -&gt; None:
+    h = _bearer(make_token("catalog:read"))
+    monkeypatch.setattr("app.api.lists.get_settings", lambda: Settings(controls_dir=str(tmp_path)))
+    assert client.get("/api/v1/unified-controls", headers=h).json()["items"] == []
+    (tmp_path / "bad.yaml").write_text("catalogue_version: x\ncontrols: []\n", encoding="utf-8")
+    assert client.get("/api/v1/unified-controls", headers=h).status_code == 503
+EOF
+uv run ruff format . &gt;/dev/null; uv run ruff check . | tail -15; uv run mypy app tests scripts | tail -5; uv run pytest tests -q --ignore=tests/db 2&gt;&amp;1 | tail -6</pre><div class="k">timeout</div><pre class="v">300000</pre></div><div class="k">result</div><pre class="out">   |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+46 |     start = _decode(cursor)
+47 |     end = start + limit
+   |
+help: Use type parameters
+   |
+44 |
+   - def paginate(rows: list[T], limit: int, cursor: str | None) -&gt; tuple[list[T], str | None]:
+45 + def paginate[T](rows: list[T], limit: int, cursor: str | None) -&gt; tuple[list[T], str | None]:
+46 |     start = _decode(cursor)
+   |
+note: This is an unsafe fix and may change runtime behavior
+
+Found 1 error.
+1 unsafe fix available with `--fix --unsafe-fixes`.
+app/api/lists.py:72: error: Unused "type: ignore" comment  [unused-ignore]
+Found 1 error in 1 file (checked 43 source files)
+.venv/lib/python3.13/site-packages/fastapi/testclient.py:1
+  /Users/praveen.da/REPOS-PD/aucoff/backend/.venv/lib/python3.13/site-packages/fastapi/testclient.py:1: StarletteDeprecationWarning: Using `httpx` with `starlette.testclient` is deprecated; install `httpx2` instead.
+    from starlette.testclient import TestClient as TestClient  # noqa
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+72 passed, 1 warning in 2.11s</pre></div>
+<div class="tool"><div class="th"><span>Tool: Bash</span></div><div class="inp"><div class="k">command</div><pre class="v">python3 - &lt;&lt;'EOF'
+p='app/api/pagination.py'
+s=open(p).read()
+s=s.replace("def paginate(rows: list[T], limit","def paginate[T](rows: list[T], limit")
+s=s.replace("from typing import Annotated, Generic, Literal, TypeVar","from typing import Annotated, Literal")
+s=s.replace('T = TypeVar("T")\n\n','')
+s=s.replace("class Page(BaseModel, Generic[T]):  # noqa: UP046 - pydantic generic model","class Page[T](BaseModel):")
+open(p,'w').write(s)
+p='app/api/lists.py'
+s=open(p).read().replace("  # type: ignore[arg-type]","")
+open(p,'w').write(s)
+EOF
+uv run ruff format . &gt;/dev/null; uv run ruff check . | tail -3; uv run mypy app tests scripts | tail -3; uv run pytest tests -q --ignore=tests/db 2&gt;&amp;1 | tail -1; cd .. &amp;&amp; make openapi &gt;/dev/null 2&gt;&amp;1; make spectral 2&gt;&amp;1 | tail -4</pre><div class="k">timeout</div><pre class="v">300000</pre></div><div class="k">result</div><pre class="out">All checks passed!
+Success: no issues found in 43 source files
+72 passed, 1 warning in 1.57s
+cd backend &amp;&amp; npx --yes @stoplight/spectral-cli@6 lint openapi.yaml --ruleset .spectral.yaml --fail-severity=warn
+No results with a severity of 'warn' or higher found!</pre></div>
+<div class="tool"><div class="th"><span>Tool: Bash</span></div><div class="inp"><div class="k">command</div><pre class="v">python3 - &lt;&lt;'EOF'
+p='backend/Dockerfile'
+s=open(p).read()
+s=s.replace("COPY pyproject.toml uv.lock ./","COPY backend/pyproject.toml backend/uv.lock ./")
+s=s.replace("COPY app ./app","COPY backend/app ./app")
+s=s.replace("COPY alembic.ini /app/alembic.ini","COPY backend/alembic.ini /app/alembic.ini")
+s=s.replace("COPY migrations /app/migrations","COPY backend/migrations /app/migrations\n# The owner-authored control catalogue ships with the image (read at run time by GET /unified-controls).\nCOPY data/controls /app/data/controls")
+s=s.replace("# AUCoFF backend image.","# AUCoFF backend image. Build from the repository root: docker build -f backend/Dockerfile .\n# ",1) if False else s
+open(p,'w').write(s)
+open('.dockerignore','w').write(".git\nbuild\nfrontend\nbackend/.venv\nbackend/**/__pycache__\n**/node_modules\n**/.next\ndocs\nspecs\ndeploy\n")
+p='Makefile'
+s=open(p).read()
+s=s.replace("docker build -t aucoff-backend:dev backend","docker build -f backend/Dockerfile -t aucoff-backend:dev .")
+open(p,'w').write(s)
+EOF
+head -4 backend/Dockerfile; ls backend/.dockerignore 2&gt;&amp;1 | head -1; make images 2&gt;&amp;1 | grep -E "^Successfully tagged|rror"</pre><div class="k">timeout</div><pre class="v">600000</pre></div><div class="k">result</div><pre class="out"># AUCoFF backend image. Base image is an unmodified official minimal image pinned by digest
+# (constitution LIC-2 exception, LICENCES.md section 5a). Runs as a non-root user and works with a
+# read-only root filesystem.
+FROM docker.io/library/python@sha256:70729b46c69b4f1e97c4822c1af3df53a1476cf5ddc6c087c0c10bc3a5678c2f AS build
+backend/.dockerignore
+Successfully tagged aucoff-backend:dev
+Successfully tagged aucoff-frontend:dev</pre></div>
+<div class="tool"><div class="th"><span>Tool: Bash</span></div><div class="inp"><div class="k">command</div><pre class="v">cd /Users/praveen.da/REPOS-PD/aucoff/frontend &amp;&amp; mkdir -p src/components/table src/components/lists "src/app/(app)/controls" "src/app/(app)/findings" "src/app/(app)/evidence" &amp;&amp; cat &gt; src/lib/density.ts &lt;&lt;'EOF'
+"use client";
+
+import { useSyncExternalStore } from "react";
+
+export type Density = "comfortable" | "compact";
+const KEY = "aucoff-density";
+const EVENT = "aucoff-density-change";
+
+function read(): Density {
+  try {
+    return localStorage.getItem(KEY) === "compact" ? "compact" : "comfortable";
+  } catch {
+    return "comfortable"; // storage blocked: fall back to the default
+  }
+}
+
+function subscribe(onChange: () =&gt; void): () =&gt; void {
+  window.addEventListener(EVENT, onChange);
+  window.addEventListener("storage", onChange);
+  return () =&gt; {
+    window.removeEventListener(EVENT, onChange);
+    window.removeEventListener("storage", onChange);
+  };
+}
+
+export function useDensity(): [Density, (next: Density) =&gt; void] {
+  const density = useSyncExternalStore&lt;Density&gt;(subscribe, read, () =&gt; "comfortable");
+  function set(next: Density) {
+    try {
+      localStorage.setItem(KEY, next);
+    } catch {
+      // not persisted; the event below still updates this page
+    }
+    window.dispatchEvent(new Event(EVENT));
+  }
+  return [density, set];
+}
+EOF
+cat &gt; src/lib/use-list.ts &lt;&lt;'EOF'
+"use client";
+
+import { useCallback, useEffect, useRef, useState } from "react";
+
+export interface Page&lt;T&gt; {
+  items: T[];
+  next_cursor: string | null;
+  data_source: "synthetic" | "catalogue" | "assessments";
+}
+
+type State&lt;T&gt; =
+  | { kind: "loading"; rows: T[] }
+  | { kind: "error"; message: string; rows: T[] }
+  | { kind: "ready"; rows: T[]; next: string | null; source: Page&lt;T&gt;["data_source"]; loadingMore: boolean };
+
+// Loads a cursor-paginated list through the BFF (/bff/*): the browser never holds a token.
+export function useCursorList&lt;T&gt;(path: string, params: Record&lt;string, string&gt;) {
+  const [state, setState] = useState&lt;State&lt;T&gt;&gt;({ kind: "loading", rows: [] });
+  const key = JSON.stringify([path, params]);
+  const generation = useRef(0);
+
+  const fetchPage = useCallback(
+    async (cursor: string | null): Promise&lt;Page&lt;T&gt;&gt; =&gt; {
+      const q = new URLSearchParams({ limit: "25", ...params });
+      if (cursor) q.set("cursor", cursor);
+      const r = await fetch(`/bff${path}?${q}`, { headers: { Accept: "application/json" } });
+      if (r.status === 403) throw new Error("Your role does not include access to this list.");
+      if (!r.ok) throw new Error(`The list could not be loaded (status ${r.status}).`);
+      return (await r.json()) as Page&lt;T&gt;;
+    },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [key],
+  );
+
+  useEffect(() =&gt; {
+    const mine = ++generation.current;
+    setState({ kind: "loading", rows: [] });
+    fetchPage(null)
+      .then((p) =&gt; {
+        if (mine === generation.current)
+          setState({ kind: "ready", rows: p.items, next: p.next_cursor, source: p.data_source, loadingMore: false });
+      })
+      .catch((e: Error) =&gt; {
+        if (mine === generation.current) setState({ kind: "error", message: e.message, rows: [] });
+      });
+  }, [fetchPage]);
+
+  const loadMore = useCallback(() =&gt; {
+    setState((s) =&gt; {
+      if (s.kind !== "ready" || !s.next || s.loadingMore) return s;
+      const mine = generation.current;
+      fetchPage(s.next)
+        .then((p) =&gt; {
+          if (mine !== generation.current) return;
+          setState((cur) =&gt;
+            cur.kind === "ready"
+              ? { ...cur, rows: [...cur.rows, ...p.items], next: p.next_cursor, loadingMore: false }
+              : cur,
+          );
+        })
+        .catch((e: Error) =&gt; {
+          if (mine === generation.current) setState({ kind: "error", message: e.message, rows: s.rows });
+        });
+      return { ...s, loadingMore: true };
+    });
+  }, [fetchPage]);
+
+  return { state, loadMore };
+}
+EOF
+cat &gt; src/components/table/data-table.tsx &lt;&lt;'EOF'
+"use client";
+
+import { ArrowDown, ArrowUp, ChevronsUpDown } from "lucide-react";
+import { useMemo, useState } from "react";
+import type { Density } from "@/lib/density";
+
+export interface Column&lt;T&gt; {
+  key: string;
+  header: string;
+  render: (row: T) =&gt; React.ReactNode;
+  /** Present = the column can be sorted. */
+  sortValue?: (row: T) =&gt; string | number;
+}
+
+export function DataTable&lt;T&gt;({
+  caption,
+  rows,
+  columns,
+  rowKey,
+  density,
+  onRowOpen,
+}: {
+  caption: string;
+  rows: T[];
+  columns: Column&lt;T&gt;[];
+  rowKey: (row: T) =&gt; string;
+  density: Density;
+  onRowOpen?: (row: T) =&gt; void;
+}) {
+  const [sort, setSort] = useState&lt;{ key: string; dir: "asc" | "desc" } | null&gt;(null);
+
+  const sorted = useMemo(() =&gt; {
+    const col = columns.find((c) =&gt; c.key === sort?.key);
+    if (!sort || !col?.sortValue) return rows;
+    const get = col.sortValue;
+    const factor = sort.dir === "asc" ? 1 : -1;
+    return [...rows].sort((a, b) =&gt; {
+      const x = get(a);
+      const y = get(b);
+      return (x &lt; y ? -1 : x &gt; y ? 1 : 0) * factor;
+    });
+  }, [rows, columns, sort]);
+
+  const pad = density === "compact" ? "py-1.5" : "py-3.5"; // 36 px / 48 px rows (design.md 10.4)
+
+  return (
+    &lt;div className="overflow-x-auto rounded-card border border-border-subtle"&gt;
+      &lt;table className="w-full text-sm"&gt;
+        &lt;caption className="sr-only"&gt;{caption}&lt;/caption&gt;
+        &lt;thead className="bg-surface text-left text-xs text-muted"&gt;
+          &lt;tr&gt;
+            {columns.map((c) =&gt; {
+              const active = sort?.key === c.key;
+              return (
+                &lt;th
+                  key={c.key}
+                  scope="col"
+                  aria-sort={active ? (sort?.dir === "asc" ? "ascending" : "descending") : undefined}
+                  className="px-4 py-2.5 font-medium"
+                &gt;
+                  {c.sortValue ? (
+                    &lt;button
+                      type="button"
+                      className="inline-flex items-center gap-1 hover:text-text"
+                      onClick={() =&gt;
+                        setSort(active &amp;&amp; sort?.dir === "asc" ? { key: c.key, dir: "desc" } : { key: c.key, dir: "asc" })
+                      }
+                    &gt;
+                      {c.header}
+                      {active ? (
+                        sort?.dir === "asc" ? (
+                          &lt;ArrowUp size={14} aria-hidden /&gt;
+                        ) : (
+                          &lt;ArrowDown size={14} aria-hidden /&gt;
+                        )
+                      ) : (
+                        &lt;ChevronsUpDown size={14} aria-hidden /&gt;
+                      )}
+                    &lt;/button&gt;
+                  ) : (
+                    c.header
+                  )}
+                &lt;/th&gt;
+              );
+            })}
+          &lt;/tr&gt;
+        &lt;/thead&gt;
+        &lt;tbody&gt;
+          {sorted.map((row) =&gt; (
+            &lt;tr key={rowKey(row)} className="border-t border-border-subtle hover:bg-surface"&gt;
+              {columns.map((c, i) =&gt; (
+                &lt;td key={c.key} className={`px-4 ${pad}`}&gt;
+                  {i === 0 &amp;&amp; onRowOpen ? (
+                    &lt;button type="button" className="text-left font-medium text-brand hover:underline" onClick={() =&gt; onRowOpen(row)}&gt;
+                      {c.render(row)}
+                    &lt;/button&gt;
+                  ) : (
+                    c.render(row)
+                  )}
+                &lt;/td&gt;
+              ))}
+            &lt;/tr&gt;
+          ))}
+        &lt;/tbody&gt;
+      &lt;/table&gt;
+    &lt;/div&gt;
+  );
+}
+EOF
+cat &gt; src/components/table/list-view.tsx &lt;&lt;'EOF'
+"use client";
+
+import { Info, TriangleAlert } from "lucide-react";
+import { useState } from "react";
+import { DetailDrawer } from "@/components/shell/detail-drawer";
+import { useDensity } from "@/lib/density";
+import { useCursorList } from "@/lib/use-list";
+import { type Column, DataTable } from "./data-table";
+
+export interface Filter {
+  name: string;
+  label: string;
+  options: { value: string; label: string }[];
+}
+
+export function ListView&lt;T&gt;({
+  path,
+  caption,
+  columns,
+  rowKey,
+  filters = [],
+  detailTitle,
+  renderDetail,
+  emptyMessage,
+}: {
+  path: string;
+  caption: string;
+  columns: Column&lt;T&gt;[];
+  rowKey: (row: T) =&gt; string;
+  filters?: Filter[];
+  detailTitle: (row: T) =&gt; string;
+  renderDetail: (row: T) =&gt; React.ReactNode;
+  emptyMessage: string;
+}) {
+  const [values, setValues] = useState&lt;Record&lt;string, string&gt;&gt;({});
+  const [selected, setSelected] = useState&lt;T | null&gt;(null);
+  const [density, setDensity] = useDensity();
+  const params = Object.fromEntries(Object.entries(values).filter(([, v]) =&gt; v !== ""));
+  const { state, loadMore } = useCursorList&lt;T&gt;(path, params);
+
+  return (
+    &lt;div className="space-y-4"&gt;
+      {state.kind === "ready" &amp;&amp; state.source === "synthetic" ? (
+        &lt;div
+          role="note"
+          className="flex items-start gap-3 rounded-card p-4 text-sm font-medium"
+          style={{ background: "var(--partial-tint)", color: "var(--partial)" }}
+        &gt;
+          &lt;Info size={18} aria-hidden /&gt;
+          &lt;p&gt;Demo data. These rows are synthetic and are not real results.&lt;/p&gt;
+        &lt;/div&gt;
+      ) : null}
+
+      &lt;div className="flex flex-wrap items-end gap-4"&gt;
+        {filters.map((f) =&gt; (
+          &lt;label key={f.name} className="flex flex-col gap-1 text-xs text-muted"&gt;
+            {f.label}
+            &lt;select
+              value={values[f.name] ?? ""}
+              onChange={(e) =&gt; setValues((v) =&gt; ({ ...v, [f.name]: e.target.value }))}
+              className="rounded-control border border-border-control bg-bg px-3 py-1.5 text-sm text-text"
+            &gt;
+              &lt;option value=""&gt;All&lt;/option&gt;
+              {f.options.map((o) =&gt; (
+                &lt;option key={o.value} value={o.value}&gt;
+                  {o.label}
+                &lt;/option&gt;
+              ))}
+            &lt;/select&gt;
+          &lt;/label&gt;
+        ))}
+        &lt;fieldset className="ml-auto flex items-center gap-2 text-xs text-muted"&gt;
+          &lt;legend className="sr-only"&gt;Row density&lt;/legend&gt;
+          {(["comfortable", "compact"] as const).map((d) =&gt; (
+            &lt;label key={d} className="flex items-center gap-1"&gt;
+              &lt;input type="radio" name="density" checked={density === d} onChange={() =&gt; setDensity(d)} /&gt;
+              {d === "comfortable" ? "Comfortable" : "Compact"}
+            &lt;/label&gt;
+          ))}
+        &lt;/fieldset&gt;
+      &lt;/div&gt;
+
+      {state.kind === "loading" ? (
+        &lt;p role="status" className="text-muted"&gt;
+          Loading…
+        &lt;/p&gt;
+      ) : state.kind === "error" ? (
+        &lt;div role="alert" className="flex items-start gap-3 rounded-card border border-border-subtle bg-surface p-5"&gt;
+          &lt;TriangleAlert size={20} aria-hidden style={{ color: "var(--partial)" }} /&gt;
+          &lt;p&gt;{state.message}&lt;/p&gt;
+        &lt;/div&gt;
+      ) : state.rows.length === 0 ? (
+        &lt;div className="rounded-card border border-dashed border-border-control p-10 text-center text-muted"&gt;
+          {emptyMessage}
+        &lt;/div&gt;
+      ) : (
+        &lt;&gt;
+          &lt;DataTable
+            caption={caption}
+            rows={state.rows}
+            columns={columns}
+            rowKey={rowKey}
+            density={density}
+            onRowOpen={setSelected}
+          /&gt;
+          &lt;div className="flex items-center justify-between text-xs text-muted"&gt;
+            &lt;span className="tabular"&gt;{state.rows.length} shown&lt;/span&gt;
+            {state.next ? (
+              &lt;button
+                type="button"
+                onClick={loadMore}
+                disabled={state.loadingMore}
+                className="rounded-control border border-border-control px-4 py-1.5 text-sm text-text hover:bg-surface disabled:opacity-60"
+              &gt;
+                {state.loadingMore ? "Loading…" : "Load more"}
+              &lt;/button&gt;
+            ) : (
+              &lt;span&gt;End of list&lt;/span&gt;
+            )}
+          &lt;/div&gt;
+        &lt;/&gt;
+      )}
+
+      &lt;DetailDrawer open={selected !== null} title={selected ? detailTitle(selected) : ""} onClose={() =&gt; setSelected(null)}&gt;
+        {selected ? renderDetail(selected) : null}
+      &lt;/DetailDrawer&gt;
+    &lt;/div&gt;
+  );
+}
+EOF
+echo ok</pre></div><div class="k">result</div><pre class="out">ok</pre></div>
+<div class="tool"><div class="th"><span>Tool: Bash</span></div><div class="inp"><div class="k">command</div><pre class="v">cat &gt; src/components/lists/findings-view.tsx &lt;&lt;'EOF'
+"use client";
+
+import { SeverityLabel } from "@/components/status";
+import { type Column } from "@/components/table/data-table";
+import { ListView } from "@/components/table/list-view";
+
+export interface Finding {
+  id: string;
+  title: string;
+  severity: "critical" | "high" | "medium" | "low";
+  status: "open" | "in_progress" | "accepted_risk" | "resolved";
+  framework_id: string;
+  control_id: string;
+  first_seen: string;
+  age_days: number;
+}
+
+const RANK = { critical: 0, high: 1, medium: 2, low: 3 } as const;
+export const STATUS_LABEL: Record&lt;Finding["status"], string&gt; = {
+  open: "Open",
+  in_progress: "In progress",
+  accepted_risk: "Accepted risk",
+  resolved: "Resolved",
+};
+
+const columns: Column&lt;Finding&gt;[] = [
+  { key: "id", header: "ID", render: (f) =&gt; &lt;span className="font-mono"&gt;{f.id}&lt;/span&gt;, sortValue: (f) =&gt; f.id },
+  { key: "title", header: "Finding", render: (f) =&gt; f.title, sortValue: (f) =&gt; f.title },
+  { key: "severity", header: "Severity", render: (f) =&gt; &lt;SeverityLabel severity={f.severity} /&gt;, sortValue: (f) =&gt; RANK[f.severity] },
+  { key: "status", header: "Status", render: (f) =&gt; STATUS_LABEL[f.status], sortValue: (f) =&gt; f.status },
+  { key: "framework", header: "Framework", render: (f) =&gt; f.framework_id, sortValue: (f) =&gt; f.framework_id },
+  { key: "age", header: "Age (days)", render: (f) =&gt; &lt;span className="tabular"&gt;{f.age_days}&lt;/span&gt;, sortValue: (f) =&gt; f.age_days },
+];
+
+export function FindingsView() {
+  return (
+    &lt;ListView&lt;Finding&gt;
+      path="/findings"
+      caption="Findings"
+      columns={columns}
+      rowKey={(f) =&gt; f.id}
+      emptyMessage="No findings match these filters."
+      filters={[
+        {
+          name: "severity",
+          label: "Severity",
+          options: ["critical", "high", "medium", "low"].map((v) =&gt; ({ value: v, label: v[0].toUpperCase() + v.slice(1) })),
+        },
+        {
+          name: "status",
+          label: "Status",
+          options: Object.entries(STATUS_LABEL).map(([value, label]) =&gt; ({ value, label })),
+        },
+      ]}
+      detailTitle={(f) =&gt; f.id}
+      renderDetail={(f) =&gt; (
+        &lt;dl className="space-y-3 text-sm"&gt;
+          &lt;div&gt;&lt;dt className="text-muted"&gt;Finding&lt;/dt&gt;&lt;dd className="font-medium"&gt;{f.title}&lt;/dd&gt;&lt;/div&gt;
+          &lt;div&gt;&lt;dt className="text-muted"&gt;Severity&lt;/dt&gt;&lt;dd&gt;&lt;SeverityLabel severity={f.severity} /&gt;&lt;/dd&gt;&lt;/div&gt;
+          &lt;div&gt;&lt;dt className="text-muted"&gt;Status&lt;/dt&gt;&lt;dd&gt;{STATUS_LABEL[f.status]}&lt;/dd&gt;&lt;/div&gt;
+          &lt;div&gt;&lt;dt className="text-muted"&gt;Framework&lt;/dt&gt;&lt;dd&gt;{f.framework_id}&lt;/dd&gt;&lt;/div&gt;
+          &lt;div&gt;&lt;dt className="text-muted"&gt;Control&lt;/dt&gt;&lt;dd className="font-mono"&gt;{f.control_id}&lt;/dd&gt;&lt;/div&gt;
+          &lt;div&gt;&lt;dt className="text-muted"&gt;First seen&lt;/dt&gt;&lt;dd&gt;{f.first_seen} ({f.age_days} days ago)&lt;/dd&gt;&lt;/div&gt;
+        &lt;/dl&gt;
+      )}
+    /&gt;
+  );
+}
+EOF
+cat &gt; src/components/lists/evidence-view.tsx &lt;&lt;'EOF'
+"use client";
+
+import { CircleCheck, Clock } from "lucide-react";
+import { type Column } from "@/components/table/data-table";
+import { ListView } from "@/components/table/list-view";
+
+export interface EvidenceItem {
+  id: string;
+  title: string;
+  source: "aws" | "kubernetes" | "github" | "entra" | "upload";
+  collected_at: string;
+  fresh: boolean;
+}
+
+const SOURCE_LABEL: Record&lt;EvidenceItem["source"], string&gt; = {
+  aws: "AWS",
+  kubernetes: "Kubernetes",
+  github: "GitHub",
+  entra: "Entra ID",
+  upload: "Uploaded document",
+};
+
+function Freshness({ fresh }: { fresh: boolean }) {
+  const Icon = fresh ? CircleCheck : Clock;
+  return (
+    &lt;span className="inline-flex items-center gap-1.5" style={{ color: fresh ? "var(--pass)" : "var(--partial)" }}&gt;
+      &lt;Icon size={16} aria-hidden /&gt;
+      {fresh ? "Fresh" : "Stale"}
+    &lt;/span&gt;
+  );
+}
+
+const columns: Column&lt;EvidenceItem&gt;[] = [
+  { key: "id", header: "ID", render: (e) =&gt; &lt;span className="font-mono"&gt;{e.id}&lt;/span&gt;, sortValue: (e) =&gt; e.id },
+  { key: "title", header: "Evidence", render: (e) =&gt; e.title, sortValue: (e) =&gt; e.title },
+  { key: "source", header: "Source", render: (e) =&gt; SOURCE_LABEL[e.source], sortValue: (e) =&gt; e.source },
+  { key: "collected", header: "Collected", render: (e) =&gt; &lt;span className="tabular"&gt;{e.collected_at}&lt;/span&gt;, sortValue: (e) =&gt; e.collected_at },
+  { key: "fresh", header: "Freshness", render: (e) =&gt; &lt;Freshness fresh={e.fresh} /&gt;, sortValue: (e) =&gt; (e.fresh ? 0 : 1) },
+];
+
+export function EvidenceView() {
+  return (
+    &lt;ListView&lt;EvidenceItem&gt;
+      path="/evidence"
+      caption="Evidence"
+      columns={columns}
+      rowKey={(e) =&gt; e.id}
+      emptyMessage="No evidence from this source yet."
+      filters={[
+        {
+          name: "source",
+          label: "Source",
+          options: Object.entries(SOURCE_LABEL).map(([value, label]) =&gt; ({ value, label })),
+        },
+      ]}
+      detailTitle={(e) =&gt; e.id}
+      renderDetail={(e) =&gt; (
+        &lt;dl className="space-y-3 text-sm"&gt;
+          &lt;div&gt;&lt;dt className="text-muted"&gt;Evidence&lt;/dt&gt;&lt;dd className="font-medium"&gt;{e.title}&lt;/dd&gt;&lt;/div&gt;
+          &lt;div&gt;&lt;dt className="text-muted"&gt;Source&lt;/dt&gt;&lt;dd&gt;{SOURCE_LABEL[e.source]}&lt;/dd&gt;&lt;/div&gt;
+          &lt;div&gt;&lt;dt className="text-muted"&gt;Collected&lt;/dt&gt;&lt;dd&gt;{e.collected_at}&lt;/dd&gt;&lt;/div&gt;
+          &lt;div&gt;&lt;dt className="text-muted"&gt;Freshness&lt;/dt&gt;&lt;dd&gt;&lt;Freshness fresh={e.fresh} /&gt;&lt;/dd&gt;&lt;/div&gt;
+        &lt;/dl&gt;
+      )}
+    /&gt;
+  );
+}
+EOF
+cat &gt; src/components/lists/controls-view.tsx &lt;&lt;'EOF'
+"use client";
+
+import { SeverityLabel } from "@/components/status";
+import { type Column } from "@/components/table/data-table";
+import { ListView } from "@/components/table/list-view";
+
+export interface UnifiedControl {
+  id: string;
+  title: string;
+  description: string;
+  domain: string;
+  severity: "critical" | "high" | "medium" | "low";
+  check_type: "automated" | "manual" | "hybrid";
+  status: "draft" | "approved";
+  requirements: { framework: string; ref: string }[];
+}
+
+const RANK = { critical: 0, high: 1, medium: 2, low: 3 } as const;
+
+const columns: Column&lt;UnifiedControl&gt;[] = [
+  { key: "id", header: "ID", render: (c) =&gt; &lt;span className="font-mono"&gt;{c.id}&lt;/span&gt;, sortValue: (c) =&gt; c.id },
+  { key: "title", header: "Control", render: (c) =&gt; c.title, sortValue: (c) =&gt; c.title },
+  { key: "domain", header: "Domain", render: (c) =&gt; c.domain, sortValue: (c) =&gt; c.domain },
+  { key: "severity", header: "Severity", render: (c) =&gt; &lt;SeverityLabel severity={c.severity} /&gt;, sortValue: (c) =&gt; RANK[c.severity] },
+  { key: "check", header: "Check", render: (c) =&gt; c.check_type, sortValue: (c) =&gt; c.check_type },
+  { key: "status", header: "Review", render: (c) =&gt; (c.status === "approved" ? "Approved" : "Draft"), sortValue: (c) =&gt; c.status },
+];
+
+export function ControlsView() {
+  return (
+    &lt;ListView&lt;UnifiedControl&gt;
+      path="/unified-controls"
+      caption="Unified controls"
+      columns={columns}
+      rowKey={(c) =&gt; c.id}
+      emptyMessage="The control catalogue is empty. Controls are authored as YAML files in data/controls (see its README)."
+      filters={[
+        {
+          name: "framework",
+          label: "Framework",
+          options: [
+            { value: "soc2-2017", label: "SOC 2" },
+            { value: "pci-dss-4.0.1", label: "PCI DSS v4.0.1" },
+            { value: "rbi-dpsc-2026", label: "RBI DPSC 2026" },
+            { value: "iso27001-2022", label: "ISO/IEC 27001:2022" },
+          ],
+        },
+      ]}
+      detailTitle={(c) =&gt; c.id}
+      renderDetail={(c) =&gt; (
+        &lt;dl className="space-y-3 text-sm"&gt;
+          &lt;div&gt;&lt;dt className="text-muted"&gt;Control&lt;/dt&gt;&lt;dd className="font-medium"&gt;{c.title}&lt;/dd&gt;&lt;/div&gt;
+          &lt;div&gt;&lt;dt className="text-muted"&gt;Description&lt;/dt&gt;&lt;dd&gt;{c.description}&lt;/dd&gt;&lt;/div&gt;
+          &lt;div&gt;&lt;dt className="text-muted"&gt;Severity&lt;/dt&gt;&lt;dd&gt;&lt;SeverityLabel severity={c.severity} /&gt;&lt;/dd&gt;&lt;/div&gt;
+          &lt;div&gt;
+            &lt;dt className="text-muted"&gt;Requirements (clause identifiers)&lt;/dt&gt;
+            &lt;dd&gt;
+              &lt;ul className="list-disc pl-5"&gt;
+                {c.requirements.map((r) =&gt; (
+                  &lt;li key={`${r.framework}-${r.ref}`}&gt;
+                    {r.framework} &lt;span className="font-mono"&gt;{r.ref}&lt;/span&gt;
+                  &lt;/li&gt;
+                ))}
+              &lt;/ul&gt;
+            &lt;/dd&gt;
+          &lt;/div&gt;
+        &lt;/dl&gt;
+      )}
+    /&gt;
+  );
+}
+EOF
+for p in "controls:Controls:ControlsView:Unified controls" "findings:Findings:FindingsView:Findings" "evidence:Evidence:EvidenceView:Evidence"; do IFS=: read dir title comp crumb &lt;&lt;&lt; "$p"; f=$(echo $dir | cut -c1-1); lower=$dir; cat &gt; "src/app/(app)/$dir/page.tsx" &lt;&lt;EOF
+import { $comp } from "@/components/lists/$dir-view";
+import { PageHeader } from "@/components/shell/page-header";
+
+export default function Page() {
+  return (
+    &lt;&gt;
+      &lt;PageHeader title="$title" crumbs={["$crumb"]} /&gt;
+      &lt;$comp /&gt;
+    &lt;/&gt;
+  );
+}
+EOF
+done
+python3 - &lt;&lt;'EOF'
+p='src/lib/nav.ts'
+s=open(p).read()
+for k in ("controls","findings","evidence"):
+    i=s.index(f'key: "{k}"')
+    j=s.index("available: false",i)
+    s=s[:j]+"available: true"+s[j+len("available: false"):]
+open(p,'w').write(s)
+EOF
+npx prettier --write src &gt;/dev/null; npm run -s typecheck 2&gt;&amp;1 | grep -v "route types\|Types gen"; npm run -s lint 2&gt;&amp;1 | tail -12</pre><div class="k">timeout</div><pre class="v">200000</pre></div><div class="k">result</div><pre class="out">/Users/praveen.da/REPOS-PD/aucoff/frontend/src/lib/use-list.ts:43:5
+  41 |   useEffect(() =&gt; {
+  42 |     const mine = ++generation.current;
+&gt; 43 |     setState({ kind: "loading", rows: [] });
+     |     ^^^^^^^^ Avoid calling setState() directly within an effect
+  44 |     fetchPage(null)
+  45 |       .then((p) =&gt; {
+  46 |         if (mine === generation.current)  react-hooks/set-state-in-effect
+
+✖ 1 problem (1 error, 0 warnings)</pre></div>
+<div class="tool"><div class="th"><span>Tool: Bash</span></div><div class="inp"><div class="k">command</div><pre class="v">python3 - &lt;&lt;'EOF'
+p='src/lib/use-list.ts'
+s=open(p).read()
+s=s.replace('''type State&lt;T&gt; =
+  | { kind: "loading"; rows: T[] }
+  | { kind: "error"; message: string; rows: T[] }
+  | { kind: "ready"; rows: T[]; next: string | null; source: Page&lt;T&gt;["data_source"]; loadingMore: boolean };''','''type Loaded&lt;T&gt; =
+  | { kind: "error"; message: string; rows: T[] }
+  | { kind: "ready"; rows: T[]; next: string | null; source: Page&lt;T&gt;["data_source"]; loadingMore: boolean };
+type State&lt;T&gt; = { kind: "loading"; rows: T[] } | Loaded&lt;T&gt;;
+type Keyed&lt;T&gt; = { key: string; value: Loaded&lt;T&gt; };''')
+s=s.replace('const [state, setState] = useState&lt;State&lt;T&gt;&gt;({ kind: "loading", rows: [] });\n  const key = JSON.stringify([path, params]);','const [result, setResult] = useState&lt;Keyed&lt;T&gt; | null&gt;(null);\n  const key = JSON.stringify([path, params]);\n  // A result for different filters is stale: show loading until the new one arrives.\n  const state: State&lt;T&gt; = result &amp;&amp; result.key === key ? result.value : { kind: "loading", rows: [] };')
+a=s.index("  useEffect(() =&gt; {")
+b=s.index("  return { state, loadMore };")
+s=s[:a]+'''  useEffect(() =&gt; {
+    const mine = ++generation.current;
+    fetchPage(null)
+      .then((p) =&gt; {
+        if (mine === generation.current)
+          setResult({
+            key,
+            value: { kind: "ready", rows: p.items, next: p.next_cursor, source: p.data_source, loadingMore: false },
+          });
+      })
+      .catch((e: Error) =&gt; {
+        if (mine === generation.current) setResult({ key, value: { kind: "error", message: e.message, rows: [] } });
+      });
+  }, [fetchPage, key]);
+
+  const loadMore = useCallback(() =&gt; {
+    if (state.kind !== "ready" || !state.next || state.loadingMore) return;
+    const mine = generation.current;
+    const { rows, next } = state;
+    setResult({ key, value: { ...state, loadingMore: true } });
+    fetchPage(next)
+      .then((p) =&gt; {
+        if (mine !== generation.current) return;
+        setResult({
+          key,
+          value: { kind: "ready", rows: [...rows, ...p.items], next: p.next_cursor, source: p.data_source, loadingMore: false },
+        });
+      })
+      .catch((e: Error) =&gt; {
+        if (mine === generation.current) setResult({ key, value: { kind: "error", message: e.message, rows } });
+      });
+  }, [fetchPage, key, state]);
+
+'''+s[b:]
+open(p,'w').write(s)
+EOF
+npx prettier --write src &gt;/dev/null; npm run -s typecheck 2&gt;&amp;1 | grep -v "route types\|Types gen"; npm run -s lint 2&gt;&amp;1 | tail -12</pre><div class="k">timeout</div><pre class="v">200000</pre></div><div class="k">result</div><pre class="out">src/lib/use-list.ts(24,40): error TS2304: Cannot find name 'Keyed'.
+
+/Users/praveen.da/REPOS-PD/aucoff/frontend/src/lib/use-list.ts
+  27:9  warning  The 'state' conditional could make the dependencies of useCallback Hook (at line 89) change on every render. To fix this, wrap the initialization of 'state' in its own useMemo() Hook  react-hooks/exhaustive-deps
+
+✖ 1 problem (0 errors, 1 warning)</pre></div>
+<div class="tool"><div class="th"><span>Tool: Bash</span></div><div class="inp"><div class="k">command</div><div class="v1">sed -n 1,32p src/lib/use-list.ts</div></div><div class="k">result</div><pre class="out">"use client";
+
+import { useCallback, useEffect, useRef, useState } from "react";
+
+export interface Page&lt;T&gt; {
+  items: T[];
+  next_cursor: string | null;
+  data_source: "synthetic" | "catalogue" | "assessments";
+}
+
+type State&lt;T&gt; =
+  | { kind: "loading"; rows: T[] }
+  | { kind: "error"; message: string; rows: T[] }
+  | {
+      kind: "ready";
+      rows: T[];
+      next: string | null;
+      source: Page&lt;T&gt;["data_source"];
+      loadingMore: boolean;
+    };
+
+// Loads a cursor-paginated list through the BFF (/bff/*): the browser never holds a token.
+export function useCursorList&lt;T&gt;(path: string, params: Record&lt;string, string&gt;) {
+  const [result, setResult] = useState&lt;Keyed&lt;T&gt; | null&gt;(null);
+  const key = JSON.stringify([path, params]);
+  // A result for different filters is stale: show loading until the new one arrives.
+  const state: State&lt;T&gt; =
+    result &amp;&amp; result.key === key ? result.value : { kind: "loading", rows: [] };
+  const generation = useRef(0);
+
+  const fetchPage = useCallback(
+    async (cursor: string | null): Promise&lt;Page&lt;T&gt;&gt; =&gt; {</pre></div>
+<div class="tool"><div class="th"><span>Tool: Bash</span></div><div class="inp"><div class="k">command</div><pre class="v">python3 - &lt;&lt;'EOF'
+p='src/lib/use-list.ts'
+s=open(p).read()
+a=s.index("type State&lt;T&gt; =")
+b=s.index("// Loads a cursor-paginated")
+s=s[:a]+'''type Loaded&lt;T&gt; =
+  | { kind: "error"; message: string; rows: T[] }
+  | {
+      kind: "ready";
+      rows: T[];
+      next: string | null;
+      source: Page&lt;T&gt;["data_source"];
+      loadingMore: boolean;
+    };
+type State&lt;T&gt; = { kind: "loading"; rows: T[] } | Loaded&lt;T&gt;;
+type Keyed&lt;T&gt; = { key: string; value: Loaded&lt;T&gt; };
+
+'''+s[b:]
+s=s.replace('import { useCallback, useEffect, useRef, useState } from "react";','import { useCallback, useEffect, useMemo, useRef, useState } from "react";')
+s=s.replace('''  const state: State&lt;T&gt; =
+    result &amp;&amp; result.key === key ? result.value : { kind: "loading", rows: [] };''','''  const state = useMemo&lt;State&lt;T&gt;&gt;(
+    () =&gt; (result &amp;&amp; result.key === key ? result.value : { kind: "loading", rows: [] }),
+    [result, key],
+  );''')
+open(p,'w').write(s)
+EOF
+npx prettier --write src &gt;/dev/null; npm run -s typecheck 2&gt;&amp;1 | grep -v "route types\|Types gen"; npm run -s lint 2&gt;&amp;1 | tail -6</pre><div class="k">timeout</div><pre class="v">200000</pre></div><div class="k">result</div><pre class="out">[This command modified 1 file you've previously read: src/lib/use-list.ts. Call Read before editing.]</pre></div>
+<div class="say"><pre class="msg">Clean. Now tests for the table and lists.</pre></div>
+<div class="tool"><div class="th"><span>Tool: Bash</span></div><div class="inp"><div class="k">command</div><pre class="v">cat &gt; src/__tests__/lists.test.tsx &lt;&lt;'EOF'
+import { fireEvent, render, screen, waitFor, within } from "@testing-library/react";
+import { afterEach, expect, test, vi } from "vitest";
+import { ControlsView } from "@/components/lists/controls-view";
+import { FindingsView, type Finding } from "@/components/lists/findings-view";
+import { DataTable } from "@/components/table/data-table";
+
+afterEach(() =&gt; vi.unstubAllGlobals());
+
+const f = (id: string, severity: Finding["severity"], age: number): Finding =&gt; ({
+  id,
+  title: `Title ${id}`,
+  severity,
+  status: "open",
+  framework_id: "soc2-2017",
+  control_id: "UC-DEMO-001",
+  first_seen: "2026-09-01",
+  age_days: age,
+});
+
+function page(items: unknown[], next: string | null, source = "synthetic") {
+  return new Response(JSON.stringify({ items, next_cursor: next, data_source: source }), { status: 200 });
+}
+
+test("the table sorts a column and announces it", () =&gt; {
+  const rows = [f("F-2", "low", 5), f("F-1", "critical", 90)];
+  render(
+    &lt;DataTable
+      caption="Findings"
+      rows={rows}
+      rowKey={(r) =&gt; r.id}
+      density="comfortable"
+      columns={[
+        { key: "id", header: "ID", render: (r) =&gt; r.id, sortValue: (r) =&gt; r.id },
+        { key: "age", header: "Age", render: (r) =&gt; r.age_days, sortValue: (r) =&gt; r.age_days },
+      ]}
+    /&gt;,
+  );
+  const firstId = () =&gt; within(screen.getAllByRole("row")[1]).getAllByRole("cell")[0].textContent;
+  expect(firstId()).toBe("F-2");
+  fireEvent.click(screen.getByRole("button", { name: /ID/ }));
+  expect(screen.getByRole("columnheader", { name: /ID/ })).toHaveAttribute("aria-sort", "ascending");
+  expect(firstId()).toBe("F-1");
+  fireEvent.click(screen.getByRole("button", { name: /ID/ }));
+  expect(firstId()).toBe("F-2");
+});
+
+test("findings load through the BFF, are labelled demo data, page on request and open a drawer", async () =&gt; {
+  const fetchMock = vi
+    .fn()
+    .mockResolvedValueOnce(page([f("F-1", "critical", 90)], "abc"))
+    .mockResolvedValueOnce(page([f("F-2", "low", 5)], null));
+  vi.stubGlobal("fetch", fetchMock);
+  render(&lt;FindingsView /&gt;);
+  expect(await screen.findByRole("note")).toHaveTextContent(/Demo data/);
+  expect(screen.getByText("Critical")).toBeInTheDocument();
+
+  fireEvent.click(screen.getByRole("button", { name: "Load more" }));
+  expect(await screen.findByText("F-2")).toBeInTheDocument();
+  expect(String(fetchMock.mock.calls[1][0])).toContain("cursor=abc");
+  expect(String(fetchMock.mock.calls[0][0])).toMatch(/^\/bff\/findings\?/);
+  expect(screen.getByText("End of list")).toBeInTheDocument();
+
+  fireEvent.click(screen.getByRole("button", { name: "F-1" }));
+  expect(screen.getByRole("dialog", { name: "F-1" })).toBeInTheDocument();
+  fireEvent.keyDown(window, { key: "Escape" });
+  await waitFor(() =&gt; expect(screen.queryByRole("dialog")).toBeNull());
+});
+
+test("choosing a filter reloads with the filter in the request", async () =&gt; {
+  const fetchMock = vi.fn().mockImplementation(async () =&gt; page([f("F-1", "critical", 90)], null));
+  vi.stubGlobal("fetch", fetchMock);
+  render(&lt;FindingsView /&gt;);
+  await screen.findByText("F-1");
+  fireEvent.change(screen.getByLabelText("Severity"), { target: { value: "critical" } });
+  await waitFor(() =&gt; expect(String(fetchMock.mock.calls.at(-1)?.[0])).toContain("severity=critical"));
+});
+
+test("an empty real catalogue explains how to fill it and shows no demo banner", async () =&gt; {
+  vi.stubGlobal("fetch", vi.fn().mockResolvedValue(page([], null, "catalogue")));
+  render(&lt;ControlsView /&gt;);
+  expect(await screen.findByText(/catalogue is empty/)).toBeInTheDocument();
+  expect(screen.queryByRole("note")).toBeNull();
+});
+
+test("a 403 shows an explanation", async () =&gt; {
+  vi.stubGlobal("fetch", vi.fn().mockResolvedValue(new Response("{}", { status: 403 })));
+  render(&lt;FindingsView /&gt;);
+  expect(await screen.findByRole("alert")).toHaveTextContent(/does not include access/);
+});
+EOF
+python3 - &lt;&lt;'EOF'
+p='src/__tests__/shell.test.tsx'
+s=open(p).read()
+s=s.replace('expect(labels(["auditor"])).toEqual(["Dashboard", "Controls", "Evidence", "Reports", "Audit log"]);','expect(labels(["auditor"])).toEqual(["Dashboard", "Controls", "Evidence", "Reports", "Audit log"]);')
+open(p,'w').write(s)
+EOF
+npx prettier --write src &gt;/dev/null; npm run -s typecheck 2&gt;&amp;1 | grep -v "route types\|Types gen"; npm run -s lint | tail -5; npm test 2&gt;&amp;1 | grep -E "Tests |FAIL|×|Error:|expected" | head</pre><div class="k">timeout</div><pre class="v">200000</pre></div><div class="k">result</div><pre class="out">   × findings load through the BFF, are labelled demo data, page on request and open a drawer 20ms
+   × choosing a filter reloads with the filter in the request 1005ms
+   × an empty real catalogue explains how to fill it and shows no demo banner 12ms
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 3 ⎯⎯⎯⎯⎯⎯⎯
+ FAIL  src/__tests__/lists.test.tsx &gt; findings load through the BFF, are labelled demo data, page on request and open a drawer
+TestingLibraryElementError: Found multiple elements with the text: Critical
+ FAIL  src/__tests__/lists.test.tsx &gt; choosing a filter reloads with the filter in the request
+TestingLibraryElementError: Found multiple elements with the text: F-1
+ FAIL  src/__tests__/lists.test.tsx &gt; an empty real catalogue explains how to fill it and shows no demo banner
+TestingLibraryElementError: Found multiple elements with the role "note"</pre></div>
+<div class="tool"><div class="th"><span>Tool: Bash</span></div><div class="inp"><div class="k">command</div><pre class="v">cat &gt; vitest.setup.ts &lt;&lt;'EOF'
+import "@testing-library/jest-dom/vitest";
+import { cleanup } from "@testing-library/react";
+import { afterEach } from "vitest";
+
+// Vitest runs without globals, so Testing Library does not unmount between tests on its own.
+afterEach(() =&gt; cleanup());
+EOF
+npm test 2&gt;&amp;1 | grep -E "Tests |FAIL|×|Error:" | head</pre><div class="k">timeout</div><pre class="v">200000</pre></div><div class="k">result</div><pre class="out">   × findings load through the BFF, are labelled demo data, page on request and open a drawer 18ms
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+ FAIL  src/__tests__/lists.test.tsx &gt; findings load through the BFF, are labelled demo data, page on request and open a drawer
+TestingLibraryElementError: Found multiple elements with the text: Critical
+      Tests  1 failed | 22 passed (23)</pre></div>
+<div class="tool"><div class="th"><span>Tool: Bash</span></div><div class="inp"><div class="k">command</div><pre class="v">python3 - &lt;&lt;'EOF'
+p='src/__tests__/lists.test.tsx'
+s=open(p).read()
+s=s.replace('expect(screen.getByText("Critical")).toBeInTheDocument();','expect(within(screen.getByRole("table")).getByText("Critical")).toBeInTheDocument();')
+open(p,'w').write(s)
+EOF
+npx prettier --write src &gt;/dev/null; npm run -s lint | tail -3; npm test 2&gt;&amp;1 | grep -E "Tests |FAIL|×"; cd .. &amp;&amp; python3 - &lt;&lt;'EOF'
+p='scripts/web-login-test.py'
+s=open(p).read()
+s=s.replace('status, _, text = call(f"{APP}/bff/openapi.json")','''for path, scope_ok in (("/bff/unified-controls", True), ("/bff/findings", ROLE_FINDINGS), ("/bff/evidence", ROLE_EVIDENCE)):
+    status, _, text = call(f"{APP}{path}?limit=5")
+    check(f"{path} {'allowed' if scope_ok else 'forbidden'} for this role", status == (200 if scope_ok else 403), f"({status})")
+status, _, text = call(f"{APP}/bff/openapi.json")''',1)
+s=s.replace('EXPECT_DASH = int(sys.argv[4]) if len(sys.argv) &gt; 4 else 200','EXPECT_DASH = int(sys.argv[4]) if len(sys.argv) &gt; 4 else 200\n# finding:write -&gt; compliance_officer, ciso, engineer; evidence:read -&gt; compliance_officer, ciso, engineer, auditor\nROLE_FINDINGS = USER in ("dev.compliance", "dev.ciso", "dev.engineer")\nROLE_EVIDENCE = ROLE_FINDINGS or USER == "dev.auditor"')
+open(p,'w').write(s)
+p='scripts/smoke.sh'
+s=open(p).read()
+s=s.replace('echo "Message broker permissions','echo "Same flow as a compliance officer and an auditor (lists differ by scope):"\npython3 scripts/web-login-test.py "$workdir/ca.crt" dev.compliance 403 200 || fail=1\npython3 scripts/web-login-test.py "$workdir/ca.crt" dev.auditor 403 200 || fail=1\n\necho "Message broker permissions',1)
+open(p,'w').write(s)
+EOF
+grep -n "dev.compliance" scripts/smoke.sh | head -2</pre><div class="k">timeout</div><pre class="v">200000</pre></div><div class="k">result</div><pre class="out">      Tests  23 passed (23)
+97:python3 scripts/web-login-test.py "$workdir/ca.crt" dev.compliance 403 200 || fail=1</pre></div>
+<div class="tool"><div class="th"><span>Tool: Bash</span></div><div class="inp"><div class="k">command</div><pre class="v">make images load 2&gt;&amp;1 | grep -E "rror"; kubectl -n aucoff rollout restart deploy/aucoff-backend deploy/aucoff-frontend &gt;/dev/null; kubectl -n aucoff rollout status deploy/aucoff-frontend --timeout=120s | tail -1; kubectl -n aucoff rollout status deploy/aucoff-backend --timeout=120s | tail -1; sleep 10; make smoke &gt;/tmp/smoke.txt 2&gt;&amp;1; echo exit=$?; grep -E "FAIL|PASSED|FAILED" /tmp/smoke.txt; grep -c "bff/unified-controls" /tmp/smoke.txt</pre><div class="k">timeout</div><pre class="v">800000</pre></div><div class="k">result</div><pre class="out">deployment "aucoff-frontend" successfully rolled out
+deployment "aucoff-backend" successfully rolled out
+exit=2
+0</pre></div>
+<div class="tool"><div class="th"><span>Tool: Bash</span></div><div class="inp"><div class="k">command</div><div class="v1">tail -20 /tmp/smoke.txt</div></div><div class="k">result</div><pre class="out">scripts/smoke.sh
+Deployments ready:
+Waiting for deployment "aucoff-backend" rollout to finish: 0 of 1 updated replicas are available...
+error: timed out waiting for the condition
+make: *** [smoke] Error 1</pre></div>
+<div class="tool"><div class="th"><span>Tool: Bash</span></div><div class="inp"><div class="k">command</div><div class="v1">kubectl -n aucoff get pods; kubectl -n aucoff logs deploy/aucoff-backend --tail=15 2&gt;&amp;1 | tail -15</div></div><div class="k">result</div><pre class="out">NAME                               READY   STATUS             RESTARTS      AGE
+aucoff-backend-76b45b45db-kzwp5    0/1     CrashLoopBackOff   4 (50s ago)   2m21s
+aucoff-frontend-5fd964d5cb-fhh7d   1/1     Running            0             2m21s
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "&lt;frozen importlib._bootstrap&gt;", line 1404, in _gcd_import
+  File "&lt;frozen importlib._bootstrap&gt;", line 1369, in _find_and_load
+  File "&lt;frozen importlib._bootstrap&gt;", line 1340, in _find_and_load_unlocked
+  File "&lt;frozen importlib._bootstrap&gt;", line 935, in _load_unlocked
+  File "&lt;frozen importlib._bootstrap_external&gt;", line 1027, in exec_module
+  File "&lt;frozen importlib._bootstrap&gt;", line 488, in _call_with_frames_removed
+  File "/app/app/main.py", line 9, in &lt;module&gt;
+    from app.api import dashboards, health, lists, metrics
+  File "/app/app/api/lists.py", line 19, in &lt;module&gt;
+    from app.domain.controls import Control, load_catalogue
+  File "/app/app/domain/controls.py", line 15, in &lt;module&gt;
+    import yaml
+ModuleNotFoundError: No module named 'yaml'</pre></div>
+<div class="tool"><div class="th"><span>Tool: Bash</span></div><div class="inp"><div class="k">command</div><pre class="v">cd /Users/praveen.da/REPOS-PD/aucoff/backend &amp;&amp; uv remove --dev pyyaml 2&gt;&amp;1 | tail -1; uv add pyyaml 2&gt;&amp;1 | tail -1; grep -n -i "yaml" pyproject.toml; uv run python -m scripts.check_licences | tail -1; cd .. &amp;&amp; make images load 2&gt;&amp;1 | grep -E "rror"; kubectl -n aucoff rollout restart deploy/aucoff-backend &gt;/dev/null; kubectl -n aucoff rollout status deploy/aucoff-backend --timeout=120s | tail -1; sleep 8; make smoke &gt;/tmp/smoke.txt 2&gt;&amp;1; echo exit=$?; grep -E "FAIL|PASSED|FAILED" /tmp/smoke.txt; grep -c "bff/unified-controls" /tmp/smoke.txt</pre><div class="k">timeout</div><pre class="v">800000</pre></div><div class="k">result</div><pre class="out"> - pyyaml==6.0.3
+ + pyyaml==6.0.3
+15:  "pyyaml&gt;=6.0.3",
+28:  "types-pyyaml&gt;=6.0",
+licence check passed: all Python dependencies are on the permissive allow-list
+deployment "aucoff-backend" successfully rolled out
+exit=0
+SMOKE TEST PASSED
+5</pre></div>
+<div class="tool"><div class="th"><span>Tool: Bash</span></div><div class="inp"><div class="k">command</div><pre class="v">python3 - &lt;&lt;'EOF'
+def sub(p, old, new):
+    s=open(p).read(); assert old in s,(p,old[:50]); open(p,'w').write(s.replace(old,new,1))
+sub('LICENCES.md',"| aio-pika |","| pyyaml | Python | 6.0.3 | MIT | Allowed | Passed the Python licence gate, 2026-10-19 (reads the control catalogue YAML; now a runtime dependency) |\n| aio-pika |")
+a='specs/api-contract.md'
+sub(a,"| Version | 0.6.0 |","| Version | 0.7.0 |")
+sub(a,"| 0.6.0 | 2026-10-19 | API-70","| 0.7.0 | 2026-10-19 | API-22 `GET /unified-controls` (real catalogue from `data/controls`), API-37 `GET /evidence` and API-47 `GET /findings` implemented with cursor pagination and a `data_source` field (`synthetic` for evidence and findings until scanners run) | No |\n| 0.6.0 | 2026-10-19 | API-70")
+p='specs/tasks.md'
+sub(p,"| Version | 0.20.0 |","| Version | 0.21.0 |")
+s=open(p).read().rstrip('\n')+"\n- **Findings during Session 7 (2026-10-19):** (1) the Controls page shows the REAL catalogue, which is empty until the owner writes controls, so it correctly shows an empty state; Findings and Evidence rows are synthetic and labelled; (2) the backend image is now built from the repository root so `data/controls` ships with it (PyYAML became a runtime dependency - found when the pod crashed, since tests ran with dev dependencies); (3) Testing Library does not unmount between tests without Vitest globals, so cleanup was added to `vitest.setup.ts`; (4) lists page sorting is client-side over the loaded pages only; server-side sort and the remaining filters come with the database-backed implementation.\n"
+lines=s.split('\n')
+for i,l in enumerate(lines):
+    if l.startswith('| T-304 |') or l.startswith('| T-305 |') or l.startswith('| T-306 |') or l.startswith('| T-307 |'):
+        print(l[:100])
+open(p,'w').write('\n'.join(lines))
+sub('specs/frontend-spec.md',"| Version | 0.7.0 |","| Version | 0.8.0 |")
+s=open('specs/frontend-spec.md').read().rstrip('\n')+"""
+
+## Implementation status: list screens (Build Session 7, 2026-10-19)
+
+- `/controls` (real catalogue; empty until controls are authored), `/findings` and `/evidence` (synthetic, labelled "Demo data"). Each uses the shared `ListView`: `useCursorList` loads `/bff/&lt;path&gt;?limit=25` and "Load more" follows `next_cursor`; select filters (two at most) reload the list; client-side column sorting with `aria-sort`; comfortable/compact row density remembered in `localStorage` (try/catch); row opens the right-hand detail drawer (Escape closes); empty, loading, error and 403 states.
+- Sorting covers the rows loaded so far. Server-side sorting, saved views and bulk actions are not built.
+"""
+open('specs/frontend-spec.md','w').write(s)
+EOF
+make check &gt;/tmp/chk.txt 2&gt;&amp;1; echo check=$?; grep -E "FAIL|rror" /tmp/chk.txt | head -3</pre><div class="k">timeout</div><pre class="v">500000</pre></div><div class="k">result</div><pre class="out">| T-304 | Catalogue, scopes, connectors, evidence screens | frontend-spec.md §2 | E2E covers create/
+| T-305 | Assessments, run timeline (SSE), result review, approvals | frontend-spec.md §3 | E2E: run
+| T-306 | Findings, reports, dashboard, audit log screens | frontend-spec.md §2 | E2E covers key flo
+| T-307 | Admin: users, roles, SSO, integrations | frontend-spec.md §2 | Role-gated; E2E passes | T-
+check=0</pre></div>
+<div class="tool"><div class="th"><span>Tool: Bash</span></div><div class="inp"><div class="k">command</div><pre class="v">python3 - &lt;&lt;'EOF'
+p='specs/tasks.md'
+lines=open(p).read().split('\n')
+for i,l in enumerate(lines):
+    if l.startswith('| T-304 |'):
+        lines[i]=l.rsplit('|',2)[0].rstrip()+" | in progress (2026-10-19): Controls (real catalogue) and Evidence list screens with filters, sort, density, detail drawer; creating scopes/connectors/uploads not built |"
+    if l.startswith('| T-306 |'):
+        lines[i]=l.rsplit('|',2)[0].rstrip()+" | in progress (2026-10-19): Findings list and posture dashboard on synthetic data; reports and audit log screens not built |"
+open(p,'w').write('\n'.join(lines))
+EOF
+git add backend &amp;&amp; git commit -q -m "Add list endpoints: unified controls (real catalogue), findings and evidence (synthetic, labelled); cursor pagination; ship data/controls in the backend image
+
+Co-Authored-By: Claude Sonnet 5.5 &lt;noreply@anthropic.com&gt;" 2&gt;&amp;1 | grep rror; git add -A &amp;&amp; git commit -q -m "Add Controls, Findings and Evidence screens: shared sortable table, filters, density toggle, cursor paging, detail drawer; smoke checks per role; specs updated
+
+Co-Authored-By: Claude Sonnet 5.5 &lt;noreply@anthropic.com&gt;" 2&gt;&amp;1 | grep rror; git pull --rebase origin main 2&gt;&amp;1 | tail -1; git push origin main 2&gt;&amp;1 | tail -1; sleep 230; gh run list --limit 1 --json conclusion,status --jq '.[]|"\(.status) \(.conclusion)"'</pre><div class="k">timeout</div><pre class="v">400000</pre></div><div class="k">result</div><pre class="out">Current branch main is up to date.
+   2dc9e0f..ccd203b  main -&gt; main
 completed success</pre></div>
 </details></section>
 
