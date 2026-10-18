@@ -1,2 +1,55 @@
-# aucoff
-Agentic Unified Compliance Framework for Fintechs (AUCoFF)
+# AUCoFF
+
+AgenticAI Unified Compliance Framework for Fintechs (AUCoFF): a multi-tenant web application in which agentic AI services read-only scan a fintech's cloud, Kubernetes, code, SaaS tools and documents, assess them against one unified control set mapped to many regulations and standards, and produce cited findings, advisory remediation and audit-ready reports. Humans approve every consequential outcome.
+
+**v1 (MVP) scope: everything is built, deployed and tested on a developer laptop using [kind](https://kind.sigs.k8s.io/). Nothing is deployed to AWS or any other cloud in v1.**
+
+## Specification-driven development
+
+The specifications in [`specs/`](specs/) are the source of truth; code follows specs, not the other way round. Start with [`specs/constitution.md`](specs/constitution.md) (non-negotiable rules), then [`specs/spec.md`](specs/spec.md). Task breakdown: [`specs/tasks.md`](specs/tasks.md). A readable session history is in [`docs/session-summary.html`](docs/session-summary.html).
+
+| Spec | Purpose |
+|------|---------|
+| [constitution.md](specs/constitution.md) | Architecture, coding, quality, security, AI, database, API, licensing and environment rules |
+| [spec.md](specs/spec.md) | Product spec: personas, frameworks, user stories, requirements |
+| [design.md](specs/design.md) | Architecture, UX design, metrics catalogue |
+| [agent.md](specs/agent.md) | The 13 agents, orchestration, guardrails, evaluation |
+| [backend-spec.md](specs/backend-spec.md) / [frontend-spec.md](specs/frontend-spec.md) | Services and UI |
+| [api-contract.md](specs/api-contract.md) | REST + SSE contract (OpenAPI is the source of truth) |
+| [database-spec.md](specs/database-spec.md) | PostgreSQL 18.6 + pgvector schema and security |
+| [infrastructure-spec.md](specs/infrastructure-spec.md) | kind + Helm, CI/CD, observability |
+
+## Repository layout
+
+```
+specs/      specifications (source of truth)
+backend/    FastAPI gateway and (later) agent services   (Python 3.13, uv)
+frontend/   Next.js app                                    (TypeScript strict)
+deploy/     kind cluster config and the umbrella Helm chart
+docs/       session summary and licence/provenance records
+```
+
+## Prerequisites (laptop)
+
+Docker-compatible runtime running (for example Colima: `colima start`), `kind`, `kubectl`, `helm`, `make`, Python 3.13 with `uv`, Node 22+ with `npm`, and `gitleaks` (a pre-commit hook runs it). Run `make doctor` to check.
+
+## Quick start
+
+```
+make doctor          # check tools
+make setup           # install backend and frontend dependencies
+make check           # lint, type-check, tests, OpenAPI drift, licence scan
+make cluster-up      # create the local kind cluster (needs a running Docker runtime)
+make cluster-down
+```
+
+## Rules that apply to every change
+
+- Follow [`specs/constitution.md`](specs/constitution.md); cite the spec section and rule IDs in your PR.
+- **Licences:** permissive only (LIC-1 to LIC-8). Check a dependency's licence before adding it and record it in [`LICENCES.md`](LICENCES.md). Never copy code, text, images or standards wording from the internet unless its licence allows it.
+- No secrets in git, images or logs. Test data is synthetic only.
+- Never deploy outside the local kind cluster in v1.
+
+## Project licence
+
+The repository's [`LICENSE`](LICENSE) is the GNU AGPL v3. Confirm this is the intended licence for AUCoFF before distributing it; the dependency rules above govern what AUCoFF may use, not how AUCoFF itself is licensed.
