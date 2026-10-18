@@ -11,6 +11,7 @@ spec:
   renewBefore: 360h
   dnsNames:
     - aucoff-keycloak
+    - idp.localtest.me
     - aucoff-keycloak.{{ .Release.Namespace }}
     - aucoff-keycloak.{{ .Release.Namespace }}.svc
     - aucoff-keycloak.{{ .Release.Namespace }}.svc.cluster.local

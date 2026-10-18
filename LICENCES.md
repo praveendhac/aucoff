@@ -90,6 +90,7 @@ The constitution's allow-list (LIC-1) is: MIT, Apache-2.0, BSD-2/3-Clause, ISC, 
 | license-checker-rseidelsohn | npm | 5.0.1 | BSD-3-Clause | Allowed | Read from installed package metadata, 2026-10-19 |
 | next | npm | 16.4.2 | MIT | Allowed | Read from installed package metadata, 2026-10-19 |
 | prettier | npm | 3.9.10 | MIT | Allowed | Read from installed package metadata, 2026-10-19 |
+| next-auth (Auth.js v4) | npm | 4.24.15 | ISC | Allowed | Registry metadata and installed package, 2026-10-19 (BFF login). v5 is still a beta release, so the stable v4 line is used. Its dependencies jose, openid-client, oauth, cookie, @panva/hkdf, uuid, preact and preact-render-to-string are all MIT (read from installed metadata). |
 | react | npm | 19.3.0 | MIT | Allowed | Read from installed package metadata, 2026-10-19 |
 | react-dom | npm | 19.3.0 | MIT | Allowed | Read from installed package metadata, 2026-10-19 |
 | tailwindcss | npm | 4.3.3 | MIT | Allowed | Read from installed package metadata, 2026-10-19 |

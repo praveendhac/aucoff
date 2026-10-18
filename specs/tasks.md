@@ -3,7 +3,7 @@
 | Field | Value |
 |-------|-------|
 | Status | Draft |
-| Version | 0.11.0 |
+| Version | 0.12.0 |
 | Owner | Praveen Darshanam |
 | Last updated | 2026-10-19 |
 
@@ -75,7 +75,7 @@ Status values: `todo` · `in-progress` · `blocked` · `done`
 ## Phase 3: Frontend
 | ID | Task | Spec ref | Acceptance criteria | Depends on | Status |
 |----|------|----------|---------------------|------------|--------|
-| T-301 | Next.js skeleton + BFF auth shell (Keycloak) | frontend-spec.md §5 | App builds; login flow works | T-002 | in progress: app skeleton builds and tests pass; Keycloak realm and the `aucoff-web` client (code + PKCE, secret from `make secrets`) exist; Auth.js login flow not started |
+| T-301 | Next.js skeleton + BFF auth shell (Keycloak) | frontend-spec.md §5 | App builds; login flow works | T-002 | in progress: app skeleton builds and tests pass; done for the login shell (2026-10-19): Auth.js v4 login with Keycloak (code + PKCE), default-deny proxy, session-checked BFF proxy, refresh handling; `make smoke` drives a full login as the synthetic user and calls the API through the BFF. Still to do: app shell, role-to-scope mapping, TLS for the local ingress and the in-cluster frontend-to-backend hop |
 | T-302 | Generated API client + TanStack Query setup | frontend-spec.md §1, §7 | Build fails on contract drift | T-108, T-301 | todo |
 | T-303 | Design system components (DataTable, AiBadge, CitationList, ApprovalDialog) | frontend-spec.md §4 | Component and axe tests pass | T-301 | todo |
 | T-304 | Catalogue, scopes, connectors, evidence screens | frontend-spec.md §2 | E2E covers create/list flows | T-302, T-109 | todo |
@@ -118,3 +118,4 @@ Status values: `todo` · `in-progress` · `blocked` · `done`
 - T-006 (unified control set authored by owner) gates meaningful scanner-to-control mapping and mapping-agent evaluation.
 - Items marked TODO in other specs are tracked in each spec's open-questions section; deferred ones (brand, locales, KEDA, mTLS, image signing, plan limits) do not block the build.
 - **Findings during Session 3 (2026-10-19):** (1) Keycloak imports the realm only when it does not exist yet - to apply a realm change locally, delete the realm (or drop the `keycloak` database) and restart the pod; (2) Keycloak's `start` needs a writable root filesystem, so that one container does not set `readOnlyRootFilesystem` (all other hardening applies); (3) its probes are TCP checks because the management port (anonymous health) is deliberately not enabled; (4) the expired-token case is tested for real with a smoke client whose tokens live 5 seconds; (5) the throwaway smoke clients exist only when `smokeClients: true` (local values); (6) the temporary Keycloak bootstrap admin is reachable only through `kubectl port-forward` and must be replaced by a named admin before any shared use; (7) not yet done: RabbitMQ (T-123), the Auth.js login (T-301), image vulnerability scan and SBOM (T-010), authenticated metrics/telemetry.
+- **Findings during Session 4 (2026-10-19):** (1) browsers must reach the issuer, so Keycloak's public hostname is `idp.localtest.me:8443` (port-forward) while pods use the service name - tokens carry the public issuer; (2) Auth.js v5 is still beta, v4.24.15 is used; (3) the ingress previously sent all `/api` to the backend, which would have captured Auth.js - only `/api/v1` goes to the backend now; (4) `npm install` after adding a dependency broke the vitest native binding until `node_modules` and the lockfile were regenerated; (5) the session cookie is not `Secure` over the local plain-HTTP ingress.

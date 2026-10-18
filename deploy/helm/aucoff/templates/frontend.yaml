@@ -14,6 +14,7 @@ spec:
     metadata:
       labels:
         app.kubernetes.io/name: aucoff-frontend
+        aucoff.io/idp-client: "true"
         {{- include "aucoff.labels" . | nindent 8 }}
     spec:
       automountServiceAccountToken: false
@@ -22,15 +23,39 @@ spec:
       volumes:
         - name: tmp
           emptyDir: {}
+        - name: idp-ca
+          configMap:
+            name: {{ .Values.oidc.caConfigMap }}
       containers:
         - name: frontend
           image: "{{ .Values.frontend.image.repository }}:{{ .Values.frontend.image.tag }}"
           imagePullPolicy: {{ .Values.frontend.image.pullPolicy }}
           ports:
             - containerPort: {{ .Values.frontend.port }}
+          env:
+            - name: NEXTAUTH_URL
+              value: "http://{{ .Values.global.host }}"
+            - name: NEXTAUTH_SECRET
+              valueFrom: { secretKeyRef: { name: {{ .Values.oidc.webSessionSecret }}, key: secret } }
+            - name: OIDC_ISSUER
+              value: {{ .Values.oidc.issuer | quote }}
+            - name: OIDC_BACKCHANNEL_ISSUER
+              value: {{ .Values.oidc.backchannelIssuer | quote }}
+            - name: OIDC_CLIENT_ID
+              valueFrom: { secretKeyRef: { name: {{ .Values.oidc.webSecret }}, key: client_id } }
+            - name: OIDC_CLIENT_SECRET
+              valueFrom: { secretKeyRef: { name: {{ .Values.oidc.webSecret }}, key: client_secret } }
+            - name: BACKEND_URL
+              value: "http://aucoff-backend:{{ .Values.backend.port }}"
+            # Trust the local CA for the identity provider's certificate (ZT-4).
+            - name: NODE_EXTRA_CA_CERTS
+              value: /etc/aucoff/idp-ca/ca.crt
           volumeMounts:
             - name: tmp
               mountPath: /tmp
+            - name: idp-ca
+              mountPath: /etc/aucoff/idp-ca
+              readOnly: true
           livenessProbe:
             exec:
               command:

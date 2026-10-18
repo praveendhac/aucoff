@@ -78,6 +78,26 @@ spec:
       ports:
         - { port: 5432, protocol: TCP }
 ---
+# The web app may call only the API gateway (plus DNS and the identity provider, above).
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: aucoff-frontend-to-backend-egress
+  labels:
+    {{- include "aucoff.labels" . | nindent 4 }}
+spec:
+  podSelector:
+    matchLabels:
+      app.kubernetes.io/name: aucoff-frontend
+  policyTypes: ["Egress"]
+  egress:
+    - to:
+        - podSelector:
+            matchLabels:
+              app.kubernetes.io/name: aucoff-backend
+      ports:
+        - { port: {{ .Values.backend.port }}, protocol: TCP }
+---
 # Pods that validate tokens or call other services may reach the identity provider (TLS, 8443).
 apiVersion: networking.k8s.io/v1
 kind: NetworkPolicy

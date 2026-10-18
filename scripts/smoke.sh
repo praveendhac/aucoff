@@ -19,11 +19,14 @@ kubectl -n "$NS" rollout status deployment/aucoff-backend --timeout=120s
 kubectl -n "$NS" rollout status deployment/aucoff-frontend --timeout=120s
 
 echo "Through the ingress (no credentials):"
-check "frontend login shell is public"      200 "$(code /)"
+check "web app redirects anonymous users to login" 307 "$(code /)"
+check "login page is public"                200 "$(code /login)"
+check "BFF proxy refuses anonymous calls"  401 "$(code /bff/health)"
+check "Auth.js session endpoint is public but empty" 200 "$(code /api/auth/session)"
 check "API health refuses anonymous calls"  401 "$(code /api/v1/health)"
 check "old anonymous probe path is gone"    401 "$(code /api/v1/health/live)"
 check "OpenAPI refuses anonymous calls"     401 "$(code /api/v1/openapi.json)"
-check "backend docs are not routed outside"  404 "$(code /docs)"
+check "backend docs are not routed outside (web app redirects to login)" 307 "$(code /docs)"
 
 echo "Directly against the backend pod (no credentials):"
 pycode() { kubectl -n "$NS" exec deploy/aucoff-backend -- python -c "
@@ -68,6 +71,13 @@ sleep 7
 check "same token after it expired is refused"     401 "$(authcode "$short" /api/v1/health)"
 check "garbage bearer token is refused"            401 "$(authcode not-a-jwt /api/v1/health)"
 check "token signed by someone else is refused"    401 "$(authcode "${good%.*}.AAAA" /api/v1/health)"
+
+echo "Browser-style login through Keycloak (code + PKCE) and the BFF:"
+kubectl -n "$IDP_NS" port-forward svc/aucoff-keycloak 8443:8443 >/dev/null 2>&1 &
+pf2=$!
+trap 'kill $pf $pf2 2>/dev/null; rm -rf "$workdir"' EXIT
+for _ in $(seq 1 20); do nc -z 127.0.0.1 8443 2>/dev/null && break; sleep 0.5; done
+python3 scripts/web-login-test.py "$workdir/ca.crt" || fail=1
 
 echo "Cluster hygiene:"
 for ns in "$NS" "$IDP_NS"; do

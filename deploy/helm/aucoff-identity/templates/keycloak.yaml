@@ -58,7 +58,7 @@ spec:
             - name: KC_DB_PASSWORD
               valueFrom: { secretKeyRef: { name: {{ .Values.database.secret }}, key: password } }
             - { name: KC_HOSTNAME, value: {{ .Values.hostname | quote }} }
-            - { name: KC_HOSTNAME_BACKCHANNEL_DYNAMIC, value: "false" }
+            - { name: KC_HOSTNAME_BACKCHANNEL_DYNAMIC, value: "true" }
             # TLS only: the plain HTTP listener is switched off (ZT-4).
             - { name: KC_HTTP_ENABLED, value: "false" }
             - { name: KC_HTTPS_CERTIFICATE_FILE, value: /etc/aucoff/tls/tls.crt }

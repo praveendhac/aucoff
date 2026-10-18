@@ -34,7 +34,12 @@ frontend:
 oidc:
   # Keycloak (chart aucoff-identity). The issuer must match the identity chart's `hostname` and
   # every URL is https, verified against the local CA published as the aucoff-identity-ca ConfigMap.
-  issuer: https://aucoff-keycloak.aucoff-identity.svc:8443/realms/aucoff
+  # Public issuer (identical in every token); keys and tokens are fetched via the service name.
+  issuer: https://idp.localtest.me:8443/realms/aucoff
+  # Service-name URL for the BFF (backchannel); the browser is sent to the public issuer.
+  backchannelIssuer: https://aucoff-keycloak.aucoff-identity.svc:8443/realms/aucoff
+  webSecret: aucoff-web-oidc
+  webSessionSecret: aucoff-web-session
   jwksUrl: https://aucoff-keycloak.aucoff-identity.svc:8443/realms/aucoff/protocol/openid-connect/certs
   tokenUrl: https://aucoff-keycloak.aucoff-identity.svc:8443/realms/aucoff/protocol/openid-connect/token
   gatewayAudience: aucoff-gateway

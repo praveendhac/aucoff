@@ -3,7 +3,7 @@
 | Field | Value |
 |-------|-------|
 | Status | Draft |
-| Version | 0.4.0 |
+| Version | 0.5.0 |
 | Owner | Praveen Darshanam |
 | Last updated | 2026-10-19 |
 
@@ -153,3 +153,11 @@ frontend/
 - [ ] Charting library.
 - [ ] i18n requirements and target locales (India/EU).
 - [ ] Dark mode and branding.
+
+## Implementation status: login and BFF (Build Session 4, 2026-10-19)
+
+- Auth.js **v4.24.15** (ISC, stable) is used, not v5, which is still a beta. Authorization code + PKCE + state against Keycloak client `aucoff-web`; the session is a JWT in an encrypted httpOnly cookie. The access and refresh tokens stay inside that cookie and are never sent to browser code; the `session` callback exposes only the tenant and an error flag. Tokens are refreshed server-side and a failed refresh ends the session.
+- `src/proxy.ts` (Next.js 16 name for middleware) denies every request without a session except `isPublicPath` (`/login`, `/api/auth/*`, static assets). Route handlers outside `/api/auth` call `requireSession` themselves; a test fails if any does not.
+- `/bff/*` is the only way the browser reaches the API: the handler adds the user's bearer token, forwards to `/api/v1/*`, drops cookies, and rejects path-traversal segments. The ingress sends only `/api/v1` to the gateway, where a missing or invalid token is refused.
+- The issuer in tokens is the public URL `https://idp.localtest.me:8443/realms/aucoff` (reached with `make idp-forward`); pods use the service name (backchannel) for discovery and tokens.
+- Known gaps: the local ingress is plain HTTP, so the session cookie cannot be `Secure` yet (serve the app over TLS with the local CA to fix); the frontend-to-backend hop inside the cluster is plain HTTP with a bearer token (backend TLS still to add); user roles are not yet mapped to scopes (the dev user gets `ops:read`); idle timeout is still open.

@@ -113,6 +113,9 @@ deploy: ## Install/upgrade the AUCoFF Helm chart into namespace aucoff
 	kubectl label namespace aucoff pod-security.kubernetes.io/enforce=restricted --overwrite
 	helm upgrade --install aucoff deploy/helm/aucoff -n aucoff -f deploy/helm/aucoff/values-local.yaml --wait --timeout 3m
 
+idp-forward: ## Expose Keycloak for the browser at https://idp.localtest.me:8443 (needs the local CA trusted, see README)
+	kubectl -n aucoff-identity port-forward svc/aucoff-keycloak 8443:8443
+
 smoke: ## Smoke test the local deployment (unauthenticated requests must be refused)
 	scripts/smoke.sh
 

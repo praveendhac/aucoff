@@ -7,8 +7,10 @@ image:
 realm: aucoff
 # Token audience the AUCoFF API gateway accepts (ZT-3). Must equal oidc.gatewayAudience in the aucoff chart.
 gatewayAudience: aucoff-gateway
-# The issuer clients validate: scheme + host + port of the in-cluster service.
-hostname: https://aucoff-keycloak.aucoff-identity.svc:8443
+# The PUBLIC (frontend) URL: it is the token issuer and where browsers are sent to log in. Browsers
+# reach it through `make idp-forward` (localtest.me resolves to 127.0.0.1). Services inside the
+# cluster use the service name instead (backchannel), but still see this issuer in every token.
+hostname: https://idp.localtest.me:8443
 # Redirect URI of the web BFF (Auth.js), used from build session 4.
 webRedirectUri: http://aucoff.localtest.me/api/auth/callback/keycloak
 
@@ -22,6 +24,10 @@ database:
 # Throwaway clients used only by `make smoke` to prove the API accepts/refuses real tokens. They are
 # imported with the realm, so enable them in local environments only (v1 is local-only).
 smokeClients: false
+
+# Synthetic local login users (password from `make secrets`, never in git). Local only.
+devUsers: false
+devTenantId: 00000000-0000-4000-8000-000000000001
 
 resources:
   requests: { cpu: 250m, memory: 768Mi }

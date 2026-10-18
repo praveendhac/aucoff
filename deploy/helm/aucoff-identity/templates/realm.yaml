@@ -53,6 +53,36 @@ data:
           ]
         },
         {
+          "name": "profile",
+          "protocol": "openid-connect",
+          "attributes": { "include.in.token.scope": "true", "display.on.consent.screen": "false" },
+          "protocolMappers": [
+            { "name": "username", "protocol": "openid-connect", "protocolMapper": "oidc-usermodel-attribute-mapper",
+              "config": { "user.attribute": "username", "claim.name": "preferred_username", "jsonType.label": "String", "id.token.claim": "true", "access.token.claim": "true", "userinfo.token.claim": "true" } },
+            { "name": "full name", "protocol": "openid-connect", "protocolMapper": "oidc-full-name-mapper",
+              "config": { "id.token.claim": "true", "access.token.claim": "false", "userinfo.token.claim": "true" } }
+          ]
+        },
+        {
+          "name": "email",
+          "protocol": "openid-connect",
+          "attributes": { "include.in.token.scope": "true", "display.on.consent.screen": "false" },
+          "protocolMappers": [
+            { "name": "email", "protocol": "openid-connect", "protocolMapper": "oidc-usermodel-attribute-mapper",
+              "config": { "user.attribute": "email", "claim.name": "email", "jsonType.label": "String", "id.token.claim": "true", "access.token.claim": "false", "userinfo.token.claim": "true" } }
+          ]
+        },
+        {{- /* The tenant comes from the signed token, never from client input (ARC-6, DB-3). */}}
+        {
+          "name": "aucoff-tenant",
+          "protocol": "openid-connect",
+          "attributes": { "include.in.token.scope": "false", "display.on.consent.screen": "false" },
+          "protocolMappers": [
+            { "name": "tenant_id", "protocol": "openid-connect", "protocolMapper": "oidc-usermodel-attribute-mapper",
+              "config": { "user.attribute": "tenant_id", "claim.name": "tenant_id", "jsonType.label": "String", "id.token.claim": "false", "access.token.claim": "true", "introspection.token.claim": "true" } }
+          ]
+        },
+        {
           "name": "ops:read",
           "protocol": "openid-connect",
           "attributes": { "include.in.token.scope": "true", "display.on.consent.screen": "false" }
@@ -79,6 +109,20 @@ data:
               }
             }
           ]
+        }
+        {{- end }}
+      ],
+      "users": [
+        {{- if .Values.devUsers }}
+        {
+          "username": "dev.admin",
+          "enabled": true,
+          "emailVerified": true,
+          "email": "dev.admin@example.test",
+          "firstName": "Dev",
+          "lastName": "Admin",
+          "attributes": { "tenant_id": [{{ .Values.devTenantId | quote }}] },
+          "credentials": [{ "type": "password", "value": "${DEV_USER_PASSWORD}", "temporary": false }]
         }
         {{- end }}
       ],
@@ -113,8 +157,8 @@ data:
           "redirectUris": [{{ .Values.webRedirectUri | quote }}],
           "webOrigins": [],
           "attributes": { "pkce.code.challenge.method": "S256" },
-          "defaultClientScopes": ["basic", "aucoff-gateway-audience"],
-          "optionalClientScopes": ["ops:read", "docs:read"]
+          "defaultClientScopes": ["basic", "profile", "email", "aucoff-tenant", "aucoff-gateway-audience", "ops:read"],
+          "optionalClientScopes": ["docs:read"]
         }
         {{- if .Values.smokeClients }},
         {

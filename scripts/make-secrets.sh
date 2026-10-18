@@ -51,7 +51,7 @@ ensure_basic_auth aucoff-pg-keycloak aucoff_keycloak aucoff-data aucoff-identity
 # client secrets that the realm import substitutes for ${...} placeholders.
 ensure_basic_auth aucoff-keycloak-admin admin aucoff-identity
 ensure_client_secrets aucoff-keycloak-clients \
-  SVC_GATEWAY_SECRET WEB_SECRET SMOKE_SECRET SMOKE_OTHERAUD_SECRET SMOKE_SHORT_SECRET
+  SVC_GATEWAY_SECRET WEB_SECRET DEV_USER_PASSWORD SMOKE_SECRET SMOKE_OTHERAUD_SECRET SMOKE_SHORT_SECRET
 
 # The gateway's own service-identity secret, mounted by the gateway for outbound calls (T-121).
 gw=$(kubectl -n aucoff-identity get secret aucoff-keycloak-clients -o jsonpath='{.data.SVC_GATEWAY_SECRET}' | base64 -d)
@@ -59,3 +59,14 @@ kubectl -n aucoff create secret generic aucoff-svc-gateway \
   --from-literal=client_id=svc-gateway --from-literal=client_secret="$gw" \
   --dry-run=client -o yaml | kubectl -n aucoff apply -f - >/dev/null
 echo "secret aucoff-svc-gateway ready"
+
+# The web BFF (Auth.js): its OIDC client credentials and a random key that encrypts session cookies.
+web=$(kubectl -n aucoff-identity get secret aucoff-keycloak-clients -o jsonpath='{.data.WEB_SECRET}' | base64 -d)
+sess=$(kubectl -n aucoff get secret aucoff-web-session -o jsonpath='{.data.secret}' 2>/dev/null | base64 -d || true)
+[ -n "$sess" ] || sess=$(openssl rand -base64 48 | tr -d '\n')
+kubectl -n aucoff create secret generic aucoff-web-oidc \
+  --from-literal=client_id=aucoff-web --from-literal=client_secret="$web" \
+  --dry-run=client -o yaml | kubectl -n aucoff apply -f - >/dev/null
+kubectl -n aucoff create secret generic aucoff-web-session --from-literal=secret="$sess" \
+  --dry-run=client -o yaml | kubectl -n aucoff apply -f - >/dev/null
+echo "secrets aucoff-web-oidc and aucoff-web-session ready"
