@@ -3,9 +3,9 @@
 | Field | Value |
 |-------|-------|
 | Status | Draft |
-| Version | 0.2.0 |
+| Version | 0.3.0 |
 | Owner | Praveen Darshanam |
-| Last updated | 2026-10-18 |
+| Last updated | 2026-10-19 |
 
 > Purpose: how AUCoFF is packaged, deployed and operated. Phase 1: local Kubernetes (kind) with one umbrella Helm chart. Phase 2: AWS (EKS) with Terraform.
 
@@ -25,7 +25,7 @@ Same images and chart in all environments, differing only by values (ENV-1).
 | frontend | `frontend/` (Next.js standalone) | Port 3000 (TODO) |
 | backend gateway | `backend/app` (FastAPI) | Port 8000 (TODO) |
 | agent services (9) | `backend/services/*` | assessment-orchestrator, mapping-agent, cloud-scanner, k8s-scanner, repo-scanner, saas-scanner, document-analyzer, remediation-advisor, report-generator |
-| PostgreSQL 18.6 + pgvector | CloudNativePG operator + pgvector-enabled PostgreSQL 18 image (image TODO) | [database-spec.md](database-spec.md) |
+| PostgreSQL 18.6 + pgvector 0.8.6 | CloudNativePG operator + pgvector-enabled PostgreSQL 18.6 image (image source to verify, T-004) | [database-spec.md](database-spec.md) |
 | RabbitMQ | Official chart/image | Queues per [backend-spec.md](backend-spec.md) section 5 |
 | MinIO | Official chart/image | S3-compatible evidence/report store |
 | Keycloak | Official chart/image | Local OIDC/SAML IdP |
@@ -137,7 +137,7 @@ Controls referenced from constitution section 6: network policies, image scannin
 
 ## 12. Open Questions
 - [x] Ingress: NGINX; local host `aucoff.localtest.me`.
-- [x] PostgreSQL via CloudNativePG operator. [ ] pgvector-enabled image choice still open.
+- [x] PostgreSQL via CloudNativePG operator; pgvector 0.8.6 (owner-confirmed with PostgreSQL 18.6). [ ] Image source/build compatible with CloudNativePG still to verify (T-004).
 - [ ] Queue autoscaling approach (KEDA).
 - [ ] mTLS/service mesh need.
 - [ ] Image registry and signing.

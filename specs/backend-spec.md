@@ -3,9 +3,9 @@
 | Field | Value |
 |-------|-------|
 | Status | Draft |
-| Version | 0.2.0 |
+| Version | 0.3.0 |
 | Owner | Praveen Darshanam |
-| Last updated | 2026-10-18 |
+| Last updated | 2026-10-19 |
 
 > Purpose: services, domain logic, agent microservices and persistence behind the API defined in [api-contract.md](api-contract.md).
 

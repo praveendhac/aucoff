@@ -3,9 +3,9 @@
 | Field | Value |
 |-------|-------|
 | Status | Draft |
-| Version | 0.2.0 |
+| Version | 0.3.0 |
 | Owner | Praveen Darshanam |
-| Last updated | 2026-10-18 |
+| Last updated | 2026-10-19 |
 
 > Purpose: UI behaviour and structure for the Next.js (React, TypeScript) app. Entity IDs are UUID strings and the tenant comes from the session, never the URL or client input (see [database-spec.md](database-spec.md), [api-contract.md](api-contract.md)).
 

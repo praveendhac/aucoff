@@ -3,7 +3,7 @@
 | Field | Value |
 |-------|-------|
 | Status | Draft |
-| Version | 0.2.0 |
+| Version | 0.3.0 |
 | Owner | Praveen Darshanam |
 | Last updated | 2026-10-19 |
 
@@ -16,7 +16,7 @@ Related: [constitution.md](constitution.md) · [design.md](design.md) · [backen
 |------|-------|-------|
 | Engine | PostgreSQL 18.6 | Confirmed by owner |
 | Database name | `aucoff` | One database; tenant isolation by `tenant_id` + RLS |
-| Vector extension | `pgvector` (version pinned at build; image TODO) | Verify the pinned release supports PostgreSQL 18 before adoption |
+| Vector extension | `pgvector` 0.8.6 | Owner-confirmed compatible with PostgreSQL 18.6; confirm a CloudNativePG-compatible image exists (T-004) |
 | Other extensions | `pgcrypto`, `pg_audit` (TODO confirm availability locally and on AWS), `pg_stat_statements` | |
 | ORM | SQLAlchemy 2.x (async) | See [backend-spec.md](backend-spec.md) |
 | Migrations | Alembic | Versioned, forward-only in prod (COD-9) |
@@ -26,7 +26,7 @@ Related: [constitution.md](constitution.md) · [design.md](design.md) · [backen
 ### Environments
 | Env | Deployment | Notes |
 |-----|-----------|-------|
-| local | PostgreSQL 18.6 + pgvector in the Helm chart (CloudNativePG operator with a pgvector-enabled PostgreSQL 18 image), PVC storage | Synthetic data only (ENV-2) |
+| local | PostgreSQL 18.6 + pgvector 0.8.6 in the Helm chart (CloudNativePG operator with a pgvector-enabled PostgreSQL 18.6 image), PVC storage | Synthetic data only (ENV-2) |
 | aws (future) | RDS or Aurora PostgreSQL | Confirm 18.x and `pgvector` support at migration time; see section 12 |
 
 ## 2. Conventions
@@ -251,14 +251,14 @@ No role is superuser; `aucoff_app` has `NOBYPASSRLS`.
 ## 12. AWS Migration Notes (future)
 | Local | AWS | Notes |
 |-------|-----|-------|
-| In-cluster PostgreSQL 18.6 | RDS/Aurora PostgreSQL | Confirm 18.x availability; `pgvector` and `pg_audit` support per engine version |
+| In-cluster PostgreSQL 18.6 + pgvector 0.8.6 | RDS/Aurora PostgreSQL | Confirm 18.x availability and the supported `pgvector`/`pg_audit` versions per engine version |
 | PgBouncer | RDS Proxy or PgBouncer | TODO |
 | K8s Secret credentials | Secrets Manager with rotation | IAM auth optional |
 | cert-manager TLS | RDS CA bundle | |
 | PVC storage | gp3/io2 with KMS | |
 
 ## 13. Open Questions
-- [x] Embedding dimension 1024 (placeholder). [ ] Exact pgvector version and image.
+- [x] Embedding dimension 1024 (placeholder). [x] pgvector 0.8.6 with PostgreSQL 18.6 (owner-confirmed). [ ] Image source compatible with CloudNativePG still to verify (T-004).
 - [x] Local deployment: CloudNativePG operator with a pgvector-enabled image.
 - [ ] Column-level encryption approach and key management.
 - [ ] Retention periods and RPO/RTO targets.

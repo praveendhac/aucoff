@@ -5,7 +5,7 @@
 | Status | Draft |
 | Version | 0.7.0 |
 | Owner | Praveen Darshanam |
-| Last updated | 2026-10-18 |
+| Last updated | 2026-10-19 |
 
 > Purpose: the non-negotiable rules every spec, design decision and code change must obey. If another spec conflicts with this file, this file wins. Rules use RFC 2119 keywords: **MUST**, **MUST NOT**, **SHOULD**, **MAY**. Each rule has an ID so specs, tasks and reviews can cite it.
 

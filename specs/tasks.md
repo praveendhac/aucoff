@@ -3,7 +3,7 @@
 | Field | Value |
 |-------|-------|
 | Status | Draft |
-| Version | 0.2.0 |
+| Version | 0.3.0 |
 | Owner | Praveen Darshanam |
 | Last updated | 2026-10-19 |
 
@@ -19,7 +19,7 @@ Status values: `todo` · `in-progress` · `blocked` · `done`
 | T-001 | Fill in constitution and spec | constitution.md, spec.md | Reviewed and versioned 1.0.0 | - | todo |
 | T-002 | Repo scaffold (frontend/, backend/, deploy/) | design.md | Directories and tooling committed | T-001 | todo |
 | T-003 | Repo conventions: root README, CLAUDE.md, CODEOWNERS, PR template, branch protection, commit conventions, pre-commit hooks (keep Gitleaks) | constitution.md §4, COD-10 | Files committed; rules documented | T-001 | todo |
-| T-004 | Pre-build verification: PostgreSQL 18.6 and compatible pgvector, CloudNativePG support for PG 18, Python 3.13 compatibility of LangGraph/asyncpg/SQLAlchemy, RDS 18.x support (note for Phase 2) | database-spec.md §1, §12 | Findings recorded in the specs; versions pinned or fallbacks chosen | T-001 | todo |
+| T-004 | Pre-build verification: CloudNativePG supports PostgreSQL 18.6 and a pgvector 0.8.6 image exists or can be built (PostgreSQL 18.6 + pgvector 0.8.6 compatibility is owner-confirmed), Python 3.13 compatibility of LangGraph/asyncpg/SQLAlchemy, RDS 18.x and pgvector support (note for Phase 2) | database-spec.md §1, §12 | Findings recorded in the specs; versions pinned or fallbacks chosen | T-001 | todo |
 | T-005 | Verify owner-supplied framework instruments/versions against official sources | spec.md §4 | Table updated with source links | T-001 | todo |
 | T-006 | Author v1 unified control set (owner) and versioning scheme; decide licensing for source texts | spec.md §10a | Control set v1 reviewed and checked in as data | T-001 | todo |
 | T-007 | Tool vetting for scanners (licence, maintenance, supply chain) and chosen list per source | backend-spec.md §4a, constitution SEC-17 | Approved tool list with versions | T-001 | todo |
@@ -100,6 +100,6 @@ Status values: `todo` · `in-progress` · `blocked` · `done`
 | T-502 | `values-aws.yaml`; verify PostgreSQL 18.x/pgvector on RDS | infrastructure-spec.md §10, database-spec.md §12 | Staging deploy passes smoke/E2E | T-501 | todo |
 
 ## Blockers and Notes
-- T-004 (pre-build verification) can change version pins and the Postgres/pgvector image; do it before the T-002 scaffold is finalised.
+- T-004 (pre-build verification) can change version pins and the Postgres/pgvector image (pgvector 0.8.6 with PostgreSQL 18.6 is owner-confirmed; image and operator support still to verify); do it before the T-002 scaffold is finalised.
 - T-006 (unified control set authored by owner) gates meaningful scanner-to-control mapping and mapping-agent evaluation.
 - Items marked TODO in other specs are tracked in each spec's open-questions section; deferred ones (brand, locales, KEDA, mTLS, image signing, plan limits) do not block the build.
