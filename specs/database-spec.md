@@ -3,7 +3,7 @@
 | Field | Value |
 |-------|-------|
 | Status | Draft |
-| Version | 0.4.0 |
+| Version | 0.5.0 |
 | Owner | Praveen Darshanam |
 | Last updated | 2026-10-19 |
 
@@ -17,17 +17,17 @@ Related: [constitution.md](constitution.md) · [design.md](design.md) · [backen
 | Engine | PostgreSQL 18.6 | Confirmed by owner |
 | Database name | `aucoff` | One database; tenant isolation by `tenant_id` + RLS |
 | Vector extension | `pgvector` 0.8.6 | Owner-confirmed compatible with PostgreSQL 18.6; confirm a CloudNativePG-compatible image exists (T-004) |
-| Other extensions | `pgcrypto`, `pg_audit` (TODO confirm availability locally and on AWS), `pg_stat_statements` | |
+| Other extensions | `pgcrypto`, `pg_audit` (TODO confirm availability in the local image), `pg_stat_statements` | |
 | ORM | SQLAlchemy 2.x (async) | See [backend-spec.md](backend-spec.md) |
 | Migrations | Alembic | Versioned, forward-only in prod (COD-9) |
 | Driver | `asyncpg` (TODO confirm) | |
-| Pooling | PgBouncer (TODO decide local vs AWS RDS Proxy) | |
+| Pooling | PgBouncer (local sidecar/chart in v1; hosted option post-v1) | |
 
 ### Environments
 | Env | Deployment | Notes |
 |-----|-----------|-------|
 | local | PostgreSQL 18.6 + pgvector 0.8.6 in the Helm chart (CloudNativePG operator with a pgvector-enabled PostgreSQL 18.6 image), PVC storage | Synthetic data only (ENV-2) |
-| aws (future) | RDS or Aurora PostgreSQL | Confirm 18.x and `pgvector` support at migration time; see section 12 |
+| aws (post-v1, out of scope) | RDS or Aurora PostgreSQL | Confirm 18.x and `pgvector` support if/when a hosted environment is built; see section 12 |
 
 ## 2. Conventions
 - Names: `snake_case`; tables plural; one schema `app` for domain tables, `audit` for the audit log, `ref` for reference data (frameworks, controls).
@@ -193,11 +193,11 @@ No role is superuser; `aucoff_app` has `NOBYPASSRLS`.
 
 ### 6.3 Authentication and transport
 - `scram-sha-256` password auth only; no `trust` or `md5`.
-- TLS required (`hostssl` only), TLS 1.2+ ; certificates managed by the platform (cert-manager locally, ACM/RDS CA on AWS).
-- Credentials come from Kubernetes Secrets locally and AWS Secrets Manager later; never in images, values files in git, logs or prompts (SEC-3). Rotation procedure TODO.
+- TLS required (`hostssl` only), TLS 1.2+ ; certificates managed by the platform (cert-manager locally in v1; ACM/RDS CA post-v1).
+- Credentials come from Kubernetes Secrets locally in v1 (a managed secret store is post-v1); never in images, values files in git, logs or prompts (SEC-3). Rotation procedure TODO.
 
 ### 6.4 Encryption
-- At rest: encrypted volumes locally where available; KMS-encrypted storage on AWS.
+- At rest: encrypted volumes locally where available; KMS-encrypted storage is a post-v1 hosted option.
 - Column-level: sensitive fields (e.g. integration tokens if stored, evidence classified restricted) encrypted with an application-managed key (`pgcrypto` or app-side envelope encryption, TODO decide). Prefer storing only secret references (`config_ref`).
 - Backups encrypted.
 
@@ -213,7 +213,7 @@ No role is superuser; `aucoff_app` has `NOBYPASSRLS`.
 - Alembic revisions in `backend/app/db/migrations/`; one logical change per revision; names `YYYYMMDD_HHMM_short_description`.
 - Never edit a merged revision; fix forward.
 - Destructive changes use expand/contract in separate releases.
-- Migrations run as `aucoff_migrator` in a Helm pre-upgrade hook Job locally; CI job on AWS.
+- Migrations run as `aucoff_migrator` in a Helm pre-upgrade hook Job locally (v1); a CI/CD job in a hosted environment is post-v1.
 - Every migration is tested on an empty DB and on the previous release's schema in CI.
 - Row-Level Security, grants and extensions are managed in migrations, not by hand.
 
@@ -245,10 +245,10 @@ No role is superuser; `aucoff_app` has `NOBYPASSRLS`.
 
 ## 11. Backup, Restore and DR
 - Local: scheduled `pg_dump`/volume snapshot for developer convenience (TODO).
-- AWS: automated backups plus PITR; RPO/RTO targets TODO (proposal: RPO 15 min, RTO 4 h).
+- Post-v1 (AWS): automated backups plus PITR; RPO/RTO targets TODO (proposal: RPO 15 min, RTO 4 h).
 - Restore drills documented and rehearsed per phase.
 
-## 12. AWS Migration Notes (future)
+## 12. Post-v1: AWS Migration Notes (informational, not built in v1)
 | Local | AWS | Notes |
 |-------|-----|-------|
 | In-cluster PostgreSQL 18.6 + pgvector 0.8.6 | RDS/Aurora PostgreSQL | Confirm 18.x availability and the supported `pgvector`/`pg_audit` versions per engine version |

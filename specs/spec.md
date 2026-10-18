@@ -3,7 +3,7 @@
 | Field | Value |
 |-------|-------|
 | Status | Draft |
-| Version | 0.5.1 |
+| Version | 0.6.0 |
 | Owner | Praveen Darshanam |
 | Last updated | 2026-10-19 |
 
@@ -169,16 +169,16 @@ Full definitions in [agent.md](agent.md) section 2.
 |----|----------|-------------|
 | NFR-1 | Security | No OWASP Top 10 (web) or OWASP API Security Top 10 vulnerabilities; verified by SAST, DAST and API testing before each release; high/critical findings block release |
 | NFR-2 | Security | Meet constitution section 6 (SEC-1 to SEC-14) |
-| NFR-3 | Availability | 99.9% monthly API availability *(proposal)*; scans degrade gracefully when providers fail |
+| NFR-3 | Availability | v1 (local kind): services expose health/readiness, recover from pod restarts, and scans degrade gracefully when providers fail; the 99.9% monthly availability target *(proposal)* applies post-v1 once hosted |
 | NFR-4 | Performance | API p95 < 500 ms for non-agent calls *(proposal)* |
 | NFR-5 | Scan latency and scale | Single-scope assessment completes within TODO (proposal: 30 min for 1,000 resources); N concurrent assessments per tenant TODO; evidence volume per tenant TODO |
 | NFR-6 | Data retention | Per [database-spec.md](database-spec.md) section 9; configurable per tenant within regulatory minimums |
-| NFR-7 | Data residency | Tenant data stays in its configured region, including LLM processing where required (SEC-14) |
+| NFR-7 | Data residency | Tenant data stays in its configured region, including LLM processing where required (SEC-14); in v1 all data stays on the developer laptop (only redacted prompts go to the LLM API); regional hosting is post-v1 |
 | NFR-8 | Cost | LLM budget per assessment and per tenant per month, enforced with alerts and hard stops (AI-12); numbers TODO |
 | NFR-9 | Auditability | Every agent action and approval reproducible from logs (AI-10) |
 | NFR-10 | Accessibility | WCAG 2.2 AA |
 | NFR-11 | Privacy | PII redacted before LLM calls (AI-8); GDPR/DPDP erasure supported |
-| NFR-12 | Portability | Same images and Helm chart for local Kubernetes and AWS (ENV-1) |
+| NFR-12 | Deployment scope and portability | **v1 (MVP) is local-only:** build, run and test everything on a developer laptop using kind (minikube not used); no AWS or other cloud hosting in v1. Images and the Helm chart stay portable so a later AWS deployment needs only values changes (ENV-1, ENV-4) |
 | NFR-13 | Data retention (history) | Scan/assessment snapshots and metric points retained at least 13 months (12 months visible); tenants may extend but never go below 12 months; snapshots are immutable and survive evidence deletion |
 | NFR-14 | UX | Visual design, layout and metrics per [design.md](design.md) section 10 and 11; WCAG 2.2 AA with contrast verified |
 | NFR-15 | Licensing and IP compliance | No FOSS licence issue and no plagiarism/copyright issue in any library, software, container image, font, icon, dataset, content or generated output; only items meeting constitution LIC-1 to LIC-8 are used; if an issue exists, the item is not used and an alternative is chosen |
@@ -209,6 +209,7 @@ Detailed definitions and formulas are in the metrics catalogue ([design.md](desi
 - Frameworks not listed in section 4.
 - Automatic submission of questionnaire answers to external portals (answers are drafted for manual entry).
 - Self-service tenant signup and billing (tenants are operator-provisioned and invite-based in v1).
+- Any AWS (or other cloud) hosting, Terraform/EKS, managed data services or multi-region deployment in v1; these are post-v1. Cloud scanners still read customer AWS/GCP/Azure accounts (read-only); in v1 they are exercised with recorded fixtures or optional read-only test accounts.
 
 ## 12. Assumptions, Risks, Dependencies
 | ID | Item | Mitigation |

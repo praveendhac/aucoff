@@ -3,7 +3,7 @@
 | Field | Value |
 |-------|-------|
 | Status | Draft |
-| Version | 0.4.0 |
+| Version | 0.5.0 |
 | Owner | Praveen Darshanam |
 | Last updated | 2026-10-19 |
 
@@ -21,7 +21,7 @@ Related: [spec.md](spec.md) · [design.md](design.md) · [agent.md](agent.md) ·
 | Queue | RabbitMQ via `aio-pika` | Jobs from API to agent services |
 | Agent orchestration | LangGraph | Checkpoints in PostgreSQL; interrupt nodes for human approval |
 | LLM access | Provider-agnostic interface; Claude default | ARC-5, AI-8, AI-12 |
-| Object store | S3 API via `boto3` (AWS S3 on AWS; local store TBD - MinIO is believed AGPL and not approved, see constitution LIC-1/LIC-2) | Presigned URLs |
+| Object store | S3 API via `boto3` (local S3-compatible store in v1; AWS S3 is post-v1; local store TBD - MinIO is believed AGPL and not approved, see constitution LIC-1/LIC-2) | Presigned URLs |
 | Cloud/SaaS SDKs | boto3, Google, Azure, GitHub/Bitbucket, Microsoft Graph, Metabase API | Read-only scopes only |
 | Logging / tracing | structlog (JSON), OpenTelemetry | COD-8 |
 | Tooling | Ruff, mypy, pytest, httpx, testcontainers | COD-1, QA |
@@ -177,8 +177,8 @@ Additional roles and permissions (decisions 2026-10-19):
 Credentials via secret references; outbound calls have timeouts, retries and circuit breakers.
 
 ## 11. Configuration and Secrets
-Per-tenant connector credentials live in a dedicated secret store addressed by `config_ref` (HashiCorp Vault-style or AWS Secrets Manager on AWS; Kubernetes Secrets are acceptable only for local development and do not scale to many tenants). Tenant secrets are encrypted with per-tenant keys where the store supports it.
-12-factor environment config (ARC-8) validated by Pydantic Settings at start-up; values from Helm values/ConfigMaps; secrets from Kubernetes Secrets (Secrets Manager on AWS); no defaults for secrets; config documented in [infrastructure-spec.md](infrastructure-spec.md).
+Per-tenant connector credentials live in a dedicated secret store addressed by `config_ref` (v1, local-only: Kubernetes Secrets in a dedicated namespace/prefix, which is acceptable for a single-laptop deployment; a Vault-style or AWS Secrets Manager store is the post-v1 path because Kubernetes Secrets do not scale to many tenants). Tenant secrets are encrypted with per-tenant keys where the store supports it.
+12-factor environment config (ARC-8) validated by Pydantic Settings at start-up; values from Helm values/ConfigMaps; secrets from Kubernetes Secrets (managed secret store post-v1); no defaults for secrets; config documented in [infrastructure-spec.md](infrastructure-spec.md).
 
 ## 12. Observability
 Structured JSON logs with `request_id`, `tenant_id`, `agent_run_id` (no PII or secrets); OpenTelemetry traces across API, queue and services; Prometheus metrics (request latency, queue depth, run durations, LLM tokens/cost, scanner errors); health endpoints (`/health/live`, `/health/ready`).

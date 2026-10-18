@@ -3,7 +3,7 @@
 | Field | Value |
 |-------|-------|
 | Status | Draft |
-| Version | 0.4.0 |
+| Version | 0.5.0 |
 | Owner | Praveen Darshanam |
 | Last updated | 2026-10-19 |
 
@@ -42,7 +42,7 @@ Next.js frontend (BFF session) -> FastAPI gateway -> PostgreSQL (+ pgvector) and
 | API | REST gateway, auth, RBAC, SSE | FastAPI | [backend-spec.md](backend-spec.md) |
 | Agent runtime | 13 agents / microservices, LangGraph graphs | Python, LangGraph | [agent.md](agent.md) |
 | Relational DB + vector store | System of record, RLS tenancy, embeddings, history snapshots | PostgreSQL 18.6 + pgvector | [database-spec.md](database-spec.md) |
-| Queue | Job and event transport | RabbitMQ (AWS: Amazon MQ) | [backend-spec.md](backend-spec.md) §5 |
+| Queue | Job and event transport | RabbitMQ (post-v1 hosted option: Amazon MQ) | [backend-spec.md](backend-spec.md) §5 |
 | Object store | Evidence files, reports, exports | S3-compatible store locally (MinIO believed AGPL, not approved; permissive candidate TBD under T-009), S3 on AWS | [infrastructure-spec.md](infrastructure-spec.md) |
 | Identity provider | OIDC login, SAML brokering | Keycloak locally; Entra ID/Cognito later | [frontend-spec.md](frontend-spec.md) §5 |
 | Observability | Logs, metrics, traces | OpenTelemetry, Prometheus + permissively licensed dashboards/logs/traces (Grafana/Loki/Tempo believed AGPL, not approved; T-009) | [infrastructure-spec.md](infrastructure-spec.md) §8 |
@@ -91,7 +91,7 @@ Services publish run events to RabbitMQ; the gateway relays them to the browser 
 - **AuthN/AuthZ:** external OIDC IdP; JWT validated by the API; BFF session cookie for the browser; RBAC enforced in domain code (SEC-1).
 - **Tenancy:** `tenant_id` + forced RLS; tenant context set per transaction; tenant-filtered vector queries (SEC-11, DB-3, DB-6).
 - **Data protection:** TLS everywhere; encryption at rest; column-level encryption for restricted fields; classification and retention in [database-spec.md](database-spec.md) (SEC-4, SEC-5).
-- **Secrets:** Kubernetes Secrets locally, Secrets Manager on AWS; connector credentials only by reference (SEC-3).
+- **Secrets:** Kubernetes Secrets on the local cluster in v1 (managed secret store post-v1); connector credentials only by reference (SEC-3).
 - **LLM data boundary:** only redacted data to approved providers/regions (AI-8, SEC-14).
 - **Outputs leaving the tenant:** approved, redacted, audit-logged (AI-16).
 - **Network:** default-deny NetworkPolicies; DB reachable only from backend/agents ([infrastructure-spec.md](infrastructure-spec.md) §4).
@@ -120,7 +120,8 @@ Logs, metrics, traces via OpenTelemetry into Prometheus and permissively license
 | ADR-4 | FastAPI gateway + Python agent services over RabbitMQ | Sync gRPC/HTTP, modular monolith | Decouples long-running scans; retries and DLQs | Accepted (owner) |
 | ADR-5 | External OIDC IdP (Keycloak locally) with BFF session in Next.js | Built-in auth, SaaS auth | Enterprise SSO/SAML, no tokens in browser storage | Accepted (owner) |
 | ADR-6 | OpenAPI 3.1 as source of truth; generated TS client; Swagger UI for all endpoints | Hand-written clients | Prevents contract drift | Accepted (owner) |
-| ADR-7 | kind + umbrella Helm chart locally; Terraform + EKS later | minikube, per-service charts | Same chart across environments | Accepted (owner) |
+| ADR-7 | kind + umbrella Helm chart; Terraform + EKS only post-v1 | minikube, per-service charts | Same chart across environments; kind is lighter and matches CI | Accepted (owner) |
+| ADR-13 | **v1 (MVP) is local-only on kind: no AWS or other cloud hosting; everything tested on a laptop** | Early AWS deployment | Faster feedback, no cloud cost or compliance surface in MVP; images and chart stay portable | Accepted (owner) |
 | ADR-8 | Immutable per-assessment snapshots + metric points for 12-month history, rollups for trends | Recompute from live data | Reproducible comparisons independent of later data changes | Proposed |
 | ADR-9 | Light-default theme with dark mode, token-based design system (shadcn/ui + Tailwind) | Single theme, other UI kits | Owner choice; accessibility and consistency | Accepted (owner) |
 | ADR-10 | Wrap vetted open-source scanners behind our adapter interface; map checks to unified controls | Write all rules in OPA/Rego | Broad coverage quickly; keep our control logic and versioning | Accepted (owner) |

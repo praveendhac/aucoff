@@ -3,7 +3,7 @@
 | Field | Value |
 |-------|-------|
 | Status | Draft |
-| Version | 0.4.0 |
+| Version | 0.5.0 |
 | Owner | Praveen Darshanam |
 | Last updated | 2026-10-19 |
 
@@ -19,7 +19,7 @@ Status values: `todo` · `in-progress` · `blocked` · `done`
 | T-001 | Fill in constitution and spec | constitution.md, spec.md | Reviewed and versioned 1.0.0 | - | todo |
 | T-002 | Repo scaffold (frontend/, backend/, deploy/) | design.md | Directories and tooling committed | T-001 | todo |
 | T-003 | Repo conventions: root README, CLAUDE.md, CODEOWNERS, PR template, branch protection, commit conventions, pre-commit hooks (keep Gitleaks) | constitution.md §4, COD-10 | Files committed; rules documented | T-001 | todo |
-| T-004 | Pre-build verification: CloudNativePG supports PostgreSQL 18.6 and a pgvector 0.8.6 image exists or can be built (PostgreSQL 18.6 + pgvector 0.8.6 compatibility is owner-confirmed), Python 3.13 compatibility of LangGraph/asyncpg/SQLAlchemy, RDS 18.x and pgvector support (note for Phase 2) | database-spec.md §1, §12 | Findings recorded in the specs; versions pinned or fallbacks chosen | T-001 | todo |
+| T-004 | Pre-build verification: CloudNativePG supports PostgreSQL 18.6 and a pgvector 0.8.6 image exists or can be built (PostgreSQL 18.6 + pgvector 0.8.6 compatibility is owner-confirmed), Python 3.13 compatibility of LangGraph/asyncpg/SQLAlchemy | database-spec.md §1, §12 | Findings recorded in the specs; versions pinned or fallbacks chosen | T-001 | todo |
 | T-005 | Verify owner-supplied framework instruments/versions against official sources | spec.md §4 | Table updated with source links | T-001 | todo |
 | T-006 | Author v1 unified control set (owner) and versioning scheme; decide licensing for source texts | spec.md §10a | Control set v1 reviewed and checked in as data | T-001 | todo |
 | T-007 | Tool vetting for scanners (maintenance, supply chain; licence per T-009) and chosen list per source | backend-spec.md §4a, constitution SEC-17 | Approved tool list with versions | T-009 | todo |
@@ -94,14 +94,16 @@ Status values: `todo` · `in-progress` · `blocked` · `done`
 | T-407 | Observability stack (OTel, Prometheus + permissively licensed dashboard/log/trace backends selected under T-009) + dashboards | infrastructure-spec.md §8 | Traces, logs, metrics visible for a sample run | T-402 | todo |
 | T-408 | Makefile local workflow (cluster-up, deploy, seed, e2e) | infrastructure-spec.md §6 | Fresh clone to running stack documented | T-402 | todo |
 | T-409 | GitHub Actions pipelines (PR, build, chart, E2E on kind) | infrastructure-spec.md §7 | All required checks gate merges | T-401 | todo |
+| T-410 | Laptop smoke test and resource profile: measure CPU/RAM of the full stack on kind, define `values-local-min.yaml`, document `make` targets and prerequisites; verify cold start from a clean clone on a laptop | infrastructure-spec.md §5a, constitution ENV-4 | Fresh clone to working stack in the documented time on a 16 GB laptop; minimal profile runs on 8 GB | T-408 | todo |
 
-## Phase 5: AWS (future)
+## Post-v1 (out of scope for the MVP): AWS
 | ID | Task | Spec ref | Acceptance criteria | Depends on | Status |
 |----|------|----------|---------------------|------------|--------|
-| T-501 | Terraform modules (network, EKS, RDS, MQ, S3, IAM, secrets) | infrastructure-spec.md §10 | Plan/apply in a sandbox account | T-409 | todo |
-| T-502 | `values-aws.yaml`; verify PostgreSQL 18.x/pgvector on RDS | infrastructure-spec.md §10, database-spec.md §12 | Staging deploy passes smoke/E2E | T-501 | todo |
+| T-501 | Terraform modules (network, EKS, RDS, MQ, S3, IAM, secrets) | infrastructure-spec.md §10 | Plan/apply in a sandbox account | T-409 | deferred (post-v1) |
+| T-502 | `values-aws.yaml`; verify PostgreSQL 18.x/pgvector on RDS | infrastructure-spec.md §10, database-spec.md §12 | Staging deploy passes smoke/E2E | T-501 | deferred (post-v1) |
 
 ## Blockers and Notes
+- **v1 scope decision:** v1 (MVP) is local-only on kind; AWS/Terraform/EKS work (T-501, T-502) is deferred to post-v1 and does not gate any v1 task.
 - T-004 (pre-build verification) can change version pins and the Postgres/pgvector image (pgvector 0.8.6 with PostgreSQL 18.6 is owner-confirmed; image and operator support still to verify); do it before the T-002 scaffold is finalised.
 - T-009 (licence and provenance audit) gates T-007, T-405, T-407 and the scanner choices; no tool or image is adopted until it passes constitution LIC-1 to LIC-5.
 - T-006 (unified control set authored by owner) gates meaningful scanner-to-control mapping and mapping-agent evaluation.

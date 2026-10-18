@@ -3,7 +3,7 @@
 | Field | Value |
 |-------|-------|
 | Status | Draft |
-| Version | 0.8.0 |
+| Version | 0.9.0 |
 | Owner | Praveen Darshanam |
 | Last updated | 2026-10-19 |
 
@@ -36,7 +36,7 @@ Related: [spec.md](spec.md) · [design.md](design.md) · [agent.md](agent.md) ·
 - **ARC-8** Configuration MUST come from environment/Helm values (12-factor); no environment-specific values in code.
 - **ARC-9** Long-running agent work MUST run asynchronously (queue/worker) with status polling or streaming, never block a request.
 - **ARC-10** Significant architectural decisions MUST be recorded as an ADR in [design.md](design.md) before implementation.
-- **ARC-11** Infrastructure MUST be declared as code (Helm now, IaC for AWS later); no manual cluster changes.
+- **ARC-11** Infrastructure MUST be declared as code (Helm and kind configuration in v1; IaC for a hosted environment is post-v1); no manual cluster changes.
 
 ## 3. Design Philosophy
 
@@ -85,7 +85,7 @@ Related: [spec.md](spec.md) · [design.md](design.md) · [agent.md](agent.md) ·
 |----|------|
 | SEC-1 | Authentication is required on every endpoint except health checks; authorisation is role-based and enforced server-side (never only in the UI). |
 | SEC-2 | Least privilege for users, services, database roles and Kubernetes service accounts. |
-| SEC-3 | Secrets MUST NOT be in source control, images, logs or prompts; they come from Kubernetes Secrets locally and a managed secret store on AWS. A pre-commit secret scan (Gitleaks) MUST remain enabled. |
+| SEC-3 | Secrets MUST NOT be in source control, images, logs or prompts; in v1 they come from Kubernetes Secrets on the local cluster (a managed secret store is a post-v1 option). A pre-commit secret scan (Gitleaks) MUST remain enabled. |
 | SEC-4 | Encrypt in transit (TLS) and at rest for all sensitive data. |
 | SEC-5 | Data classification: PII, financial and regulated data are classified; the highest class sets handling rules. Collect and retain the minimum needed, with defined retention and deletion. |
 | SEC-6 | Cardholder data (PAN, CVV) MUST NOT be stored or processed by AUCoFF; keep the system out of PCI DSS cardholder-data scope. |
@@ -179,9 +179,10 @@ AUCoFF MUST NOT contain, depend on, or distribute anything that creates a free/o
 
 ## 9. Environment Rules
 
-- **ENV-1** Local (Kubernetes + Helm on laptop) and AWS deployments MUST use the same container images and chart, differing only by values.
+- **ENV-1** Container images and the Helm chart MUST stay environment-neutral so a future hosted deployment (e.g. AWS) differs only by values; v1 itself deploys only to a local kind cluster.
 - **ENV-2** Real regulated or customer data MUST NOT be used in local/dev environments; use synthetic data.
-- **ENV-3** The AWS migration table in [infrastructure-spec.md](infrastructure-spec.md) MUST be updated whenever a local component is added.
+- **ENV-3** The post-v1 AWS migration notes in [infrastructure-spec.md](infrastructure-spec.md) are informational and SHOULD be updated when a local component is added; they do not gate v1.
+- **ENV-4** v1 (MVP) MUST be buildable, runnable and fully testable on a developer laptop with kind (minikube is not used), with no AWS or other cloud hosting; the only external dependencies allowed are the LLM API (with a recorded/mock mode for offline tests) and optional read-only scan targets. Cloud hosting work is out of scope until after v1.
 
 ## 10. Governance
 
@@ -207,3 +208,4 @@ AUCoFF MUST NOT contain, depend on, or distribute anything that creates a free/o
 | 0.6.0 | 2026-10-19 | Added DB-9, DB-10 (immutable 12-month history) |
 | 0.7.0 | 2026-10-19 | Added SEC-15 (break-glass), SEC-16 (auditor access), SEC-17 (third-party scanner vetting) |
 | 0.8.0 | 2026-10-19 | Added licensing, provenance and content rules LIC-1 to LIC-8; QA-11 and SEC-17 updated |
+| 0.9.0 | 2026-10-19 | v1 is local-only (kind): ENV-4 added; ARC-11, SEC-3, ENV-1, ENV-3 reworded |
