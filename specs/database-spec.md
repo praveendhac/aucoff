@@ -78,6 +78,13 @@ Related: [constitution.md](constitution.md) · [design.md](design.md) · [backen
 | `approvals` | Human decisions on agent actions | `id`, `tenant_id`, `agent_run_id`, `action`, `requested_at`, `decided_by`, `decision`, `decided_at`, `comment` |
 | `embeddings` | RAG vectors | `id`, `tenant_id` (NULL for shared reference text), `source_type`, `source_id`, `chunk_index`, `content`, `embedding vector(N)` (N depends on embedding model - TODO), `model` |
 
+### 3.4a Orchestration support (`app`)
+| Table | Purpose |
+|-------|---------|
+| `outbox` | Transactional outbox for RabbitMQ publishing ([backend-spec.md](backend-spec.md) section 5): `id`, `tenant_id`, `type`, `payload jsonb`, `created_at`, `published_at` |
+| `idempotency_keys` | API idempotency records: `tenant_id`, `key`, `request_hash`, `response jsonb`, `expires_at` |
+| LangGraph checkpoint tables | Created by the LangGraph Postgres checkpointer in schema `app`; MUST carry `tenant_id` (or be keyed by run ID joined to `agent_runs`) and be covered by RLS - design TODO |
+
 ### 3.5 Audit (`audit`)
 | Table | Purpose | Key columns |
 |-------|---------|-------------|

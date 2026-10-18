@@ -3,71 +3,141 @@
 | Field | Value |
 |-------|-------|
 | Status | Draft |
-| Version | 0.1.0 |
-| Owner | TODO |
-| Last updated | TODO |
+| Version | 0.2.0 |
+| Owner | Praveen Darshanam |
+| Last updated | 2026-10-18 |
 
-> Purpose: how AUCoFF is packaged, deployed and operated. Phase 1: local Kubernetes via Helm on a laptop. Phase 2: AWS.
+> Purpose: how AUCoFF is packaged, deployed and operated. Phase 1: local Kubernetes (kind) with one umbrella Helm chart. Phase 2: AWS (EKS) with Terraform.
 
-Related: [design.md](design.md) · [backend-spec.md](backend-spec.md) · [frontend-spec.md](frontend-spec.md) · [database-spec.md](database-spec.md)
+Related: [design.md](design.md) · [backend-spec.md](backend-spec.md) · [frontend-spec.md](frontend-spec.md) · [database-spec.md](database-spec.md) · [constitution.md](constitution.md)
 
 ## 1. Environments
 | Env | Platform | Purpose | Status |
 |-----|----------|---------|--------|
-| local | Local Kubernetes (kind / minikube / Docker Desktop - TODO) | Dev and testing | Phase 1 |
-| aws | AWS (see section 7) | Staging / prod | Phase 2 |
+| local | kind cluster on laptop | Development, integration and E2E testing; synthetic data only (ENV-2) | Phase 1 |
+| ci | GitHub Actions runners + ephemeral kind | Build, test, scan, E2E | Phase 1 |
+| aws | EKS + managed services (section 10) | Staging / production | Phase 2 |
+Same images and chart in all environments, differing only by values (ENV-1).
 
-## 2. Containers
-| Image | Source | Base image | Port | Health check |
-|-------|--------|------------|------|--------------|
-| aucoff-frontend | `frontend/` | TODO | TODO | TODO |
-| aucoff-backend | `backend/` | TODO | TODO | TODO |
-| TODO (worker, db, vector store) | TODO | TODO | TODO | TODO |
+## 2. Container Inventory
+| Component | Image / source | Notes |
+|-----------|----------------|-------|
+| frontend | `frontend/` (Next.js standalone) | Port 3000 (TODO) |
+| backend gateway | `backend/app` (FastAPI) | Port 8000 (TODO) |
+| agent services (9) | `backend/services/*` | assessment-orchestrator, mapping-agent, cloud-scanner, k8s-scanner, repo-scanner, saas-scanner, document-analyzer, remediation-advisor, report-generator |
+| PostgreSQL 18.6 + pgvector | Official/operator image with pgvector (TODO choose) | [database-spec.md](database-spec.md) |
+| RabbitMQ | Official chart/image | Queues per [backend-spec.md](backend-spec.md) section 5 |
+| MinIO | Official chart/image | S3-compatible evidence/report store |
+| Keycloak | Official chart/image | Local OIDC/SAML IdP |
+| Observability | OpenTelemetry Collector, Prometheus, Grafana, Loki, Tempo | Section 8 |
+| Ingress + cert-manager | NGINX Ingress (or Traefik - TODO) + cert-manager | Local CA for TLS |
 
-## 3. Helm Chart
+### Image standards
+- Multi-stage builds, minimal base (distroless or slim), non-root user, read-only root filesystem where possible (SEC-8).
+- Pinned base image digests; lockfile-based installs; SBOM generated; vulnerability scan (Trivy) blocks on critical/high.
+- Health endpoints for liveness/readiness; graceful shutdown.
+- Images tagged with git SHA; semantic versions for releases.
+
+## 3. Helm Chart (umbrella)
 ```
 deploy/helm/aucoff/
   Chart.yaml
-  values.yaml
-  values-local.yaml
+  values.yaml            # defaults
+  values-local.yaml      # kind overrides
+  values-aws.yaml        # placeholder for Phase 2
+  charts/                # subcharts / vendored dependencies
   templates/
+    frontend/ backend/ services/ migration-job/ networkpolicies/ ingress/ rbac/
 ```
-- Single umbrella chart vs sub-charts: TODO
-- Resources deployed: TODO
-- Key `values.yaml` settings (image tags, replicas, resources, ingress host): TODO
+- Dependencies (subcharts): PostgreSQL (or operator), RabbitMQ, MinIO, Keycloak, observability stack; each toggled by `<name>.enabled` so AWS can disable in-cluster versions (RDS, Amazon MQ, S3, Cognito/Entra).
+- Key values: image tags/digests, replicas, resources, ingress host, feature flags, queue names, LLM provider/model, budget limits, OIDC issuer/audience, object-store endpoint.
+- Migration: Helm pre-upgrade hook Job runs Alembic as `aucoff_migrator` (database-spec section 7).
+- `helm lint`, `helm template | kubeconform` and policy checks run in CI.
 
-## 4. Local Workflow
-- Prerequisites (docker, kubectl, helm, kind/minikube): TODO
-- Build and load images: TODO
-- Install: `helm upgrade --install aucoff deploy/helm/aucoff -f values-local.yaml` (TODO confirm)
-- Access (ingress / port-forward): TODO
-- Teardown: TODO
+## 4. Kubernetes Baseline
+- Namespaces: `aucoff` (app), `aucoff-data` (database, broker, object store), `aucoff-observability`, `aucoff-system` (ingress, cert-manager).
+- **Pod Security**: `restricted` profile; `runAsNonRoot`, drop all capabilities, `seccompProfile: RuntimeDefault`, no privileged/hostPath.
+- **NetworkPolicies**: default deny ingress and egress per namespace; explicit allows:
+  - ingress controller -> frontend, backend
+  - frontend -> backend
+  - backend and agent services -> PostgreSQL, RabbitMQ, MinIO, Keycloak (JWKS)
+  - only agent services -> external internet (cloud/SaaS APIs, LLM provider) via egress rules/proxy
+  - everything -> OpenTelemetry Collector
+  - PostgreSQL reachable only from backend, agent services and the migration Job (DB-5, SEC-2)
+- **RBAC**: dedicated ServiceAccounts per workload, least privilege, no cluster-admin; `automountServiceAccountToken: false` unless required.
+- Resource requests/limits on every container; PodDisruptionBudgets for stateless services; HPA for scanners based on queue depth (KEDA - TODO) or CPU.
+- Anti-affinity/topology spread for multi-replica services on AWS.
 
 ## 5. Configuration and Secrets
-Config maps, secrets (LLM API keys, DB creds) in local k8s: TODO
+- ConfigMaps for non-secret config; Kubernetes Secrets for credentials (DB, RabbitMQ, MinIO, OIDC client secret, LLM API key, encryption keys). Secrets never committed; local secrets generated by a bootstrap script into the cluster (SEC-3).
+- Per-tenant connector credentials are NOT stored in Helm secrets; they are referenced via `config_ref` and kept in the secret store (Kubernetes Secrets locally under a dedicated namespace/prefix; AWS Secrets Manager later).
+- cert-manager issues TLS certificates (local CA now, ACM/Let's Encrypt later); in-cluster traffic TLS for DB and broker (mTLS between services is a TODO decision).
+- Secret rotation procedure TODO; Gitleaks pre-commit stays enabled.
 
-## 6. Data Services
-- PostgreSQL 18.6 with pgvector: in-cluster for local (StatefulSet or operator, PVC, NetworkPolicy allowing only backend/worker pods, TLS, credentials from Kubernetes Secrets); managed RDS/Aurora on AWS. Details in [database-spec.md](database-spec.md).
-- Migrations run as a Helm pre-upgrade hook Job using the `aucoff_migrator` role.
-- Object store and queue: TODO.
+## 6. Local Workflow
+Prerequisites: Docker, kind, kubectl, helm, make, (optional) k9s.
+```
+make cluster-up     # kind create cluster with ingress ports (config in deploy/kind/)
+make images         # build images
+make load           # kind load docker-image ...
+make secrets        # generate local secrets
+make deploy         # helm upgrade --install aucoff deploy/helm/aucoff -f values-local.yaml
+make seed           # load synthetic seed data and framework catalogue
+make e2e            # Playwright E2E against the cluster
+make logs / make down / make cluster-down
+```
+- Access via ingress hostnames (e.g. `aucoff.localtest.me`, TODO) or `kubectl port-forward`.
+- Target: cold start of the full stack on a 16 GB laptop in < 10 minutes (proposal); lightweight profile (`values-local-min.yaml`) disables observability and extra scanners.
+- LLM calls: real provider key optional locally; default to a recorded/mock provider for tests (QA-8).
 
-## 7. AWS Migration Notes (future)
-<!-- Update when moving to AWS. -->
+## 7. CI/CD (GitHub Actions)
+| Stage | Checks |
+|-------|--------|
+| PR | Lint, type check, unit tests (QA-7), OpenAPI drift and lint ([api-contract.md](api-contract.md) section 2), generated client build, Gitleaks, dependency audit, license check |
+| Build | Docker build, Trivy scan, SBOM, sign images (cosign - TODO) |
+| Chart | `helm lint`, kubeconform, policy checks (Kyverno/conftest - TODO) |
+| Integration/E2E | Ephemeral kind: deploy chart, run migrations, API tests, Playwright, axe, DAST/API scan |
+| Release | Tag, publish images to registry (GHCR now, ECR later), publish chart |
+| Deploy (Phase 2) | Terraform plan/apply with approval; Helm deploy to EKS |
+Branch protection requires all checks; required reviews per constitution.
+
+## 8. Observability
+- OpenTelemetry SDKs in all services export traces, metrics, logs to the OpenTelemetry Collector.
+- Backends: Prometheus (metrics), Loki (logs), Tempo (traces), Grafana (dashboards, alerts).
+- Standard dashboards: API latency/errors, queue depth and DLQ, agent run duration/cost/tokens, scanner errors, DB health, SLO (NFR-3).
+- Alerts: SLO burn rate, DLQ growth, budget exceeded, failed migrations, certificate expiry.
+- Logs contain no secrets or PII (COD-8); retention TODO.
+
+## 9. Backup and Recovery
+- Local: scripted `pg_dump` and MinIO bucket export (database-spec section 11).
+- AWS: RDS automated backups + PITR, S3 versioning, cross-region replication per residency rules; RPO/RTO from database-spec TODO.
+- Restore drills documented and executed per phase.
+
+## 10. AWS Migration Notes (Phase 2)
 | Local | AWS equivalent | Notes |
 |-------|----------------|-------|
-| kind / minikube | EKS | TODO |
-| In-cluster PostgreSQL 18.6 + pgvector | RDS / Aurora PostgreSQL | Confirm 18.x and pgvector support; see [database-spec.md](database-spec.md) section 12 |
-| k8s Secrets | Secrets Manager + External Secrets | TODO |
-| Local registry | ECR | TODO |
-| Ingress | ALB Ingress Controller | TODO |
-| Logs / metrics | CloudWatch / managed Prometheus | TODO |
-| IaC | Terraform (TODO confirm) | TODO |
+| kind | EKS | Managed node groups; Pod Security and NetworkPolicy (VPC CNI or Cilium - TODO) |
+| In-cluster PostgreSQL 18.6 + pgvector | RDS/Aurora PostgreSQL | Confirm 18.x and pgvector support ([database-spec.md](database-spec.md) section 12) |
+| RabbitMQ | Amazon MQ for RabbitMQ (or self-managed) | Check engine version and DLQ setup |
+| MinIO | S3 | KMS-encrypted buckets, per-region for residency |
+| Keycloak | Entra ID / Cognito | OIDC issuer change only; SAML via IdP |
+| K8s Secrets | Secrets Manager + External Secrets Operator | Rotation |
+| cert-manager local CA | ACM + cert-manager (Let's Encrypt) | |
+| NGINX ingress | ALB Ingress Controller / NLB | WAF in front (AWS WAF) |
+| Prometheus/Grafana/Loki/Tempo | Amazon Managed Prometheus/Grafana + CloudWatch / or keep self-hosted | Decide on cost |
+| GHCR | ECR | |
+| Helm values | `values-aws.yaml` | Disable in-cluster data services |
+| Manual | Terraform | Modules: network, eks, rds, mq, s3, iam (IRSA), secrets, observability; state in S3 + DynamoDB lock |
+Scanners access customer accounts via customer-granted read-only roles (cross-account assume-role with external ID).
 
-## 8. CI/CD
-Build, test, scan, publish, deploy pipeline: TODO
+## 11. Security and Compliance
+Controls referenced from constitution section 6: network policies, image scanning, non-root, RBAC least privilege, encryption in transit and at rest, audit logging of cluster changes (AWS CloudTrail/EKS audit later), no manual changes (ARC-11), dependency and SBOM tracking, regional deployment for data residency (SEC-14).
 
-## 9. Observability
-Logs, metrics, traces, dashboards, alerts: TODO
-
-## 10. Security and Compliance
-Network policies, image scanning, RBAC, encryption, backups: TODO
+## 12. Open Questions
+- [ ] Ingress controller choice; local hostnames.
+- [ ] PostgreSQL deployment (StatefulSet vs CloudNativePG) and pgvector image.
+- [ ] Queue autoscaling approach (KEDA).
+- [ ] mTLS/service mesh need.
+- [ ] Image registry and signing.
+- [ ] Observability on AWS: managed vs self-hosted.
+- [ ] Multi-region residency model and per-region deployments.

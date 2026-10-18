@@ -23,8 +23,12 @@ TODO
 | AG-3 | TODO (e.g. Gap Analyzer) | TODO | TODO | TODO | TODO |
 
 ## 3. Orchestration
-<!-- Pattern (supervisor, pipeline, graph), state handling, retries, concurrency. Diagram welcome. -->
-TODO
+- Framework: LangGraph. The `assessment-orchestrator` builds a graph per assessment (plan -> fan-out scan/analysis nodes -> aggregate -> assess controls -> propose findings -> approval interrupt -> finalise).
+- State and checkpoints persisted in PostgreSQL (checkpointer); runs are resumable after restart or approval.
+- Human approval nodes use LangGraph interrupts; the run resumes only after a recorded decision in `approvals` (constitution AI-2).
+- Scanner and analysis services run as separate microservices fed by RabbitMQ (see [backend-spec.md](backend-spec.md) sections 4 and 5); graph nodes publish jobs and await results.
+- Retries/backoff and DLQs handled at the queue layer; node-level retries bounded; budgets (steps, time, tokens, cost) enforced per run (AI-12).
+- Service roster and names: [spec.md](spec.md) section 5.6.
 
 ## 4. Models
 | Purpose | Model | Provider | Params | Fallback |

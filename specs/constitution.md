@@ -3,7 +3,7 @@
 | Field | Value |
 |-------|-------|
 | Status | Draft |
-| Version | 0.3.0 |
+| Version | 0.4.0 |
 | Owner | Praveen Darshanam |
 | Last updated | 2026-10-18 |
 
@@ -135,6 +135,19 @@ Detail in [database-spec.md](database-spec.md).
 | DB-7 | Audit and agent-step tables are append-only; audit rows are hash-chained for tamper evidence. |
 | DB-8 | Cardholder data MUST NOT be stored in any table (SEC-6); non-production databases hold synthetic data only (ENV-2). |
 
+## 7b. API Rules
+
+Detail in [api-contract.md](api-contract.md).
+
+| ID | Rule |
+|----|------|
+| API-1 | Every endpoint MUST be documented in the generated OpenAPI 3.1 spec (Swagger UI/ReDoc) with schemas, examples, errors and required scopes; undocumented routes MUST NOT merge. |
+| API-2 | The committed OpenAPI file MUST match the generated one; CI fails on drift, and the frontend client is generated from it. |
+| API-3 | Endpoints are versioned under `/api/v1`; breaking changes need a new major version and deprecation period. |
+| API-4 | State-changing POSTs that create or trigger work MUST support `Idempotency-Key`; list endpoints MUST use cursor pagination. |
+| API-5 | Errors use RFC 9457 problem details with a request ID and never expose internals. |
+| API-6 | The OWASP Top 10 and OWASP API Security Top 10 are release gates (NFR-1). |
+
 ## 8. Spec-Driven Development Rules
 
 - **SDD-1** No behaviour change without a spec change in the same PR or earlier.
@@ -168,3 +181,4 @@ Detail in [database-spec.md](database-spec.md).
 | 0.1.0 | 2026-10-18 | Initial template |
 | 0.2.0 | 2026-10-18 | Added architectural, design, coding, quality, security and AI rules |
 | 0.3.0 | 2026-10-18 | Added database rules DB-1 to DB-8; frameworks in scope resolved |
+| 0.4.0 | 2026-10-18 | Added API rules API-1 to API-6 |
