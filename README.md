@@ -47,6 +47,15 @@ Local login: `make idp-forward` (leave it running) exposes Keycloak at `https://
 
 The API never runs without authentication: `make backend-run` needs `AUCOFF_OIDC_ISSUER`, `AUCOFF_OIDC_AUDIENCE` and `AUCOFF_OIDC_JWKS_URL` and refuses to start otherwise. There is no anonymous endpoint (health, docs and OpenAPI included); see constitution section 7d.
 
+## Branch protection (main)
+
+The agreed rules are in `.github/branch-protection.json`: pull request required (no approval count), checks `backend`, `frontend`, `helm`, `secrets` must pass, no force-push, no deletion, admins not enforced. They must be applied by an account with admin rights on the repository:
+
+```
+gh auth login            # as the repository owner (praveendhac)
+gh api -X PUT repos/praveendhac/aucoff/branches/main/protection --input .github/branch-protection.json
+```
+
 ## Rules that apply to every change
 
 - Follow [`specs/constitution.md`](specs/constitution.md); cite the spec section and rule IDs in your PR.
