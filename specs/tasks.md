@@ -3,7 +3,7 @@
 | Field | Value |
 |-------|-------|
 | Status | Draft |
-| Version | 0.9.0 |
+| Version | 0.10.0 |
 | Owner | Praveen Darshanam |
 | Last updated | 2026-10-19 |
 
@@ -31,10 +31,10 @@ Status values: `todo` · `in-progress` · `blocked` · `done`
 | ID | Task | Spec ref | Acceptance criteria | Depends on | Status |
 |----|------|----------|---------------------|------------|--------|
 | T-101 | FastAPI skeleton + health endpoint | backend-spec.md | `/health` returns 200; tests pass | T-002 | done (2026-10-19); anonymous health endpoints replaced by authenticated `GET /api/v1/health` (T-120) |
-| T-102 | Domain models + migrations | backend-spec.md §4 | Migration applies cleanly | T-101 | todo |
-| T-103 | PostgreSQL 18.6 + pgvector schema migrations (tables, indexes) | database-spec.md §3, §5 | Migrations apply from empty DB; ER matches spec | T-102 | todo |
-| T-104 | DB roles, grants, TLS and Row-Level Security | database-spec.md §6, constitution DB-3..5 | RLS and privilege tests pass (database-spec.md §10) | T-103 | todo |
-| T-105 | Audit log hash chain and append-only enforcement | database-spec.md §3.5 | Chain verification test passes; UPDATE/DELETE denied | T-104 | todo |
+| T-102 | Domain models + migrations | backend-spec.md §4 | Migration applies cleanly | T-101 | in progress: Alembic wiring (async asyncpg, migrator role, retries) and baseline migration 0001 done; domain models/repositories still to do |
+| T-103 | PostgreSQL 18.6 + pgvector schema migrations (tables, indexes) | database-spec.md §3, §5 | Migrations apply from empty DB; ER matches spec | T-102 | in progress: baseline tables tenants, users, user_roles, ref.roles, audit_log done; remaining tables (database-spec 3.2 to 3.7) still to do |
+| T-104 | DB roles, grants, TLS and Row-Level Security | database-spec.md §6, constitution DB-3..5 | RLS and privilege tests pass (database-spec.md §10) | T-103 | done (2026-10-19) for the baseline: per-service roles, TLS-only, RLS forced on tenant tables, grants; 13 database tests against PostgreSQL 18 plus live checks on the kind cluster |
+| T-105 | Audit log hash chain and append-only enforcement | database-spec.md §3.5 | Chain verification test passes; UPDATE/DELETE denied | T-104 | done (2026-10-19): per-tenant hash chain with chain_pos, append-only triggers and grants, verify_chain detects tampering and deletion; concurrency race found and fixed |
 | T-106 | Synthetic seed data and catalogue loader (frameworks, unified controls) | spec.md §4, database-spec.md §3.2 | Seed loads; no real data | T-103 | todo |
 | T-107 | Auth: OIDC JWT validation, tenant context, RBAC dependencies on every endpoint | backend-spec.md §8, §8a, constitution ZT-1, ZT-3 | Unauthorised/cross-tenant calls rejected in tests | T-104, T-120 | todo |
 | T-108 | OpenAPI pipeline: committed `backend/openapi.yaml`, drift check, Spectral lint, Swagger/ReDoc | api-contract.md §2 | CI fails on drift or undocumented route | T-101 | in progress: export, drift check and Spectral lint work locally and are in CI; CI not yet run on GitHub |
@@ -45,7 +45,7 @@ Status values: `todo` · `in-progress` · `blocked` · `done`
 | T-119 | Scan schedules, drift detection and notifications | spec.md FR-28, FR-30, database-spec.md §3.7 | Schedule triggers run; drift notification emitted | T-110, T-112 | todo |
 | T-120 | **Default-deny authentication for the gateway and BFF** and the route-enumeration test: remove the anonymous `/api/v1/health/*` endpoints and make `/docs`, `/redoc` and the OpenAPI document require a token; add `GET /health` (`ops:read`); test JWKS/keys for tests (no bypass flag) | constitution ZT-1, ZT-8, ZT-9, api-contract.md API-2 | Every route returns 401 without a token and 403 with the wrong scope; CI fails if a route is added without auth; existing health tests updated | T-101 | done (2026-10-19): default-deny middleware, authenticated GET /api/v1/health, route-enumeration and OpenAPI-security tests (17 backend tests); frontend BFF route-handler enforcement still to do with T-301 |
 | T-121 | Service identities: Keycloak service realm and per-service clients, `ServiceClient` (client credentials, token cache), scope-checked internal calls | backend-spec.md §8a, constitution ZT-4 | Internal call without or with the wrong token is rejected in tests | T-107, T-405 | todo |
-| T-122 | Per-service PostgreSQL login roles, `pg_hba` reject-by-default, TLS, credentials from Kubernetes Secrets | database-spec.md §6.1, §6.3, constitution ZT-6, DB-5 | Role-per-service tests; no shared or trust login possible | T-104 | todo |
+| T-122 | Per-service PostgreSQL login roles, `pg_hba` reject-by-default, TLS, credentials from Kubernetes Secrets | database-spec.md §6.1, §6.3, constitution ZT-6, DB-5 | Role-per-service tests; no shared or trust login possible | T-104 | in progress: gateway and migrator roles with separate credentials, scram over TLS, non-TLS rejected, wrong/no password and network superuser login refused; per-agent-service roles to add with each service |
 | T-123 | RabbitMQ per-service users, TLS, restricted permissions, `user_id` enforcement and sender check | backend-spec.md §5, §8a, constitution ZT-5 | A service cannot publish as or read from another service's queues in tests | T-110, T-405 | todo |
 | T-124 | Exec probes and `python -m app.healthcheck`; remove `httpGet` probes from the Helm chart; authenticated telemetry push; chart/manifests check in CI | constitution ZT-7, ZT-8, infrastructure-spec.md §5 | `helm template` contains no httpGet probes; pods become Ready via exec | T-120, T-402 | in progress: exec probes and `app.healthcheck` done for backend and frontend, `make helm-lint` and CI fail on httpGet; authenticated telemetry push still to do |
 | T-110 | RabbitMQ messaging layer: envelope, outbox relay, DLQs | backend-spec.md §5 | Idempotent consumer tests pass | T-103 | todo |
@@ -92,7 +92,7 @@ Status values: `todo` · `in-progress` · `blocked` · `done`
 |----|------|----------|---------------------|------------|--------|
 | T-401 | Dockerfiles for frontend and backend | infrastructure-spec.md §2 | Images build and run | T-101, T-301 | done (2026-10-19): backend and frontend Dockerfiles (digest-pinned official minimal bases, non-root, read-only rootfs verified); image scan/SBOM still to add under T-010 |
 | T-402 | Helm chart + values-local.yaml | infrastructure-spec.md §3 | `helm install` brings up stack locally | T-401 | done (2026-10-19): chart deploys to kind, pods Ready via exec probes, `make smoke` passes |
-| T-403 | PostgreSQL via CloudNativePG in Helm chart (PVC, NetworkPolicy, Secrets, migration hook Job) | infrastructure-spec.md §6, database-spec.md §6, §7 | DB reachable only from backend; migrations run on upgrade | T-402, T-104 | todo |
+| T-403 | PostgreSQL via CloudNativePG in Helm chart (PVC, NetworkPolicy, Secrets, migration hook Job) | infrastructure-spec.md §6, database-spec.md §6, §7 | DB reachable only from backend; migrations run on upgrade | T-402, T-104 | done (2026-10-19): CloudNativePG, PostgreSQL 18.6, pgvector 0.8.6 (exact), network policy enforced (unlabelled pod times out), migration Job as a Helm hook |
 | T-404 | Backup/restore procedure for local DB | database-spec.md §11 | Restore drill documented and passes | T-403 | todo |
 | T-405 | RabbitMQ, S3-compatible object store (selected under T-009), Keycloak in chart; ingress + cert-manager TLS | infrastructure-spec.md §2, §3, §5 | Stack reachable over TLS locally | T-402 | in progress: Traefik ingress (ingress-nginx retired) installed by `make ingress`; RabbitMQ, object store, Keycloak and cert-manager TLS still to do |
 | T-406 | NetworkPolicies, Pod Security, ServiceAccounts/RBAC | infrastructure-spec.md §4 | Default-deny verified; policy tests pass | T-402 | todo |
@@ -110,6 +110,7 @@ Status values: `todo` · `in-progress` · `blocked` · `done`
 ## Blockers and Notes
 - **Authentication-everywhere (ZT-1) gap in the first scaffold is fixed for the backend and the Helm chart** (T-120 done, T-124 partly done on 2026-10-19). Still open: enforcing the same default-deny in the frontend BFF route handlers (T-301), service identities (T-121), per-service database and broker credentials (T-122, T-123) and authenticated telemetry.
 - **v1 scope decision:** v1 (MVP) is local-only on kind; AWS/Terraform/EKS work (T-501, T-502) is deferred to post-v1 and does not gate any v1 task.
+- **Findings during Session 2 (2026-10-19):** (1) ingress-nginx is retired - Traefik used; (2) CloudNativePG's *standard* PostgreSQL image bundles pgvector 0.8.7 that shadows the pinned extension image - the minimal image is used so pgvector is exactly 0.8.6; (3) CloudNativePG always appends a catch-all scram rule, so TLS is enforced with `hostnossl ... reject`; (4) a new pod's DNS/egress is blocked until the NetworkPolicy that allows it exists - the DB-client egress policy is a pre-upgrade hook, and the migration retries the connection; (5) the audit hash chain had a concurrency ordering race, fixed with a per-tenant `chain_pos`; (6) psycopg is LGPL, so asyncpg is the only PostgreSQL driver.
 - **Laptop ready (2026-10-19):** kind v0.33.0 installed, Colima running with 6 CPUs / 12 GiB; the local cluster comes up with `make up` and `make smoke` passes.
 - **Laptop prerequisites found 2026-10-19:** Docker is installed but its Colima daemon is stopped (`colima start`), and `kind` is not installed (`brew install kind`); `make doctor` reports this. T-004 and `make cluster-up` need both.
 - T-004 (pre-build verification) can change version pins and the Postgres/pgvector image (pgvector 0.8.6 with PostgreSQL 18.6 is owner-confirmed; image and operator support still to verify); do it before the T-002 scaffold is finalised.

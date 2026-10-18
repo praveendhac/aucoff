@@ -15,7 +15,7 @@ The constitution's allow-list (LIC-1) is: MIT, Apache-2.0, BSD-2/3-Clause, ISC, 
 
 | Licence | Where it appears | Notes |
 |---------|------------------|-------|
-| PSF-2.0 | Python `typing_extensions` (required by pydantic/FastAPI) | Explicit per-package exception in `backend/scripts/check_licences.py`. Removing it is not realistic. Recommend approving. |
+| PSF-2.0 | Python `typing_extensions` (required by pydantic/FastAPI) and `greenlet` (MIT AND PSF-2.0, required by SQLAlchemy asyncio) | Explicit per-package exception in `backend/scripts/check_licences.py`. Removing it is not realistic. Recommend approving. |
 | MIT-0 | npm `@csstools/*` (Tailwind/PostCSS chain); Python `cffi` (required by `cryptography`, hence by PyJWT) | MIT without the attribution clause; explicit per-package exception for `cffi` in `backend/scripts/check_licences.py`; recommend approving. |
 | BlueOak-1.0.0 | npm `glob`, `minimatch`, `tar`, `lru-cache`, others (11 packages) | Permissive, OSI-approved; recommend approving. |
 | 0BSD | npm `tslib` | Public-domain-equivalent; recommend approving. |
@@ -63,6 +63,11 @@ The constitution's allow-list (LIC-1) is: MIT, Apache-2.0, BSD-2/3-Clause, ISC, 
 | pydantic-settings | Python | 2.16.0 | MIT | Allowed | Read from installed package metadata, 2026-10-19 |
 | pyjwt | Python | 2.15.1 | MIT | Allowed | Installed package metadata, 2026-10-19 (JWT validation, ZT-3) |
 | cryptography | Python | 50.0.2 | Apache-2.0 OR BSD-3-Clause | Allowed | Installed package metadata, 2026-10-19 (via pyjwt[crypto]) |
+| sqlalchemy | Python | 2.1.5 | MIT | Allowed | Installed package metadata, 2026-10-19 |
+| asyncpg | Python | 0.32.0 | Apache-2.0 | Allowed | Installed package metadata, 2026-10-19 (chosen over psycopg, which is LGPL) |
+| alembic | Python | 1.20.0 | MIT | Allowed | Installed package metadata, 2026-10-19 |
+| greenlet | Python | 3.5.6 | MIT AND PSF-2.0 | Allowed with per-package exception (PSF-2.0 pending owner approval) | Installed package metadata, 2026-10-19 (via sqlalchemy[asyncio]) |
+| pytest-asyncio | Python | 1.4.0 | Apache-2.0 | Allowed (dev) | Installed package metadata, 2026-10-19 |
 | uvicorn | Python | 0.54.0 | BSD-3-Clause | Allowed | Read from installed package metadata, 2026-10-19 |
 | httpx | Python | 0.28.1 | BSD License | Allowed | Read from installed package metadata, 2026-10-19 |
 | mypy | Python | 2.4.0 | MIT | Allowed | Read from installed package metadata, 2026-10-19 |
@@ -101,6 +106,10 @@ Every common base image (Debian, Ubuntu, Alpine, distroless) contains GPL or LGP
 | `python:3.13-slim` | backend | `sha256:70729b46c69b4f1e97c4822c1af3df53a1476cf5ddc6c087c0c10bc3a5678c2f` (pulled 2026-10-19) | In use; vulnerability scan still to add (T-010) |
 | `node:22-slim` | frontend | `sha256:c3de60bf2f9dd0ac6370e6117950ff62d6e339527e7472301c9c78a017978392` (pulled 2026-10-19) | In use; vulnerability scan still to add (T-010) |
 | `kindest/node:v1.37.0` | kind cluster nodes | `sha256:a1ed56cfb0e7b93589bdf97c8cd566405a265939e3620fc4f5de89adff580ae5` (from the kind v0.33.0 release notes; pulled by digest successfully) | In use (local dev only) |
+| `postgres:18` | database tests only (throwaway container) | tag only (test use) | In use in tests; PostgreSQL licence per upstream, confirm (T-009) |
+| `ghcr.io/cloudnative-pg/postgresql:18.6-minimal-trixie` | PostgreSQL 18.6 operand image | `sha256:c9be7f221a05b18fe65259d9136affbabe3b39ad91c3b68f8f2f990a45f35f38` | In use; PostgreSQL licence expected, confirm (T-009) |
+| `ghcr.io/cloudnative-pg/pgvector:0.8.6-18-trixie` | pgvector 0.8.6 extension image volume | `sha256:2da4ddaf07cec8edf9ea265968c5368a5df4568737964d2a268d9843589e3e42` | In use; image label says licence "PostgreSQL" (read from the image on 2026-10-19) |
+| CloudNativePG operator (chart `cnpg/cloudnative-pg` 0.29.1, app 1.30.1) | PostgreSQL operator | pulled by the chart | In use; Apache-2.0 expected (extensions repo is Apache-2.0 per web fetch); confirm (T-009) |
 | `docker.io/traefik:v3.7.14` (Helm chart `traefik/traefik` 42.0.0) | ingress controller | pulled by the chart | In use; licence MIT per web search 2026-10-19, confirm from LICENSE (T-009) |
 
 ## 6. Fonts, icons, images and content

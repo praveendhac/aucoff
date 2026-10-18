@@ -3,7 +3,7 @@
 | Field | Value |
 |-------|-------|
 | Status | Draft |
-| Version | 0.6.0 |
+| Version | 0.7.0 |
 | Owner | Praveen Darshanam |
 | Last updated | 2026-10-19 |
 
@@ -26,7 +26,7 @@ Related: [constitution.md](constitution.md) · [design.md](design.md) · [backen
 ### Environments
 | Env | Deployment | Notes |
 |-----|-----------|-------|
-| local | PostgreSQL 18.6 + pgvector 0.8.6 in the Helm chart (CloudNativePG operator with a pgvector-enabled PostgreSQL 18.6 image), PVC storage | Synthetic data only (ENV-2) |
+| local | PostgreSQL 18.6 + pgvector 0.8.6 via the CloudNativePG operator (`deploy/postgres/`; minimal PostgreSQL image + pgvector image volume, both digest-pinned; the standard image is NOT used because it bundles its own newer pgvector), PVC storage | Synthetic data only (ENV-2) |
 | aws (post-v1, out of scope) | RDS or Aurora PostgreSQL | Confirm 18.x and `pgvector` support if/when a hosted environment is built; see section 12 |
 
 ## 2. Conventions
@@ -98,6 +98,7 @@ All tables have RLS (DB-3); exports also write to `audit.audit_log`.
 | LangGraph checkpoint tables | Created by the LangGraph Postgres checkpointer in schema `app`; MUST carry `tenant_id` (or be keyed by run ID joined to `agent_runs`) and be covered by RLS - design TODO |
 
 ### 3.5 Audit (`audit`)
+Implementation note (migration 0001): chain order uses a per-tenant `chain_pos` assigned inside the per-tenant advisory lock, not the global `seq`, because `seq` is assigned before the trigger runs and concurrent writers could otherwise interleave (a race found and fixed by the concurrency test on 2026-10-19). `audit.verify_chain` also detects deleted rows (gaps in `chain_pos`).
 | Table | Purpose | Key columns |
 |-------|---------|-------------|
 | `audit_log` | Immutable security/compliance events (SEC-9) | `id`, `tenant_id`, `occurred_at`, `actor_type`, `actor_id`, `action`, `target_type`, `target_id`, `outcome`, `request_id`, `details jsonb`, `prev_hash`, `row_hash` |
@@ -177,8 +178,7 @@ erDiagram
 ### 6.1 Roles and privileges (SEC-2)
 | DB role | Used by | Privileges |
 |---------|---------|------------|
-| `aucoff_owner` | Nobody at runtime | Owns objects; no login in prod |
-| `aucoff_migrator` | Alembic job | DDL on `app`, `ref`, `audit`; used only during deploy |
+| `aucoff_migrator` | Alembic migration Job only | **Owns the database and all objects** (the earlier separate `aucoff_owner` was dropped: CloudNativePG's bootstrap owner must be a login role); DDL on `app`, `ref`, `audit`; its credential is used only by the migration Job |
 | `aucoff_app` | **NOLOGIN group role** holding the runtime privileges: DML on `app`; `SELECT` on `ref`; `INSERT`-only on `audit.audit_log`; no DDL; subject to RLS | (never logs in) |
 | `aucoff_gateway`, `aucoff_svc_<service>` | One **login role per service** (gateway and each agent service), each a member of `aucoff_app` and granted only the extra privileges that service needs | Own credential per service (ZT-6) |
 | `aucoff_readonly` | Reporting/support | `SELECT` on `app` (subject to RLS); no PII columns where avoidable |
@@ -193,7 +193,7 @@ No role is superuser; `aucoff_app` and every per-service role have `NOBYPASSRLS`
 - RLS tests are mandatory (section 10).
 
 ### 6.3 Authentication and transport
-- `scram-sha-256` password auth only (or TLS client certificates); no `trust`, `md5`, `password`, or network `peer`/`ident`. `pg_hba.conf` has an explicit `hostssl` line per role and database; the default catch-all is `reject`.
+- `scram-sha-256` password auth only (or TLS client certificates); no `trust`, `md5`, `password`, or network `peer`/`ident`. CloudNativePG always appends a final `host all all all scram-sha-256` rule that cannot be replaced, so TLS is enforced by a preceding `hostnossl all all all reject` rule (verified 2026-10-19: a non-TLS connection is rejected with "pg_hba.conf rejects connection ... no encryption"). Network superuser logins fail (`enableSuperuserAccess: false`).
 - Every connection is authenticated with the calling service's **own** credential (ZT-6); credentials are unique per service and environment, come from the secret store, and are rotated. The application never connects as a superuser.
 - TLS required (`hostssl` only), TLS 1.2+ ; certificates managed by the platform (cert-manager locally in v1; ACM/RDS CA post-v1).
 - Credentials come from Kubernetes Secrets locally in v1 (a managed secret store is post-v1); never in images, values files in git, logs or prompts (SEC-3). Rotation procedure TODO.
