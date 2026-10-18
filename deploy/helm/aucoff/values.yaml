@@ -31,9 +31,16 @@ frontend:
     requests: { cpu: 100m, memory: 128Mi }
     limits: { cpu: 500m, memory: 512Mi }
 
+oidc:
+  # Keycloak is added in the next build session; until then tokens cannot be issued and every
+  # request is rejected with 401 (which is the intended default-deny behaviour, ZT-1).
+  issuer: http://aucoff-keycloak:8080/realms/aucoff
+  jwksUrl: http://aucoff-keycloak:8080/realms/aucoff/protocol/openid-connect/certs
+  gatewayAudience: aucoff-gateway
+
 ingress:
   enabled: true
-  className: nginx
+  className: traefik
 
 networkPolicy:
   enabled: true

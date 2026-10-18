@@ -19,12 +19,25 @@ spec:
       automountServiceAccountToken: false
       securityContext:
         {{- include "aucoff.podSecurityContext" . | nindent 8 }}
+      volumes:
+        - name: tmp
+          emptyDir: {}
       containers:
         - name: backend
           image: "{{ .Values.backend.image.repository }}:{{ .Values.backend.image.tag }}"
           imagePullPolicy: {{ .Values.backend.image.pullPolicy }}
           ports:
             - containerPort: {{ .Values.backend.port }}
+          env:
+            - name: AUCOFF_OIDC_ISSUER
+              value: {{ .Values.oidc.issuer | quote }}
+            - name: AUCOFF_OIDC_AUDIENCE
+              value: {{ .Values.oidc.gatewayAudience | quote }}
+            - name: AUCOFF_OIDC_JWKS_URL
+              value: {{ .Values.oidc.jwksUrl | quote }}
+          volumeMounts:
+            - name: tmp
+              mountPath: /tmp
           livenessProbe:
             exec:
               command:

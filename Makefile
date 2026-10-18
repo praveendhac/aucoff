@@ -5,7 +5,7 @@ CLUSTER := aucoff
 SPECTRAL := npx --yes @stoplight/spectral-cli@6
 
 .PHONY: help doctor setup lint typecheck test openapi openapi-check spectral licences helm-lint check \
-        backend-run frontend-dev cluster-up cluster-down
+        backend-run frontend-dev cluster-up cluster-down images load ingress deploy smoke up
 
 help: ## Show this help
 	@grep -E '^[a-zA-Z_-]+:.*?## ' $(MAKEFILE_LIST) | awk 'BEGIN {FS = ":.*?## "}; {printf "  %-16s %s\n", $$1, $$2}'
@@ -63,3 +63,26 @@ cluster-up: ## Create the local kind cluster
 
 cluster-down: ## Delete the local kind cluster
 	kind delete cluster --name $(CLUSTER)
+
+images: ## Build the backend and frontend container images
+	docker build -t aucoff-backend:dev backend
+	docker build -t aucoff-frontend:dev frontend
+
+load: ## Load the images into the kind cluster
+	kind load docker-image aucoff-backend:dev aucoff-frontend:dev --name $(CLUSTER)
+
+ingress: ## Install the Traefik ingress controller (ingress-nginx is retired)
+	helm repo add traefik https://traefik.github.io/charts >/dev/null 2>&1 || true
+	helm repo update traefik >/dev/null
+	helm upgrade --install traefik traefik/traefik --version 42.0.0 -n traefik --create-namespace \
+	  -f deploy/traefik/values-local.yaml --wait --timeout 3m
+
+deploy: ## Install/upgrade the AUCoFF Helm chart into namespace aucoff
+	kubectl create namespace aucoff --dry-run=client -o yaml | kubectl apply -f -
+	kubectl label namespace aucoff pod-security.kubernetes.io/enforce=restricted --overwrite
+	helm upgrade --install aucoff deploy/helm/aucoff -n aucoff -f deploy/helm/aucoff/values-local.yaml --wait --timeout 3m
+
+smoke: ## Smoke test the local deployment (unauthenticated requests must be refused)
+	scripts/smoke.sh
+
+up: cluster-up ingress images load deploy smoke ## Bring the whole local stack up

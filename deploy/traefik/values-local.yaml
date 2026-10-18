@@ -1,0 +1,39 @@
+# Traefik ingress controller for the local kind cluster (replaces ingress-nginx, which was retired
+# upstream after March 2026 and no longer receives security fixes; see LICENCES.md / ADR-15).
+# Chart: traefik/traefik 42.0.0 (app v3.7.14), installed by `make ingress`.
+ingressClass:
+  enabled: true
+  isDefaultClass: true
+  name: traefik
+
+providers:
+  kubernetesIngress:
+    enabled: true
+    ingressClass: traefik
+  kubernetesCRD:
+    enabled: false
+
+# No dashboard or API: they would be anonymous endpoints (constitution ZT-1).
+api:
+  dashboard: false
+ingressRoute:
+  dashboard:
+    enabled: false
+
+ports:
+  web:
+    hostPort: 80
+  websecure:
+    hostPort: 443
+
+service:
+  type: ClusterIP
+
+# Run on the kind control-plane node, which maps host ports 80 and 443 (deploy/kind/kind-config.yaml).
+nodeSelector:
+  ingress-ready: "true"
+tolerations:
+  - key: node-role.kubernetes.io/control-plane
+    operator: Exists
+    effect: NoSchedule
+
