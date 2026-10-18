@@ -3,7 +3,7 @@
 | Field | Value |
 |-------|-------|
 | Status | Draft |
-| Version | 0.5.0 |
+| Version | 0.6.0 |
 | Owner | Praveen Darshanam |
 | Last updated | 2026-10-18 |
 
@@ -135,6 +135,8 @@ Detail in [database-spec.md](database-spec.md).
 | DB-6 | Similarity (vector) queries MUST always be tenant-filtered. |
 | DB-7 | Audit and agent-step tables are append-only; audit rows are hash-chained for tamper evidence. |
 | DB-8 | Cardholder data MUST NOT be stored in any table (SEC-6); non-production databases hold synthetic data only (ENV-2). |
+| DB-9 | Assessment snapshots and metric points are immutable once written; the application role has no UPDATE/DELETE on them; corrections are new versions. |
+| DB-10 | At least 12 months of snapshot and metric history MUST be retained and queryable (stored 13); tenant retention may be extended but never below 12 months, and history MUST survive evidence deletion. |
 
 ## 7b. API Rules
 
@@ -184,3 +186,4 @@ Detail in [api-contract.md](api-contract.md).
 | 0.3.0 | 2026-10-18 | Added database rules DB-1 to DB-8; frameworks in scope resolved |
 | 0.4.0 | 2026-10-18 | Added API rules API-1 to API-6 |
 | 0.5.0 | 2026-10-18 | Added AI-16 (outputs leaving the tenant) |
+| 0.6.0 | 2026-10-19 | Added DB-9, DB-10 (immutable 12-month history) |

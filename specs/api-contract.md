@@ -148,7 +148,13 @@ All paths are under `/api/v1`. Status shows the success code.
 | API-53 | POST | `/approvals/{id}/decision` | Decide an agent action | result:review | 200 | AI-2 |
 | API-60 | POST | `/reports` | Generate report (async) | report:generate | 202 | US-9, FR-12 |
 | API-61 | GET | `/reports`, `/reports/{id}` | List / read / download link | report:read | 200 | FR-12 |
-| API-70 | GET | `/dashboards/posture` | Coverage, findings, trends (by framework/jurisdiction) | report:read | 200 | US-8, FR-11 |
+| API-70 | GET | `/dashboards/posture` | KPI strip and widgets for a role preset, with deltas vs previous scan | report:read | 200 | US-8, FR-11 |
+| API-71 | GET | `/metrics/{metric_id}` | Metric time series (`from`, `to`, `granularity`, `framework_id`, `jurisdiction`, `scope_id`); metric IDs M-01..M-20 from [design.md](design.md) §11; 12-month history | report:read | 200 | US-20, FR-24 |
+| API-72 | GET | `/metrics/severity-comparison` | Severity counts for the latest scan and the previous two (`scope_id`) | report:read | 200 | US-19, FR-23 |
+| API-73 | GET | `/assessments/compare` | Compare two scans (`base`, `target`): new, resolved, regressed, unchanged controls and findings | report:read | 200 | US-19, FR-23 |
+| API-74 | GET | `/control-results/{id}/history` | Per-control status/evidence history over the last 12 months | evidence:read / result:review | 200 | US-20, FR-22 |
+| API-75 | POST | `/history/exports` | Export history (CSV/JSON) for a scope and period (async) | report:generate | 202 | US-20 |
+| API-76 | GET | `/assessments/snapshots` | List snapshots (cursor-paginated) for pickers | report:read | 200 | FR-22 |
 | API-80 | GET | `/audit-log` | Audit events (paged, filtered) | audit:read | 200 | US-7, FR-10 |
 | API-81 | POST | `/audit-log:verify` | Verify hash-chain integrity for a range | audit:read | 200 | SEC-10 |
 | API-90 | GET/PUT | `/notification-preferences` | Per-user event channels | any | 200 | US-11, FR-14 |

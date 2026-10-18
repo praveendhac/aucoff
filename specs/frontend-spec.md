@@ -19,7 +19,8 @@ Related: [spec.md](spec.md) · [api-contract.md](api-contract.md) · [design.md]
 | Server state | TanStack Query | Caching, retries, invalidation |
 | API client | TypeScript client generated from the backend OpenAPI spec (e.g. `openapi-typescript` + `openapi-fetch`; tool TODO) | Generated on CI; never hand-edit; keeps contract in sync (DES-7) |
 | Forms / validation | React Hook Form + Zod | Zod schemas mirror API schemas |
-| Charts | TODO (e.g. Recharts) | Dashboards (US-8) |
+| Charts | Recharts (proposal; visx for the heatmap if needed) | Dashboards (US-8); every chart has a data-table alternative |
+| Design tokens / theming | CSS variables via Tailwind theme; light default + dark mode (`prefers-color-scheme` with user override) | Colours, typography and layout defined in [design.md](design.md) §10 |
 | Auth | Server-side session via BFF pattern (Auth.js or equivalent - TODO) | See section 5 |
 | Unit/component tests | Vitest + Testing Library | |
 | E2E / a11y tests | Playwright + axe-core | |
@@ -54,7 +55,15 @@ Related: [spec.md](spec.md) · [api-contract.md](api-contract.md) · [design.md]
 - Live steps from the SSE stream (see [api-contract.md](api-contract.md)): started, tool call, evidence collected, result produced, awaiting approval, failed.
 - Shows token/cost progress against budget (NFR-8).
 ### 3.3 Posture dashboard
-- Coverage % by framework and jurisdiction, open findings by severity, trend, readiness score (definitions from [spec.md](spec.md) section 10).
+- Widgets, wireframe, persona presets and the full metrics catalogue (M-01..M-20) are defined in [design.md](design.md) sections 10.5, 10.7 and 11; data from API-70 to API-72.
+- KPI strip: posture score, coverage %, open findings, pending approvals, evidence freshness; each with delta vs previous scan and sparkline.
+- Severity now vs last 2 scans (M-05), 12-month trends (M-06), jurisdiction heatmap (M-17).
+- Global time-range and scan selector in the top bar; drill-down applies filters to tables.
+### 3.6 Scan comparison and history
+- Compare any two scans (API-73): new, resolved, regressed, unchanged; per-control history timeline (API-74); 12-month trends and CSV/JSON export (API-71, API-75).
+### 3.7 Questionnaires and copilot
+- Questionnaire queue and side-by-side review (question, draft answer, citations/evidence, redaction preview, approval, export); answer-library tab ([agent.md](agent.md) §10).
+- Copilot as a right-side panel with cited answers.
 ### 3.4 Findings
 - Filter by severity, framework, jurisdiction, status; remediation steps; "Create ticket" with Jira/ServiceNow link and status sync.
 ### 3.5 Reports

@@ -3,9 +3,9 @@
 | Field | Value |
 |-------|-------|
 | Status | Draft |
-| Version | 0.1.0 |
+| Version | 0.2.0 |
 | Owner | Praveen Darshanam |
-| Last updated | 2026-10-18 |
+| Last updated | 2026-10-19 |
 
 > Purpose: the database engine, schema, migrations and secure configuration for AUCoFF. Implements constitution rules ARC-6, DES-1, COD-9, SEC-2 to SEC-5, SEC-9 to SEC-11 and DB-1 to DB-8.
 
@@ -102,6 +102,21 @@ All tables have RLS (DB-3); exports also write to `audit.audit_log`.
 
 `row_hash = sha256(prev_hash || canonical row)` per tenant, giving tamper evidence (SEC-10).
 
+### 3.6 History and metrics (`app`) - 12-month comparison
+| Table | Purpose | Key columns |
+|-------|---------|-------------|
+| `assessment_snapshots` | Immutable summary of each completed assessment | `id`, `tenant_id`, `assessment_id`, `scope_id`, `captured_at`, `formula_version`, `posture_score numeric`, `coverage_pct numeric`, `status_counts jsonb`, `severity_counts jsonb`, `framework_coverage jsonb`, `jurisdiction_coverage jsonb` |
+| `snapshot_control_results` | Per-control result as of the snapshot (append-only copy) | `snapshot_id`, `tenant_id`, `unified_control_id`, `status`, `severity`, `confidence`, `evidence_ids uuid[]`, `evidence_hashes text[]`, `approved_by`, `approved_at` |
+| `snapshot_findings` | Findings as of the snapshot | `snapshot_id`, `tenant_id`, `finding_id`, `severity`, `status`, `opened_at` |
+| `metric_points` | Time series of catalogue metrics | `id`, `tenant_id`, `metric_id` (M-01..M-20), `scope_id`, `framework_id` (nullable), `jurisdiction` (nullable), `dimension jsonb`, `value numeric`, `captured_at`, `assessment_id`, `formula_version` |
+| `metric_rollups` | Daily/weekly/monthly aggregates (materialised views or tables) | `tenant_id`, `metric_id`, `granularity`, `period_start`, `value`, `min`, `max`, `count` |
+- Snapshots and metric points are written once, in the same transaction as assessment finalisation, and are **immutable** (no UPDATE/DELETE for `aucoff_app`; DB-9).
+- Snapshot rows store evidence IDs and SHA-256 hashes so history stays comparable after evidence files are deleted under retention.
+- Partition `snapshot_control_results`, `snapshot_findings` and `metric_points` by month on `captured_at`.
+- Indexes: (`tenant_id`, `scope_id`, `captured_at DESC`) on `assessment_snapshots`; (`tenant_id`, `metric_id`, `captured_at`) on `metric_points`; (`tenant_id`, `unified_control_id`, `snapshot_id`) on `snapshot_control_results`.
+- Queries: "latest scan vs previous two" uses the three newest snapshots for a scope; any-to-any comparison joins two snapshots on `unified_control_id`; per-control history reads `snapshot_control_results` over the last 12 months.
+- Changing a metric formula increments `formula_version`; old points keep their version (displayed with a marker); recompute jobs write new versions rather than editing.
+
 ## 4. Relationships (ER overview)
 ```mermaid
 erDiagram
@@ -120,6 +135,10 @@ erDiagram
   evidence ||--o{ result_evidence : cited_by
   control_results ||--o{ findings : raises
   assessments ||--o{ reports : yields
+  assessments ||--|| assessment_snapshots : snapshots
+  assessment_snapshots ||--o{ snapshot_control_results : contains
+  assessment_snapshots ||--o{ snapshot_findings : contains
+  assessments ||--o{ metric_points : emits
   assessments ||--o{ agent_runs : triggers
   agent_runs ||--o{ agent_steps : records
   agent_runs ||--o{ approvals : requests
@@ -194,6 +213,7 @@ No role is superuser; `aucoff_app` has `NOBYPASSRLS`.
 | Audit log | TODO (proposal: 7 years) | Never edited; partitions dropped only after retention |
 | Evidence and reports | TODO per tenant policy | Object + metadata deletion job, logged |
 | Agent steps | TODO (proposal: 13 months) | Partition drop |
+| Assessment snapshots, snapshot results/findings, metric points | At least 13 months (12 months visible); tenant-extendable, never below 12 months; rollups kept longer (TODO) | Partition drop after retention; exempt from evidence deletion; never edited |
 | User data | Account life + TODO | Erasure on request (GDPR/DPDP) with audit-log pseudonymisation |
 - Each tenant has a `region`; tenant data MUST reside only in that region's database/storage (deployment-per-region model TODO in [design.md](design.md)).
 

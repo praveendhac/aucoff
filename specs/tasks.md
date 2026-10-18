@@ -32,6 +32,11 @@ Status values: `todo` · `in-progress` · `blocked` · `done`
 | T-108 | OpenAPI pipeline: committed spec, drift check, lint, Swagger/ReDoc | api-contract.md §2 | CI fails on drift or undocumented route | T-101 | todo |
 | T-109 | Catalogue/admin APIs (API-1x, API-2x) | api-contract.md §5.1-5.3 | Endpoints documented and tested | T-107, T-108 | todo |
 | T-110 | RabbitMQ messaging layer: envelope, outbox relay, DLQs | backend-spec.md §5 | Idempotent consumer tests pass | T-103 | todo |
+| T-111 | Snapshot/metric tables (database-spec §3.6): migrations, partitions, immutability grants | database-spec.md §3.6, constitution DB-9 | UPDATE/DELETE denied; monthly partitions created | T-104 | todo |
+| T-112 | Snapshot writer at assessment finalisation (same transaction) | design.md §12 | Snapshot and metric points written atomically | T-111, T-202 | todo |
+| T-113 | Retention jobs (13-month floor, partition drop, evidence-deletion safe) | database-spec.md §9, DB-10 | History survives evidence deletion in tests | T-111 | todo |
+| T-114 | Metrics service and endpoints API-70..72, API-76 (M-01..M-20) | design.md §11, api-contract.md §5.6 | Values match fixture calculations | T-112 | todo |
+| T-115 | Compare, history and export endpoints API-73..75 | api-contract.md §5.6 | 12-month seeded-data tests pass | T-112 | todo |
 
 ## Phase 2: Agents
 | ID | Task | Spec ref | Acceptance criteria | Depends on | Status |
@@ -60,6 +65,10 @@ Status values: `todo` · `in-progress` · `blocked` · `done`
 | T-305 | Assessments, run timeline (SSE), result review, approvals | frontend-spec.md §3 | E2E: run, review, approve | T-302, T-202 | todo |
 | T-306 | Findings, reports, dashboard, audit log screens | frontend-spec.md §2 | E2E covers key flows | T-305 | todo |
 | T-307 | Admin: users, roles, SSO, integrations | frontend-spec.md §2 | Role-gated; E2E passes | T-302 | todo |
+| T-308 | Design tokens, theming (light/dark), app shell (sidebar, top bar, drawer) | design.md §10.2-10.4 | Contrast checks automated; axe passes in both themes | T-301 | todo |
+| T-309 | Dashboard KPIs, charts and persona presets | design.md §10.5, §10.7, §11 | M-01..M-20 render from API with deltas; data-table alternatives | T-308, T-114 | todo |
+| T-310 | Scan comparison, per-control history, history export UI | design.md §12, frontend-spec.md §3.6 | Any-two-scan compare works over 12 months of seeded data | T-309, T-115 | todo |
+| T-311 | Questionnaire screens and copilot panel | frontend-spec.md §3.7 | E2E: upload, review, approve, export | T-308, T-209 | todo |
 
 ## Phase 4: Infrastructure (local Helm)
 | ID | Task | Spec ref | Acceptance criteria | Depends on | Status |

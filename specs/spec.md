@@ -3,9 +3,9 @@
 | Field | Value |
 |-------|-------|
 | Status | Draft |
-| Version | 0.2.0 |
+| Version | 0.3.0 |
 | Owner | Praveen Darshanam |
-| Last updated | 2026-10-18 |
+| Last updated | 2026-10-19 |
 
 > Purpose: what AUCoFF (AgenticAI Unified Compliance Framework for Fintechs) must do and why. Describes behaviour, not implementation. Items marked *(proposal)* are suggested values awaiting owner confirmation.
 
@@ -31,21 +31,24 @@ Fintechs must satisfy many overlapping frameworks and regional regulations at on
 | Framework | Version | Jurisdiction | Type | Notes |
 |-----------|---------|--------------|------|-------|
 | PCI DSS | v4.0.1 | Global | Standard | AUCoFF itself stays out of cardholder-data scope (SEC-6) |
-| PCI 3DS | TODO version | Global | Standard | 3-D Secure core security requirements |
-| SOC 2 | Trust Services Criteria (TODO year) | Global | Attestation framework | |
+| PCI 3DS | PCI 3DS Core Security Standard (aligned with EMV 3-D Secure v2.x) | Global | Standard | Part 1 baseline security requirements; Part 2 3DS security requirements |
+| SOC 2 | AICPA 2017 Trust Services Criteria with revised points of focus (2022/2023) | Global | Attestation framework | Common Criteria (Security) plus optional Availability, Confidentiality, Processing Integrity, Privacy |
 | ISO/IEC 27001 | 2022 | Global | Standard | |
 | ISO/IEC 27701 | 2025 | Global | Standard | Privacy management extension |
 | ISO 20022 | TODO | Global | Messaging standard | Scoped as data-format / message-handling controls, not a control framework |
 | GDPR | EU 2016/679 | EU | Regulation | |
-| DPDP | Act 2023, 2025 rules (TODO confirm) | India | Regulation | |
-| RBI DPSC | TODO exact instrument | India | Regulation | Digital payment security controls |
-| RBI PPI | TODO exact instrument | India | Regulation | Prepaid payment instruments |
+| DPDP | DPDP Act 2023 and DPDP Rules, 2025 (G.S.R. 846(E), 13 Nov 2025) | India | Regulation | Phased compliance timeline; track milestones |
+| RBI DPSC | RBI (Commercial Banks - Digital Payment Security Controls) Directions, 2026 (updated as on 1 Oct 2026) | India | Regulation | Evolved from 2021 baseline |
+| RBI PPI | RBI Master Directions on Prepaid Payment Instruments (MD-PPI) | India | Regulation | Under Payment and Settlement Systems Act, 2007; periodically updated |
 | FFIEC BSA/AML Examination Manual | TODO edition | US | Examination guidance | |
-| FTC Safeguards Rule | 16 CFR Part 314 | US | Regulation | |
-| GLBA | TODO | US | Regulation | |
-| NYDFS 23 NYCRR 500 | TODO | US | Regulation | |
-| PSD2 | TODO | EU | Regulation | |
+| FFIEC IT Examination Handbook | Current handbook with 2026 updates | US | Examination guidance | Joint supervisory framework (OCC, FDIC, Federal Reserve, NCUA) |
+| FTC Safeguards Rule | 16 CFR Part 314 | US | Regulation | Implements GLBA safeguards: encryption, MFA, risk assessment |
+| GLBA | Gramm-Leach-Bliley Act | US | Statute | Assessed through the FTC Safeguards Rule (and FFIEC guidance for banks) |
+| NYDFS 23 NYCRR 500 | 23 NYCRR Part 500 including the Second Amendment (fully phased in) | US | Regulation | Third-party and governance obligations |
+| PSD2 | Directive (EU) 2015/2366 | EU | Regulation | Watch item: PSD3 (Directive) and the Payment Services Regulation (PSR) are in the EU legislative pipeline |
 | DORA | EU 2022/2554 | EU | Regulation | |
+
+Note: instrument names and versions above (except where already stated in earlier drafts) were supplied by the owner on 2026-10-19 and MUST be verified against the official sources before the catalogue is loaded.
 
 Licensing note: standard texts (PCI DSS, ISO) are copyrighted; how they are stored and displayed is an open question (see [database-spec.md](database-spec.md) section 13).
 
@@ -118,6 +121,8 @@ Full definitions in [agent.md](agent.md) section 2.
 | US-16 | As a CISO, I want only approved, redacted answers exported so that sensitive detail is not leaked to customers | Export blocked until approval; sensitive details redacted by default; export audit-logged | P0 |
 | US-17 | As a compliance officer, I want to be alerted to regulation or standard changes with proposed mapping updates so that the catalogue stays current | Proposed diffs shown for approval; nothing applied automatically | P1 |
 | US-18 | As any user, I want to ask a copilot about my posture, controls and findings and get cited answers | Answers cite sources; refuses when ungrounded; read-only | P2 |
+| US-19 | As a compliance officer, CISO or auditor, I want to compare any two scans and see severity counts for the latest scan against the previous two so that I can see progress and regressions | Compare view lists new, resolved, regressed, unchanged items; deltas shown | P0 |
+| US-20 | As an executive or auditor, I want 12 months of historical results and trends so that I can show posture over time | 12-month trends by framework, jurisdiction and severity; export as CSV/JSON | P0 |
 
 ## 7. Functional Requirements
 | ID | Requirement | Traces to |
@@ -143,6 +148,9 @@ Full definitions in [agent.md](agent.md) section 2.
 | FR-19 | Redacted export of approved answers with configurable detail level; export audit log | US-16 |
 | FR-20 | Regulatory-change monitoring from allow-listed sources with approval-gated catalogue/mapping proposals | US-17 |
 | FR-21 | Copilot Q&A with citations, read-only | US-18 |
+| FR-22 | Immutable per-assessment snapshots and metric points; 12 months of history queryable | US-19, US-20 |
+| FR-23 | Compare any two scans (new, resolved, regressed, unchanged) and show severity counts for the latest scan vs the previous two | US-19 |
+| FR-24 | Metrics, trends, dashboards and history export per the catalogue in [design.md](design.md) section 11 | US-8, US-20 |
 
 ## 8. Non-Functional Requirements
 | ID | Category | Requirement |
@@ -159,11 +167,15 @@ Full definitions in [agent.md](agent.md) section 2.
 | NFR-10 | Accessibility | WCAG 2.2 AA |
 | NFR-11 | Privacy | PII redacted before LLM calls (AI-8); GDPR/DPDP erasure supported |
 | NFR-12 | Portability | Same images and Helm chart for local Kubernetes and AWS (ENV-1) |
+| NFR-13 | Data retention (history) | Scan/assessment snapshots and metric points retained at least 13 months (12 months visible); tenants may extend but never go below 12 months; snapshots are immutable and survive evidence deletion |
+| NFR-14 | UX | Visual design, layout and metrics per [design.md](design.md) section 10 and 11; WCAG 2.2 AA with contrast verified |
 
 ## 9. LLM Approach
 Provider-agnostic cloud LLM API behind an interface (ARC-5), with Anthropic Claude as the default provider. Approved providers and data classes allowed per provider remain to be decided (constitution open items).
 
 ## 10. Success Metrics
+Detailed definitions and formulas are in the metrics catalogue ([design.md](design.md) section 11): time to audit readiness = M-09, control coverage % = M-02, agent accuracy/citation correctness = M-13, remediation cycle time = M-08.
+
 | Metric | Definition | Target |
 |--------|-----------|--------|
 | Time to audit readiness | Time from scope definition to an approved audit-ready report | TODO (proposal: -50% vs baseline) |
@@ -191,7 +203,7 @@ Provider-agnostic cloud LLM API behind an interface (ARC-5), with Anthropic Clau
 | D-1 | Dependencies | LLM provider, identity providers, Jira/ServiceNow, cloud and SaaS APIs |
 
 ## 13. Open Questions
-- [ ] Exact versions/instruments for PCI 3DS, SOC 2 TSC, RBI DPSC, RBI PPI, DPDP rules, FFIEC edition, GLBA, NYDFS, PSD2.
+- [ ] Verify owner-supplied instrument names/versions (section 4) against official sources; FFIEC BSA/AML edition still open.
 - [ ] How ISO 20022 translates into assessable controls.
 - [ ] Numeric targets for NFR-3, NFR-4, NFR-5, NFR-8 and section 10 metrics.
 - [ ] Order of delivery of frameworks within v1 (internal milestones).

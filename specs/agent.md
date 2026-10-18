@@ -229,7 +229,7 @@ Each run writes `agent_runs` and `agent_steps` ([database-spec.md](database-spec
 - [ ] Embedding model and dimension; reranker choice.
 - [ ] Staleness thresholds per evidence type.
 - [ ] Targets for mapping and questionnaire evaluation metrics.
-- [ ] Allow-listed regulatory sources per jurisdiction.
+- [ ] Allow-listed regulatory sources per jurisdiction (include watch items: PSD3/PSR, DPDP phased milestones).
 - [ ] Questionnaire template licensing/format details (SIG, CAIQ, HECVAT, VSA).
 - [ ] Concurrency limits per tenant and provider.
 - [ ] Redaction tooling (library vs model-based) and entity list.
