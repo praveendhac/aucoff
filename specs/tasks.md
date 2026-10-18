@@ -3,7 +3,7 @@
 | Field | Value |
 |-------|-------|
 | Status | Approved (v1 baseline, owner sign-off 2026-10-19) |
-| Version | 0.19.0 |
+| Version | 0.20.0 |
 | Owner | Praveen Darshanam |
 | Last updated | 2026-10-19 |
 
@@ -82,8 +82,8 @@ Status values: `todo` · `in-progress` · `blocked` · `done`
 | T-305 | Assessments, run timeline (SSE), result review, approvals | frontend-spec.md §3 | E2E: run, review, approve | T-302, T-202 | todo |
 | T-306 | Findings, reports, dashboard, audit log screens | frontend-spec.md §2 | E2E covers key flows | T-305 | todo |
 | T-307 | Admin: users, roles, SSO, integrations | frontend-spec.md §2 | Role-gated; E2E passes | T-302 | todo |
-| T-308 | Design tokens, theming (light/dark), app shell (sidebar, top bar, drawer) | design.md §10.2-10.4 | Contrast checks automated; axe passes in both themes | T-301 | todo |
-| T-309 | Dashboard KPIs, charts and persona presets | design.md §10.5, §10.7, §11 | M-01..M-20 render from API with deltas; data-table alternatives | T-308, T-114 | todo |
+| T-308 | Design tokens, theming (light/dark), app shell (sidebar, top bar, drawer) | design.md §10.2-10.4 | Contrast checks automated; axe passes in both themes | T-301 | in progress (2026-10-19): tokens (light/dark, `src/lib/tokens.ts` mirrored in `globals.css`) with automated WCAG tests for every colour pair (7 tests), theme toggle without flash, role-filtered sidebar, top bar, breadcrumbs/page header and detail drawer components, icon+label status/severity components. Not done: axe tests, compact density toggle, tenant switcher, command search, notifications, tablet/mobile behaviour, visual check in a real browser (not run) |
+| T-309 | Dashboard KPIs, charts and persona presets | design.md §10.5, §10.7, §11 | M-01..M-20 render from API with deltas; data-table alternatives | T-308, T-114 | in progress (2026-10-19): posture dashboard from `GET /api/v1/dashboards/posture` (KPI strip with deltas, control status, severity latest vs two before, coverage for the four first frameworks, demo-data banner); the endpoint returns SYNTHETIC numbers (`data_source: synthetic`) until assessments exist. Not done: other metrics, jurisdiction heatmap, trends, data-table alternatives, persona presets |
 | T-310 | Scan comparison, per-control history, history export UI | design.md §12, frontend-spec.md §3.6 | Any-two-scan compare works over 12 months of seeded data | T-309, T-115 | todo |
 | T-311 | Questionnaire screens and copilot panel | frontend-spec.md §3.7 | E2E: upload, review, approve, export | T-308, T-209 | todo |
 
@@ -123,3 +123,4 @@ Status values: `todo` · `in-progress` · `blocked` · `done`
 - **Findings during Session 4, image scan (2026-10-19):** (1) `node:22-slim` (Debian 12) carried 7 fixable perl HIGH/CRITICAL findings with no fixed image, so the frontend moved to `node:24-trixie-slim`; (2) pip/setuptools (python) and npm (node) are bundled in the base images with vulnerable vendored libraries and are not needed at run time, so they are deleted from the final images; (3) Trivy matches the local `sharp` stub by name, so four advisories for the real library are ignored with a written reason in `.trivyignore`; (4) the scan uses the Trivy vulnerability database downloaded at scan time, so results change over time and must be re-run.
 - **Branch protection not applied (2026-10-19):** the owner approved the rules (PR required, checks backend/frontend/helm/secrets, no force-push or deletion, admins not enforced), but the GitHub CLI on this laptop is logged in as another account (`praveenda_Zeta`) that has read-only access to `praveendhac/aucoff`, so GitHub answered 404. The owner must run the two commands in the README with an admin account.
 - **CI correction (2026-10-19):** earlier notes said the workflow had never run; it had, and the frontend job failed from the Session 4 push until now because `frontend/src/lib/` was hidden by the `lib/` rule in `.gitignore` and Next's generated route types were missing in a clean checkout. Both are fixed; all four jobs are green on commit `29a3e85`. Lesson: check `gh run list` after each push.
+- **Findings during Session 6 (2026-10-19):** (1) the dashboard numbers are fixed demo values and say so in the API and the UI - replace them when assessment snapshots exist (T-309); (2) adding an npm dependency drops the macOS native binding of the test runner until `node_modules` and the lockfile are regenerated; (3) an `&&` chain aborted by a failed `sed` left old files in place and the build served the old page - the smoke test now asserts the new page title, which would have caught it; (4) the user interface was verified through tests and HTTP responses only, nobody has looked at it in a browser yet.

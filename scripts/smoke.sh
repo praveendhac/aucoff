@@ -87,9 +87,11 @@ kubectl -n "$IDP_NS" port-forward svc/aucoff-keycloak 8443:8443 >/dev/null 2>&1 
 pf2=$!
 trap 'kill $pf $pf2 2>/dev/null; rm -rf "$workdir" "$CA"' EXIT
 for _ in $(seq 1 20); do nc -z 127.0.0.1 8443 2>/dev/null && break; sleep 0.5; done
-python3 scripts/web-login-test.py "$workdir/ca.crt" dev.admin 200 || fail=1
+python3 scripts/web-login-test.py "$workdir/ca.crt" dev.admin 200 403 || fail=1
 echo "Same flow as an executive (role without ops:read must get 403 from the API):"
-python3 scripts/web-login-test.py "$workdir/ca.crt" dev.exec 403 || fail=1
+python3 scripts/web-login-test.py "$workdir/ca.crt" dev.exec 403 200 || fail=1
+echo "Same flow as an engineer (no report:read: dashboard must be 403):"
+python3 scripts/web-login-test.py "$workdir/ca.crt" dev.engineer 403 403 || fail=1
 
 echo "Message broker permissions (in-cluster service pod):"
 scripts/run-broker-test.sh 2>&1 | grep -v "error when creating transport" || fail=1

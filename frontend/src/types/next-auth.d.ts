@@ -4,6 +4,7 @@ import "next-auth/jwt";
 declare module "next-auth" {
   interface Session {
     tenantId?: string;
+    roles?: string[];
     error?: string;
   }
 }
@@ -14,6 +15,7 @@ declare module "next-auth/jwt" {
     refreshToken?: string;
     expiresAt?: number;
     tenantId?: string;
+    roles?: string[];
     error?: string;
   }
 }

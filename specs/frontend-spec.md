@@ -3,7 +3,7 @@
 | Field | Value |
 |-------|-------|
 | Status | Approved (v1 baseline, owner sign-off 2026-10-19) |
-| Version | 0.6.0 |
+| Version | 0.7.0 |
 | Owner | Praveen Darshanam |
 | Last updated | 2026-10-19 |
 
@@ -161,3 +161,10 @@ frontend/
 - `/bff/*` is the only way the browser reaches the API: the handler adds the user's bearer token, forwards to `/api/v1/*`, drops cookies, and rejects path-traversal segments. The ingress sends only `/api/v1` to the gateway, where a missing or invalid token is refused.
 - The issuer in tokens is the public URL `https://idp.localtest.me:8443/realms/aucoff` (reached with `make idp-forward`); pods use the service name (backchannel) for discovery and tokens.
 - TLS (Session 5): the app is served at `https://aucoff.localtest.me` (certificate from the local CA; plain HTTP only redirects) so the session cookie is `Secure`, and the BFF calls the gateway over HTTPS verified against the local CA. Known gaps: the ingress-to-frontend hop is still plain HTTP inside the cluster (Next.js standalone has no TLS listener; a sidecar or mesh is post-v1); user roles are not yet mapped to scopes (the dev user gets `ops:read`); idle timeout is still open.
+
+## Implementation status: app shell and dashboard (Build Session 6, 2026-10-19)
+
+- Tokens: `src/lib/tokens.ts` (single source, design.md section 10.2) mirrored as CSS variables in `globals.css`; light default, dark by system setting or user choice (stored in `localStorage` inside try/catch, applied before first paint). Tests compute the WCAG ratio of every text, status, severity and brand pair in both themes and check `globals.css` repeats the same values.
+- Shell (`src/components/shell/`): collapsible sidebar (deep blue in both themes), top bar (tenant, disabled search placeholder, theme toggle, sign out), breadcrumbs and page header, right-hand detail drawer. Navigation is filtered by the roles in the session (`src/lib/nav.ts`); items not built yet are shown disabled with a "Soon" tag. Hiding is cosmetic; the API enforces access.
+- Dashboard (`/`): loads `/bff/dashboards/posture` in the browser (no token in client code). Hero cards for posture score and coverage, plain cards for findings, approvals and evidence freshness; control status bar and list; severity table (latest vs the two previous scans) with arrow, signed number and the word better/worse; coverage bars with `progressbar` semantics. Every status and severity has an icon and a label. A banner states when the data is synthetic.
+- Charts are hand-written SVG/CSS; no chart library has been added yet (decision still open for the trend charts).

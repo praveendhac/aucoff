@@ -22,6 +22,7 @@ APP = "https://aucoff.localtest.me"
 ca = sys.argv[1]
 USER = sys.argv[2] if len(sys.argv) > 2 else "dev.admin"
 EXPECT_HEALTH = int(sys.argv[3]) if len(sys.argv) > 3 else 200
+EXPECT_DASH = int(sys.argv[4]) if len(sys.argv) > 4 else 200
 
 
 class NoRedirect(urllib.request.HTTPRedirectHandler):
@@ -96,6 +97,12 @@ check("session exists and carries the tenant", session.get("tenantId") == "00000
 check("session never contains tokens", "accessToken" not in text and "refreshToken" not in text)
 status, _, text = call(f"{APP}/bff/health")
 check(f"BFF reaches the API with the user's token (health expects {EXPECT_HEALTH})", status == EXPECT_HEALTH, f"({status})")
+status, _, text = call(f"{APP}/bff/dashboards/posture")
+check(f"dashboard through the BFF (expects {EXPECT_DASH} for this role)", status == EXPECT_DASH, f"({status})")
+if status == 200:
+    check("dashboard data is labelled synthetic", json.loads(text)["data_source"] == "synthetic")
+status, _, text = call(f"{APP}/")
+check("app shell page renders for a signed-in user", status == 200 and "Compliance posture" in text, f"({status})")
 status, _, text = call(f"{APP}/bff/openapi.json")
 check("API docs need only a signed-in user (docs:read is in every role)", status == 200, f"({status})")
 
