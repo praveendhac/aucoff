@@ -12,8 +12,7 @@ const ALLOWED = new Set([
   "MPL-2.0",
   "PostgreSQL",
   "OFL-1.1",
-]);
-const PENDING_OWNER = new Set([
+  // approved by the owner on 2026-10-19 (constitution LIC-1)
   "BlueOak-1.0.0",
   "0BSD",
   "CC0-1.0",
@@ -23,6 +22,8 @@ const PENDING_OWNER = new Set([
   "PSF-2.0",
   "MIT-0",
 ]);
+// Permissive-style licences that still need an owner decision would be listed here.
+const PENDING_OWNER = new Set([]);
 const DENIED = /agpl|\bgpl|lgpl|sspl|busl|business source|commons clause/i;
 
 const out = execFileSync(

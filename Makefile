@@ -52,7 +52,10 @@ helm-lint: ## Lint the Helm charts and fail on anonymous HTTP probes (ZT-7, ZT-8
 	  echo "ERROR: httpGet probes are not allowed (constitution ZT-7); use exec probes"; exit 1; fi
 	@echo "no httpGet probes: ok"
 
-check: lint typecheck test openapi-check spectral licences helm-lint ## Everything CI runs
+controls: ## Validate the unified control catalogue in data/controls (T-006)
+	cd backend && uv run python -m scripts.check_controls
+
+check: lint typecheck test openapi-check spectral licences controls helm-lint ## Everything CI runs
 
 backend-run: ## Run the API on :8000 (needs AUCOFF_OIDC_ISSUER, _AUDIENCE, _JWKS_URL; it refuses to start without them)
 	cd backend && uv run uvicorn app.main:create_app --factory --reload --port 8000

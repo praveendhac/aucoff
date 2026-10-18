@@ -1,0 +1,11 @@
+AUCoFF third-party notices (constitution LIC-7)
+
+AUCoFF is MIT licensed (see LICENSE). It uses third-party packages under permissive licences; their
+own licence texts ship inside each package. Data licences that require attribution:
+
+- caniuse-lite (CC-BY-4.0): browser-support data by Ben Briggs and contributors, derived from the
+  Can I Use database by Alexis Deveria. https://creativecommons.org/licenses/by/4.0/
+- spdx-exceptions (CC-BY-3.0): SPDX licence-exception data, (c) The Linux Foundation.
+  https://creativecommons.org/licenses/by/3.0/
+
+Neither is modified by AUCoFF. The full dependency list with licences is in LICENCES.md.

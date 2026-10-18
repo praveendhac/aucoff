@@ -24,16 +24,19 @@ ALLOWED = {
     "isc license",
     "postgresql",
     "mpl-2.0",
+    # approved by the owner 2026-10-19 (constitution LIC-1)
+    "psf-2.0",
+    "python software foundation license",
+    "mit-0",
+    "0bsd",
+    "blueoak-1.0.0",
+    "cc0-1.0",
     "mozilla public license 2.0 (mpl 2.0)",  # MPL-2.0 is allowed only unmodified (LIC-1)
 }
 DENIED_PATTERN = re.compile(r"agpl|\bgpl|lgpl|sspl|busl|business source|commons clause", re.I)
 
-# package -> licence accepted as an explicit exception (pending owner decision, see LICENCES.md)
-EXCEPTIONS: dict[str, str] = {
-    "typing_extensions": "psf-2.0",  # required by pydantic; permissive, awaiting owner approval
-    "cffi": "mit-0",  # required by cryptography (PyJWT); MIT-0, awaiting owner approval
-    "greenlet": "psf-2.0",  # required by SQLAlchemy asyncio; MIT AND PSF-2.0, awaiting approval
-}
+# package -> licence accepted as an explicit exception (needs an owner decision, see LICENCES.md)
+EXCEPTIONS: dict[str, str] = {}  # none needed since the owner approved PSF-2.0 and MIT-0 (2026-10-19)
 
 
 def alternatives(expr: str) -> list[list[str]]:

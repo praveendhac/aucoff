@@ -11,19 +11,17 @@ Last updated: 2026-10-19. Status: **T-009 in progress** (first pass; not complet
 
 ## 2. Policy decisions that need the owner
 
-The constitution's allow-list (LIC-1) is: MIT, Apache-2.0, BSD-2/3-Clause, ISC, PostgreSQL, MPL-2.0 (unmodified), OFL fonts. The dependency scan found these permissive-style licences that are **not on the list yet**. CI currently passes them with a notice. Please decide for each: add to the allow-list, or require replacement.
+**Decided by the owner on 2026-10-19:** all of the licences below are added to the allow-list (constitution LIC-1, version 1.0.0). The per-package exceptions in `backend/scripts/check_licences.py` were removed and the npm gate no longer has a pending list.
 
-| Licence | Where it appears | Notes |
-|---------|------------------|-------|
-| PSF-2.0 | Python `typing_extensions` (required by pydantic/FastAPI) and `greenlet` (MIT AND PSF-2.0, required by SQLAlchemy asyncio) | Explicit per-package exception in `backend/scripts/check_licences.py`. Removing it is not realistic. Recommend approving. |
-| MIT-0 | npm `@csstools/*` (Tailwind/PostCSS chain); Python `cffi` (required by `cryptography`, hence by PyJWT) | MIT without the attribution clause; explicit per-package exception for `cffi` in `backend/scripts/check_licences.py`; recommend approving. |
-| BlueOak-1.0.0 | npm `glob`, `minimatch`, `tar`, `lru-cache`, others (11 packages) | Permissive, OSI-approved; recommend approving. |
-| 0BSD | npm `tslib` | Public-domain-equivalent; recommend approving. |
-| CC0-1.0 | npm `language-subtag-registry`, `mdn-data`, `spdx-license-ids` | Public-domain dedication (data); recommend approving. |
-| CC-BY-4.0 / CC-BY-3.0 | npm `caniuse-lite` (data), `spdx-exceptions` | Data licences requiring attribution; attribution must be carried in NOTICE (LIC-7). |
-| Python-2.0 | npm `argparse` | PSF-style, permissive; recommend approving. |
-
-**Project licence (decided 2026-10-19):** AUCoFF itself is licensed under the **MIT License** (see [`LICENSE`](LICENSE)), relicensed by the copyright holder from the GNU AGPL v3. The rules above govern what AUCoFF may depend on; MIT governs what others may do with AUCoFF.
+| Licence | Where it appears | Decision |
+|---------|------------------|----------|
+| PSF-2.0 | Python `typing_extensions`, `greenlet` (MIT AND PSF-2.0) | Approved |
+| MIT-0 | npm `@csstools/*`; Python `cffi` | Approved |
+| BlueOak-1.0.0 | npm `glob`, `minimatch`, `tar`, `lru-cache` and others | Approved |
+| 0BSD | npm `tslib` | Approved |
+| CC0-1.0 | npm `language-subtag-registry`, `mdn-data`, `spdx-license-ids` (data) | Approved |
+| CC-BY-4.0 / CC-BY-3.0 | npm `caniuse-lite`, `spdx-exceptions` (data) | Approved with attribution in `NOTICE` (done, LIC-7) |
+| Python-2.0 | npm `argparse` | Approved |
 
 ## 3. Issue found and fixed during scaffolding
 
@@ -45,17 +43,19 @@ The constitution's allow-list (LIC-1) is: MIT, Apache-2.0, BSD-2/3-Clause, ISC, 
 | Trivy v0.76.0 (image scanning and SBOM) | Apache-2.0 (read from the aquasecurity/trivy LICENSE, 2026-10-19); run from a digest-pinned container | Allowed; in use (`make scan`). Its vulnerability data is downloaded at scan time; no data is copied into the repository |
 | Prowler | Apache-2.0 | Candidate (cloud scanning) - confirm from LICENSE on adoption |
 | Trivy, Checkov, kube-bench | Apache-2.0 | Candidates - confirm from LICENSE on adoption |
-| kubescape | Not found in search | **Unverified** - do not adopt until confirmed |
+| kubescape | Apache-2.0 (read from the kubescape/kubescape LICENSE, 2026-10-19) | Allowed; candidate for Kubernetes scanning (maintenance still to vet under T-007) |
 | ingress-nginx | Retired by Kubernetes SIG Network: no releases, bug fixes or security updates after March 2026 | **Not approved** (unmaintained, security risk); replaced by Traefik (MIT per web search) |
 | SeaweedFS | Apache-2.0 | Candidate replacement for MinIO (S3-compatible) - confirm and test |
 | Perses | Apache-2.0 | Candidate dashboard tool replacing Grafana |
 | VictoriaLogs | Apache-2.0 (single-node and cluster) | Candidate log store replacing Loki |
-| Jaeger | Not found in search | **Unverified** - candidate for traces; confirm |
-| Prometheus | Not checked | **Unverified** - confirm before adopting |
+| Jaeger | Apache-2.0 (read from the jaegertracing/jaeger LICENSE, 2026-10-19) | Allowed; candidate for traces |
+| Prometheus | Apache-2.0 (read from the prometheus/prometheus LICENSE, 2026-10-19) | Allowed; candidate for metrics |
 | RabbitMQ 4.3.6 | Server MPL-2.0 with some Apache-2.0 files (read from the rabbitmq-server LICENSE and the image's /opt/rabbitmq/LICENSE, 2026-10-19) | Allowed (MPL-2.0, unmodified official image); in use |
 | Keycloak 26.8.1 | Apache-2.0 (read from `LICENSE.txt` in the keycloak/keycloak repository, 2026-10-19) | Allowed; in use (identity provider) |
 | cert-manager v1.21.2 | Apache-2.0 (read from `LICENSE` in the cert-manager/cert-manager repository, 2026-10-19) | Allowed; in use (local CA, in-cluster TLS) |
-| PostgreSQL, pgvector, CloudNativePG | PostgreSQL licence (PostgreSQL); pgvector uses the PostgreSQL licence; CloudNativePG Apache-2.0 - **not confirmed in this pass** | **Unverified** - confirm on adoption |
+| PostgreSQL | PostgreSQL licence (read from the COPYRIGHT file in postgres/postgres, 2026-10-19) | Allowed; in use |
+| pgvector | PostgreSQL licence (read from the pgvector/pgvector LICENSE, 2026-10-19) | Allowed; in use |
+| CloudNativePG | Apache-2.0 (read from the cloudnative-pg/cloudnative-pg LICENSE, 2026-10-19) | Allowed; in use |
 
 ## 5. Direct dependencies in use
 
@@ -68,7 +68,7 @@ The constitution's allow-list (LIC-1) is: MIT, Apache-2.0, BSD-2/3-Clause, ISC, 
 | sqlalchemy | Python | 2.1.5 | MIT | Allowed | Installed package metadata, 2026-10-19 |
 | asyncpg | Python | 0.32.0 | Apache-2.0 | Allowed | Installed package metadata, 2026-10-19 (chosen over psycopg, which is LGPL) |
 | alembic | Python | 1.20.0 | MIT | Allowed | Installed package metadata, 2026-10-19 |
-| greenlet | Python | 3.5.6 | MIT AND PSF-2.0 | Allowed with per-package exception (PSF-2.0 pending owner approval) | Installed package metadata, 2026-10-19 (via sqlalchemy[asyncio]) |
+| greenlet | Python | 3.5.6 | MIT AND PSF-2.0 | Allowed (PSF-2.0 approved 2026-10-19) | Installed package metadata, 2026-10-19 (via sqlalchemy[asyncio]) |
 | aio-pika | Python | 10.1.1 | Apache-2.0 | Allowed | Passed the Python licence gate, 2026-10-19 (AMQP client; with aiormq 7.2.2, pamqp 4.0.1, yarl, multidict, propcache, idna) |
 | pytest-asyncio | Python | 1.4.0 | Apache-2.0 | Allowed (dev) | Installed package metadata, 2026-10-19 |
 | uvicorn | Python | 0.54.0 | BSD-3-Clause | Allowed | Read from installed package metadata, 2026-10-19 |
@@ -113,11 +113,11 @@ Every common base image (Debian, Ubuntu, Alpine, distroless) contains GPL or LGP
 | `postgres:18` | database tests only (throwaway container) | tag only (test use) | In use in tests; PostgreSQL licence per upstream, confirm (T-009) |
 | `ghcr.io/cloudnative-pg/postgresql:18.6-minimal-trixie` | PostgreSQL 18.6 operand image | `sha256:c9be7f221a05b18fe65259d9136affbabe3b39ad91c3b68f8f2f990a45f35f38` | In use; PostgreSQL licence expected, confirm (T-009) |
 | `ghcr.io/cloudnative-pg/pgvector:0.8.6-18-trixie` | pgvector 0.8.6 extension image volume | `sha256:2da4ddaf07cec8edf9ea265968c5368a5df4568737964d2a268d9843589e3e42` | In use; image label says licence "PostgreSQL" (read from the image on 2026-10-19) |
-| CloudNativePG operator (chart `cnpg/cloudnative-pg` 0.29.1, app 1.30.1) | PostgreSQL operator | pulled by the chart | In use; Apache-2.0 expected (extensions repo is Apache-2.0 per web fetch); confirm (T-009) |
+| CloudNativePG operator (chart `cnpg/cloudnative-pg` 0.29.1, app 1.30.1) | PostgreSQL operator | pulled by the chart | In use; Apache-2.0 confirmed from the LICENSE file (T-009) |
 | `quay.io/keycloak/keycloak:26.8.1` | identity provider | `sha256:79c623a22abacf3fe6c00a5fb30f5b7843d717b234033b80995891c06116d244` (pulled 2026-10-19) | In use; Apache-2.0 for Keycloak itself; scanned clean 2026-10-19 (T-010) |
 | cert-manager images (chart `jetstack/cert-manager` v1.21.2) | local CA / certificates | pulled by the chart | In use; Apache-2.0; digest pinning to add with T-010 |
 | `docker.io/library/rabbitmq:4.3.6-alpine` | message broker | `sha256:6931816af1a943f471c038b278835d36692d55dec769232739296bb91b7de0f5` (pulled 2026-10-19) | In use; MPL-2.0 for RabbitMQ itself; scanned clean 2026-10-19 (T-010) |
-| `docker.io/traefik:v3.7.14` (Helm chart `traefik/traefik` 42.0.0) | ingress controller | pulled by the chart | In use; licence MIT per web search 2026-10-19, confirm from LICENSE (T-009) |
+| `docker.io/traefik:v3.7.14` (Helm chart `traefik/traefik` 42.0.0) | ingress controller | pulled by the chart | In use; MIT confirmed from the traefik/traefik LICENSE.md (2026-10-19) |
 
 ## 6. Fonts, icons, images and content
 
@@ -129,4 +129,4 @@ Every common base image (Debian, Ubuntu, Alpine, distroless) contains GPL or LGP
 
 ## 7. Attribution (NOTICE)
 
-To be generated from the scans before any distribution (LIC-7). Data licences with attribution requirements (CC-BY) must be listed here.
+The attributions required by CC-BY data licences are in the root `NOTICE` file (LIC-7). Regenerate it from the scans before any distribution.

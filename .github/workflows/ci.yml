@@ -32,6 +32,8 @@ jobs:
         run: npx --yes @stoplight/spectral-cli@6 lint openapi.yaml --ruleset .spectral.yaml --fail-severity=warn
       - name: Python licence gate (LIC-5)
         run: uv run python -m scripts.check_licences
+      - name: Control catalogue check (T-006)
+        run: uv run python -m scripts.check_controls
 
   frontend:
     runs-on: ubuntu-latest

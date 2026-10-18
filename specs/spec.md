@@ -2,12 +2,12 @@
 
 | Field | Value |
 |-------|-------|
-| Status | Draft |
-| Version | 0.8.0 |
+| Status | Approved (v1 baseline, owner sign-off 2026-10-19) |
+| Version | 1.0.0 |
 | Owner | Praveen Darshanam |
 | Last updated | 2026-10-19 |
 
-> Purpose: what AUCoFF (AgenticAI Unified Compliance Framework for Fintechs) must do and why. Describes behaviour, not implementation. Items marked *(proposal)* are suggested values awaiting owner confirmation.
+> Purpose: what AUCoFF (AgenticAI Unified Compliance Framework for Fintechs) must do and why. Describes behaviour, not implementation. Items marked *(proposal)* are suggested values awaiting owner confirmation. The framework names and versions in section 4 are **owner-confirmed** (2026-10-19) as AUCoFF's reference versions; they were not independently checked against the publishers' sites.
 
 Related: [constitution.md](constitution.md) · [agent.md](agent.md) · [design.md](design.md) · [database-spec.md](database-spec.md) · [api-contract.md](api-contract.md) · [tasks.md](tasks.md)
 
@@ -42,7 +42,7 @@ Fintechs must satisfy many overlapping frameworks and regional regulations at on
 | DPDP | DPDP Act 2023 and DPDP Rules, 2025 (G.S.R. 846(E), 13 Nov 2025) | India | Regulation | Phased compliance timeline; track milestones |
 | RBI DPSC | RBI (Commercial Banks - Digital Payment Security Controls) Directions, 2026 (updated as on 1 Oct 2026) | India | Regulation | Evolved from 2021 baseline |
 | RBI PPI | RBI Master Directions on Prepaid Payment Instruments (MD-PPI) | India | Regulation | Under Payment and Settlement Systems Act, 2007; periodically updated |
-| FFIEC BSA/AML Examination Manual | 2026 reference version | US | Examination guidance | Owner-supplied version |
+| FFIEC BSA/AML Examination Manual | 2026 reference version | US | Examination guidance | Owner-confirmed version |
 | FFIEC IT Examination Handbook | Current handbook with 2026 updates | US | Examination guidance | Joint supervisory framework (OCC, FDIC, Federal Reserve, NCUA) |
 | FTC Safeguards Rule | 16 CFR Part 314 | US | Regulation | Implements GLBA safeguards: encryption, MFA, risk assessment |
 | GLBA | Gramm-Leach-Bliley Act | US | Statute | Assessed through the FTC Safeguards Rule (and FFIEC guidance for banks) |
@@ -228,14 +228,14 @@ Detailed definitions and formulas are in the metrics catalogue ([design.md](desi
 | D-1 | Dependencies | LLM provider, identity providers, Jira/ServiceNow, cloud and SaaS APIs |
 
 ## 13. Open Questions
-- [ ] Verify owner-supplied instrument names/versions (section 4) against official sources; FFIEC BSA/AML 2026 reference version and ISO 20022-1:2026 (Edition 3) are also owner-supplied and to be verified.
+- [x] Instrument names and versions in section 4 (including the FFIEC BSA/AML 2026 reference version and ISO 20022-1:2026 Edition 3): confirmed by the owner on 2026-10-19 as the product's reference versions (no independent source check was run; re-confirm when a publisher issues a new edition).
 - [ ] How ISO 20022 translates into assessable controls.
 - [ ] Numeric targets for NFR-3, NFR-4, NFR-5, NFR-8 and section 10 metrics.
-- [ ] Order of delivery of frameworks within v1 (internal milestones).
+- [x] Order of delivery within v1: the first unified control set and first assessment cover SOC 2 (Common Criteria / Security), PCI DSS v4.0.1, RBI DPSC 2026 and ISO/IEC 27001:2022 (owner decision 2026-10-19); the remaining frameworks follow.
 - [ ] Report formats and templates per framework.
 - [ ] Pricing/tenant plan limits (if any) affecting quotas.
 - [ ] Which cloud providers and SaaS scanners ship first.
 - [ ] Final list of open-source scanners per source after licence review (Steampipe AGPL-3.0, ScoutSuite GPL-2.0, Semgrep/Opengrep engines LGPL-2.1 and the Semgrep rules licence are not approved per the first-pass audit in LICENCES.md; confirm and finish under T-009).
-- [ ] Licence audit (T-009) results and the replacements chosen for object store and observability stack.
+- [ ] Licence audit (T-009): the tools in use and the scanner/observability candidates are verified (LICENCES.md); the replacements for the object store (MinIO) and observability stack (Grafana/Loki/Tempo) are still to be chosen.
 - [ ] Notification templates and per-event defaults.
 - [ ] Tenant offboarding retention exceptions (legal holds).

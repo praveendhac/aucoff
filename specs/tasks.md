@@ -2,8 +2,8 @@
 
 | Field | Value |
 |-------|-------|
-| Status | Draft |
-| Version | 0.14.0 |
+| Status | Approved (v1 baseline, owner sign-off 2026-10-19) |
+| Version | 0.15.0 |
 | Owner | Praveen Darshanam |
 | Last updated | 2026-10-19 |
 
@@ -16,15 +16,15 @@ Status values: `todo` · `in-progress` · `blocked` · `done`
 ## Phase 0: Foundations
 | ID | Task | Spec ref | Acceptance criteria | Depends on | Status |
 |----|------|----------|---------------------|------------|--------|
-| T-001 | Fill in constitution and spec | constitution.md, spec.md | Reviewed and versioned 1.0.0 | - | todo |
+| T-001 | Fill in constitution and spec | constitution.md, spec.md | Reviewed and versioned 1.0.0 | - | done (2026-10-19): owner signed off all ten specs as the v1 baseline; constitution and spec are 1.0.0 |
 | T-002 | Repo scaffold (frontend/, backend/, deploy/) | design.md | Directories and tooling committed | T-001 | done (2026-10-19; `make check` passes locally) |
-| T-003 | Repo conventions: root README, CLAUDE.md, CODEOWNERS, PR template, branch protection, commit conventions, pre-commit hooks (keep Gitleaks) | constitution.md §4, COD-10 | Files committed; rules documented | T-001 | done (2026-10-19; branch protection to be enabled in GitHub settings by the owner) |
+| T-003 | Repo conventions: root README, CLAUDE.md, CODEOWNERS, PR template, branch protection, commit conventions, pre-commit hooks (keep Gitleaks) | constitution.md §4, COD-10 | Files committed; rules documented | T-001 | done (2026-10-19); branch protection: see Blockers |
 | T-004 | Pre-build verification: CloudNativePG supports PostgreSQL 18.6 and a pgvector 0.8.6 image exists or can be built (PostgreSQL 18.6 + pgvector 0.8.6 compatibility is owner-confirmed), Python 3.13 compatibility of LangGraph/asyncpg/SQLAlchemy | database-spec.md §1, §12 | Findings recorded in the specs; versions pinned or fallbacks chosen | T-001 | in progress: verified 2026-10-19 - kind node `kindest/node:v1.37.0` runs Kubernetes v1.37.0 with containerd 2.3.4 (meets CloudNativePG image-volume needs of K8s >= 1.35 / containerd >= 2.1); pgvector 0.8.6 PostgreSQL 18 support and CloudNativePG PG18 extensions confirmed by web search; still to check: CloudNativePG operator version and a pgvector extension image, Python 3.13 compatibility of LangGraph/asyncpg |
-| T-005 | Verify owner-supplied framework instruments/versions against official sources | spec.md §4 | Table updated with source links | T-001 | todo |
-| T-006 | Author v1 unified control set (owner) and versioning scheme; decide licensing for source texts | spec.md §10a | Control set v1 reviewed and checked in as data | T-001 | todo |
+| T-005 | Verify owner-supplied framework instruments/versions against official sources | spec.md §4 | Table updated with source links | T-001 | done (2026-10-19): owner confirmed the names and versions as the product's reference versions; no independent source check was run, re-confirm when a publisher issues a new edition |
+| T-006 | Author v1 unified control set (owner) and versioning scheme; decide licensing for source texts | spec.md §10a | Control set v1 reviewed and checked in as data | T-001 | in progress: format, validator and CI gate done (`data/controls/*.yaml`, `app.domain.controls`, `make controls`, 8 tests; clause identifiers only, own words, 600-character limit). First scope: SOC 2, PCI DSS v4.0.1, RBI DPSC 2026, ISO 27001:2022. **Owner action:** write the controls; none exist yet |
 | T-007 | Tool vetting for scanners (maintenance, supply chain; licence per T-009) and chosen list per source | backend-spec.md §4a, constitution SEC-17 | Approved tool list with versions | T-009 | todo |
 | T-008 | Per-connector least-privilege permission policies (AWS, GCP, Azure, Kubernetes, GitHub, Bitbucket, Entra, Metabase) | backend-spec.md §7 | Policies documented and testable | T-007 | todo |
-| T-009 | Licence and provenance audit of every named dependency, tool, container image, font, icon, dataset and content source: verify licence from the official source, apply the permissive allow-list (LIC-1, LIC-2), choose alternatives for failures (object store, observability stack, scanners, Redis if used), create the licence register and NOTICE file | constitution LIC-1 to LIC-8, spec.md NFR-15, R-7 | Licence register committed; no disallowed or unknown licence remains; replacements recorded in the specs | T-001 | in progress: first pass in LICENCES.md (flagged tools checked by web search; sharp/LGPL fixed; owner decisions pending) |
+| T-009 | Licence and provenance audit of every named dependency, tool, container image, font, icon, dataset and content source: verify licence from the official source, apply the permissive allow-list (LIC-1, LIC-2), choose alternatives for failures (object store, observability stack, scanners, Redis if used), create the licence register and NOTICE file | constitution LIC-1 to LIC-8, spec.md NFR-15, R-7 | Licence register committed; no disallowed or unknown licence remains; replacements recorded in the specs | T-001 | in progress: owner approved MIT-0, 0BSD, BlueOak-1.0.0, PSF-2.0, CC0-1.0, CC-BY-3.0/4.0 (2026-10-19, LIC-1 updated, gates and NOTICE done); licences of Traefik, CloudNativePG, PostgreSQL, pgvector, Jaeger, Prometheus and kubescape read from their LICENSE files; still to do: choose replacements for the object store and observability stack, replace the create-next-app favicon |
 | T-010 | CI SBOM generation and licence-scan gate that fails on disallowed/unknown licences; originality review step for generated documents | constitution LIC-5, LIC-8 | PR with a disallowed licence fails CI | T-002, T-009 | in progress: Python and npm licence gates run in `make check` and CI; `make scan` (Trivy, digest-pinned) scans the four images the stack runs, fails on fixable HIGH/CRITICAL findings and writes CycloneDX SBOMs to `build/sbom/`; backend image has pip/setuptools removed, frontend moved to `node:24-trixie-slim` with npm removed (all four images clean on 2026-10-19). Still to do: run it in CI, scan the cert-manager/Traefik/CloudNativePG/PostgreSQL images, and check SBOM licences |
 
 ## Phase 1: Backend
