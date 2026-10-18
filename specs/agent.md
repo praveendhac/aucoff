@@ -13,7 +13,7 @@ Related: [constitution.md](constitution.md) · [spec.md](spec.md) · [backend-sp
 
 ## 1. Overview and Principles
 - AUCoFF runs 13 agents as Python microservices fed by RabbitMQ and orchestrated with LangGraph (ADR-3, ADR-4).
-- **Deterministic first:** scanners run policy-as-code checks that produce facts (pass/fail with raw evidence). LLMs interpret, map, explain, summarise documents and draft text. LLMs never decide whether a configuration value is compliant when a deterministic rule exists.
+- **Deterministic first:** scanners run policy-as-code checks that produce facts (pass/fail with raw evidence) through the check engine, which wraps vetted open-source scanners behind adapters ([backend-spec.md](backend-spec.md) §4a) and maps checks to unified controls (`check_definitions`). LLMs interpret, map, explain, summarise documents and draft text. LLMs never decide whether a configuration value is compliant when a deterministic rule exists.
 - **Read-only:** no agent changes customer systems (spec.md 5.5, AI-1, AI-6).
 - **Advisory with approval:** consequential outputs need human approval (AI-2). Outputs leaving the tenant need approval and redaction (AI-16).
 - **Grounded:** every claim cites evidence or source text (AI-3); no evidence means `unknown`, not a guess (AI-4).

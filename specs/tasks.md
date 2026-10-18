@@ -3,9 +3,9 @@
 | Field | Value |
 |-------|-------|
 | Status | Draft |
-| Version | 0.1.0 |
-| Owner | TODO |
-| Last updated | TODO |
+| Version | 0.2.0 |
+| Owner | Praveen Darshanam |
+| Last updated | 2026-10-19 |
 
 > Purpose: ordered, traceable work breakdown. Every task cites the spec section it implements and has verifiable acceptance criteria.
 
@@ -18,6 +18,12 @@ Status values: `todo` · `in-progress` · `blocked` · `done`
 |----|------|----------|---------------------|------------|--------|
 | T-001 | Fill in constitution and spec | constitution.md, spec.md | Reviewed and versioned 1.0.0 | - | todo |
 | T-002 | Repo scaffold (frontend/, backend/, deploy/) | design.md | Directories and tooling committed | T-001 | todo |
+| T-003 | Repo conventions: root README, CLAUDE.md, CODEOWNERS, PR template, branch protection, commit conventions, pre-commit hooks (keep Gitleaks) | constitution.md §4, COD-10 | Files committed; rules documented | T-001 | todo |
+| T-004 | Pre-build verification: PostgreSQL 18.6 and compatible pgvector, CloudNativePG support for PG 18, Python 3.13 compatibility of LangGraph/asyncpg/SQLAlchemy, RDS 18.x support (note for Phase 2) | database-spec.md §1, §12 | Findings recorded in the specs; versions pinned or fallbacks chosen | T-001 | todo |
+| T-005 | Verify owner-supplied framework instruments/versions against official sources | spec.md §4 | Table updated with source links | T-001 | todo |
+| T-006 | Author v1 unified control set (owner) and versioning scheme; decide licensing for source texts | spec.md §10a | Control set v1 reviewed and checked in as data | T-001 | todo |
+| T-007 | Tool vetting for scanners (licence, maintenance, supply chain) and chosen list per source | backend-spec.md §4a, constitution SEC-17 | Approved tool list with versions | T-001 | todo |
+| T-008 | Per-connector least-privilege permission policies (AWS, GCP, Azure, Kubernetes, GitHub, Bitbucket, Entra, Metabase) | backend-spec.md §7 | Policies documented and testable | T-007 | todo |
 
 ## Phase 1: Backend
 | ID | Task | Spec ref | Acceptance criteria | Depends on | Status |
@@ -31,6 +37,10 @@ Status values: `todo` · `in-progress` · `blocked` · `done`
 | T-107 | Auth: OIDC JWT validation, tenant context, RBAC dependencies | backend-spec.md §8 | Unauthorised/cross-tenant calls rejected in tests | T-104 | todo |
 | T-108 | OpenAPI pipeline: committed `backend/openapi.yaml`, drift check, Spectral lint, Swagger/ReDoc | api-contract.md §2 | CI fails on drift or undocumented route | T-101 | todo |
 | T-109 | Catalogue/admin APIs (API-1x, API-2x) | api-contract.md §5.1-5.3 | Endpoints documented and tested | T-107, T-108 | todo |
+| T-116 | Check engine: adapter interface, normalised result schema, `rule_packs`/`check_definitions`/`check_results` | backend-spec.md §4a, database-spec.md §3.7 | First adapter results map to unified controls in tests | T-103, T-007 | todo |
+| T-117 | Tenant provisioning, suspension, offboarding (export + deletion) | spec.md FR-25, api-contract.md §5.8 | Offboarding test removes tenant data and writes audit | T-104, T-107 | todo |
+| T-118 | External auditor invitations (scoped, expiring) and operator break-glass grants | spec.md FR-26, FR-27, constitution SEC-15, SEC-16 | Expiry/revocation tests pass; every access audited | T-107 | todo |
+| T-119 | Scan schedules, drift detection and notifications | spec.md FR-28, FR-30, database-spec.md §3.7 | Schedule triggers run; drift notification emitted | T-110, T-112 | todo |
 | T-110 | RabbitMQ messaging layer: envelope, outbox relay, DLQs | backend-spec.md §5 | Idempotent consumer tests pass | T-103 | todo |
 | T-111 | Snapshot/metric tables (database-spec §3.6): migrations, partitions, immutability grants | database-spec.md §3.6, constitution DB-9 | UPDATE/DELETE denied; monthly partitions created | T-104 | todo |
 | T-112 | Snapshot writer at assessment finalisation (same transaction) | design.md §12 | Snapshot and metric points written atomically | T-111, T-202 | todo |
@@ -90,4 +100,6 @@ Status values: `todo` · `in-progress` · `blocked` · `done`
 | T-502 | `values-aws.yaml`; verify PostgreSQL 18.x/pgvector on RDS | infrastructure-spec.md §10, database-spec.md §12 | Staging deploy passes smoke/E2E | T-501 | todo |
 
 ## Blockers and Notes
-TODO
+- T-004 (pre-build verification) can change version pins and the Postgres/pgvector image; do it before the T-002 scaffold is finalised.
+- T-006 (unified control set authored by owner) gates meaningful scanner-to-control mapping and mapping-agent evaluation.
+- Items marked TODO in other specs are tracked in each spec's open-questions section; deferred ones (brand, locales, KEDA, mTLS, image signing, plan limits) do not block the build.

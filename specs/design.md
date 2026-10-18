@@ -15,9 +15,10 @@ Related: [frontend-spec.md](frontend-spec.md) · [backend-spec.md](backend-spec.
 ```mermaid
 flowchart LR
   subgraph Users
-    CO[Compliance officer] & AU[Auditor] & EN[Engineer] & EX[Executive / CISO] & AD[Tenant admin]
+    CO[Compliance officer] & AU[Auditor] & EN[Engineer] & EX[Executive / CISO] & AD[Tenant admin] & XA[External auditor, time-boxed]
   end
   Users --> AUCOFF[AUCoFF SaaS]
+  PO[Platform operator - break-glass only] --> AUCOFF
   AUCOFF -->|read-only| CLOUD[AWS / GCP / Azure]
   AUCOFF -->|read-only| K8S[Kubernetes / containers]
   AUCOFF -->|read-only| REPOS[GitHub / Bitbucket / CI]
@@ -122,6 +123,8 @@ Logs, metrics, traces via OpenTelemetry into Loki, Prometheus and Tempo, shown i
 | ADR-7 | kind + umbrella Helm chart locally; Terraform + EKS later | minikube, per-service charts | Same chart across environments | Accepted (owner) |
 | ADR-8 | Immutable per-assessment snapshots + metric points for 12-month history, rollups for trends | Recompute from live data | Reproducible comparisons independent of later data changes | Proposed |
 | ADR-9 | Light-default theme with dark mode, token-based design system (shadcn/ui + Tailwind) | Single theme, other UI kits | Owner choice; accessibility and consistency | Accepted (owner) |
+| ADR-10 | Wrap vetted open-source scanners behind our adapter interface; map checks to unified controls | Write all rules in OPA/Rego | Broad coverage quickly; keep our control logic and versioning | Accepted (owner) |
+| ADR-11 | Operator-provisioned, invite-based tenants; audited break-glass operator access; time-boxed external auditor access | Self-service signup, standing operator access | Controlled onboarding and least privilege in v1 | Accepted (owner) |
 
 ## 9. Trade-offs and Risks
 - Single PostgreSQL for relational, vector and history data simplifies operations but concentrates load; mitigate with partitioning, read replicas and PgBouncer when needed.
@@ -289,6 +292,8 @@ Every card shows: value, unit, delta vs comparison scan (arrow + number + colour
 | Engineer | Open findings assigned, aging, remediation cycle time, failing controls by system, scan status |
 | Auditor | Control status by framework, evidence freshness, audit-log integrity, reports, 12-month history |
 | Tenant admin | Connectors health, user/role changes, budget and cost, retention settings |
+| External auditor | Scoped view only: assigned assessments, results, evidence, audit-log slice, time remaining on access |
+| Platform operator | Separate operator console: tenant list/health, provisioning, break-glass grants (no tenant data by default) |
 
 ## 11. Metrics Catalogue
 All metrics are tenant-scoped, computed from snapshots/metric points ([database-spec.md](database-spec.md) §3.6) and exposed via the metrics endpoints ([api-contract.md](api-contract.md) §5.6). "History" = window available for comparison (all >= 12 months unless noted).

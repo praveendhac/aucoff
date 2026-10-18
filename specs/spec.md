@@ -25,7 +25,9 @@ Fintechs must satisfy many overlapping frameworks and regional regulations at on
 | PER-3 | Fintech engineer / security team | Understand gaps in their systems and fix them | Vague findings, no technical remediation steps |
 | PER-4 | Executive / risk owner | See posture, risk trends and readiness at a glance | No consolidated view |
 | PER-5 | CISO | Own security and compliance posture; approve risk acceptance; report to board and regulators | Fragmented tooling, audit surprises |
-| PER-6 | Platform admin (tenant admin) | Manage users, roles, SSO, integrations | Manual onboarding |
+| PER-6 | Tenant admin | Manage users, roles, SSO, integrations | Manual onboarding |
+| PER-7 | Platform operator | Provision and support tenants, manage platform health | Safe access to tenant data when supporting |
+| PER-8 | External auditor (time-boxed) | Review a defined slice of evidence, results and audit trail | Getting scoped access without broad privileges |
 
 ## 4. Frameworks and Regulations in Scope (all in v1)
 | Framework | Version | Jurisdiction | Type | Notes |
@@ -123,6 +125,10 @@ Full definitions in [agent.md](agent.md) section 2.
 | US-18 | As any user, I want to ask a copilot about my posture, controls and findings and get cited answers | Answers cite sources; refuses when ungrounded; read-only | P2 |
 | US-19 | As a compliance officer, CISO or auditor, I want to compare any two scans and see severity counts for the latest scan against the previous two so that I can see progress and regressions | Compare view lists new, resolved, regressed, unchanged items; deltas shown | P0 |
 | US-20 | As an executive or auditor, I want 12 months of historical results and trends so that I can show posture over time | 12-month trends by framework, jurisdiction and severity; export as CSV/JSON | P0 |
+| US-21 | As a platform operator, I want to provision tenants by invitation and offboard them with export and deletion so that onboarding is controlled | Tenant created with admin invite; offboarding exports data then deletes per policy; both audit-logged | P0 |
+| US-22 | As a tenant admin, I want to invite an external auditor with a scope and expiry so that they see only what is needed | Invitation limited to chosen assessments/frameworks; expires automatically; all views audit-logged | P0 |
+| US-23 | As a platform operator, I want audited, time-limited break-glass access for support so that tenant data is protected | Grant requires reason, approver and expiry; tenant notified; read-only by default; fully logged | P1 |
+| US-24 | As a compliance officer, I want scheduled scans and drift alerts so that changes between audits are caught | Schedules per scope; drift between consecutive scans raises a notification | P1 |
 
 ## 7. Functional Requirements
 | ID | Requirement | Traces to |
@@ -151,6 +157,12 @@ Full definitions in [agent.md](agent.md) section 2.
 | FR-22 | Immutable per-assessment snapshots and metric points; 12 months of history queryable | US-19, US-20 |
 | FR-23 | Compare any two scans (new, resolved, regressed, unchanged) and show severity counts for the latest scan vs the previous two | US-19 |
 | FR-24 | Metrics, trends, dashboards and history export per the catalogue in [design.md](design.md) section 11 | US-8, US-20 |
+| FR-25 | Tenant provisioning by invitation, tenant lifecycle states, offboarding with export and deletion workflow | US-21 |
+| FR-26 | External auditor invitations with scope and expiry, automatic revocation | US-22 |
+| FR-27 | Break-glass access grants for platform operators with approval, expiry, tenant notification and audit | US-23 |
+| FR-28 | Scan scheduling (cron-style per scope) and drift detection between consecutive scans | US-24 |
+| FR-29 | Deterministic check engine wrapping open-source scanners with versioned rule packs and check-to-control mapping ([backend-spec.md](backend-spec.md) §4a) | US-3, US-5 |
+| FR-30 | Notification event catalogue and per-user channel preferences | US-11 |
 
 ## 8. Non-Functional Requirements
 | ID | Category | Requirement |
@@ -184,12 +196,18 @@ Detailed definitions and formulas are in the metrics catalogue ([design.md](desi
 | Citation correctness | % of claims with valid, verifiable citations | TODO (proposal: >= 98%) |
 | Finding remediation cycle time | Median time from finding opened to resolved | TODO |
 
+## 10a. Control Catalogue Authorship and Notification Events
+- **Unified control catalogue:** the owner authors the v1 unified control set; the `mapping-agent` proposes mappings of framework requirements to those controls, and experts approve them (FR-2). Catalogue and mappings are versioned. Licensing of source texts remains an open question.
+- **Notification events (stub):** finding opened/escalated, approval requested/expiring, assessment completed/failed, drift detected, budget threshold reached, regulatory change proposed, questionnaire ready for review, auditor invitation expiring. Channels: in-app, email, Slack, Microsoft Teams (per-user and per-tenant preferences). Templates TODO.
+- **Scheduling:** cron-style schedules per scope with timezone; a drift is any change in a control result status or a new/changed failing check between consecutive scans of the same scope.
+
 ## 11. Out of Scope (v1)
 - Automated remediation or any write access to customer systems.
 - Storing or processing cardholder data (PAN, CVV).
 - Legal advice or regulator filings submitted automatically.
 - Frameworks not listed in section 4.
 - Automatic submission of questionnaire answers to external portals (answers are drafted for manual entry).
+- Self-service tenant signup and billing (tenants are operator-provisioned and invite-based in v1).
 
 ## 12. Assumptions, Risks, Dependencies
 | ID | Item | Mitigation |
@@ -210,3 +228,6 @@ Detailed definitions and formulas are in the metrics catalogue ([design.md](desi
 - [ ] Report formats and templates per framework.
 - [ ] Pricing/tenant plan limits (if any) affecting quotas.
 - [ ] Which cloud providers and SaaS scanners ship first.
+- [ ] Final list of open-source scanners per source after licence review.
+- [ ] Notification templates and per-event defaults.
+- [ ] Tenant offboarding retention exceptions (legal holds).

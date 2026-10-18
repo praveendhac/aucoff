@@ -44,6 +44,16 @@ Related: [spec.md](spec.md) · [api-contract.md](api-contract.md) · [design.md]
 | `/settings/users` | Users and roles | PER-6 | admin | US-10, FR-13 |
 | `/settings/sso` | OIDC/SAML configuration | PER-6 | admin | US-10 |
 | `/settings/integrations` | Jira, ServiceNow, Slack, Teams, email | PER-6 | admin | US-11, FR-9, FR-14 |
+| `/questionnaires`, `/questionnaires/[id]` | Questionnaire queue and side-by-side review | PER-1, PER-5 | compliance_officer, ciso | US-14, US-16, FR-16..19 |
+| `/answer-library` | Approved reusable answers, staleness | PER-1 | compliance_officer | US-15, FR-18 |
+| `/assessments/compare` | Compare any two scans | PER-1, PER-2, PER-5 | compliance_officer, auditor, ciso | US-19, FR-23 |
+| `/controls/[id]/history` | Per-control 12-month history | PER-1, PER-2 | compliance_officer, auditor | US-20, FR-22 |
+| `/regulatory-changes` | Proposed catalogue/mapping changes | PER-1, PER-5 | compliance_officer, ciso | US-17, FR-20 |
+| `/notifications` | Notification centre and preferences | all | all | US-11, FR-30 |
+| `/settings/auditors` | Invite and revoke external auditors | PER-6 | admin, compliance_officer | US-22, FR-26 |
+| `/auditor` | Scoped read-only view for external auditors | PER-8 | external_auditor | US-22 |
+| Copilot (panel, not a route) | Cited Q&A | all | all | US-18 |
+| `/platform/*` (separate operator app/realm) | Tenant provisioning, break-glass, offboarding | PER-7 | platform_admin | US-21, US-23 |
 | `/login`, `/logout` | Auth entry points | all | - | US-10 |
 
 ## 3. Key Screens

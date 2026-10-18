@@ -173,6 +173,22 @@ All paths are under `/api/v1`. Status shows the success code.
 | API-111 | POST | `/regulatory-changes/{id}/decision` | Approve/reject proposal | mapping:write | 200 | FR-20 |
 | API-120 | POST | `/copilot/messages` | Ask copilot (SSE response with citations) | copilot:use | 200 | US-18, FR-21 |
 
+### 5.8 Platform, access control, scheduling and notifications
+| ID | Method | Path | Summary | Scope | OK | Refs |
+|----|--------|------|---------|-------|----|------|
+| API-130 | GET/POST | `/platform/tenants` | List / provision tenant (invite first admin) | platform:admin | 200/201 | US-21, FR-25 |
+| API-131 | PATCH | `/platform/tenants/{id}` | Suspend/reactivate | platform:admin | 200 | FR-25 |
+| API-132 | POST | `/platform/tenants/{id}/offboarding` | Start export + deletion workflow (async) | platform:admin | 202 | US-21, FR-25 |
+| API-133 | POST | `/platform/tenants/{id}/access-grants` | Request break-glass access (needs approval) | platform:admin | 201 | US-23, FR-27 |
+| API-134 | POST | `/platform/access-grants/{id}/decision` | Approve/revoke grant | platform:admin (second approver) | 200 | FR-27 |
+| API-140 | GET/POST | `/auditor-invitations` | List / invite external auditor with scope and expiry | admin:write, scope:write | 200/201 | US-22, FR-26 |
+| API-141 | DELETE | `/auditor-invitations/{id}` | Revoke | admin:write | 204 | FR-26 |
+| API-150 | GET/PUT | `/scopes/{id}/schedule` | Read/set scan schedule (cron + timezone) | scope:write | 200 | US-24, FR-28 |
+| API-151 | GET | `/notifications` | In-app notifications (cursor-paginated) | any | 200 | FR-30 |
+| API-152 | POST | `/notifications/{id}:read` | Mark read | any | 204 | FR-30 |
+| API-153 | GET | `/rule-packs`, `/check-definitions` | Browse check engine metadata | catalog:read | 200 | FR-29 |
+Naming: `/connectors` = evidence source connectors (DB `connectors`); `/integrations` = ticketing, notification and SSO configuration (DB `integrations`). Additional scope: `platform:admin` (operator, separate identity realm and audience from tenant users).
+
 ## 6. Streaming (SSE)
 - Endpoint: `GET /agent-runs/{id}/events`, `Accept: text/event-stream`, auth by the same session/token.
 - Event types: `run.status`, `run.step`, `run.evidence`, `run.result`, `run.approval_required`, `run.cost`, `run.error`, `heartbeat` (every 15 s).

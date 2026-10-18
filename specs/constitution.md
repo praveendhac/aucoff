@@ -3,7 +3,7 @@
 | Field | Value |
 |-------|-------|
 | Status | Draft |
-| Version | 0.6.0 |
+| Version | 0.7.0 |
 | Owner | Praveen Darshanam |
 | Last updated | 2026-10-18 |
 
@@ -97,6 +97,9 @@ Related: [spec.md](spec.md) · [design.md](design.md) · [agent.md](agent.md) ·
 | SEC-12 | A threat model is maintained in [design.md](design.md) and reviewed on significant change. |
 | SEC-13 | Regulatory mapping (PCI DSS, SOC 2, GDPR and others listed in [spec.md](spec.md)) is maintained for AUCoFF itself; AUCoFF MUST meet the standards it helps others meet. |
 | SEC-14 | Data residency and cross-border transfer constraints MUST be honoured, including where LLM providers process data. |
+| SEC-15 | Platform operators MUST NOT have standing access to tenant data. Access requires a time-limited, approved, audited break-glass grant (reason, approver, expiry), is read-only by default, and the tenant is notified. |
+| SEC-16 | External auditor access MUST be invitation-based, scoped to selected assessments/frameworks, time-boxed with automatic expiry, read-only, and every view audit-logged. |
+| SEC-17 | Third-party scanners and tools MUST be vetted for licence compatibility, maintenance and supply-chain risk, pinned by version/digest, scanned and SBOM'd before use. |
 
 ## 7. AI Behaviour Constraints
 
@@ -187,3 +190,4 @@ Detail in [api-contract.md](api-contract.md).
 | 0.4.0 | 2026-10-18 | Added API rules API-1 to API-6 |
 | 0.5.0 | 2026-10-18 | Added AI-16 (outputs leaving the tenant) |
 | 0.6.0 | 2026-10-19 | Added DB-9, DB-10 (immutable 12-month history) |
+| 0.7.0 | 2026-10-19 | Added SEC-15 (break-glass), SEC-16 (auditor access), SEC-17 (third-party scanner vetting) |

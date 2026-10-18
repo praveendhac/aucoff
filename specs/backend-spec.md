@@ -90,6 +90,23 @@ Rules: `api -> domain -> db/messaging/llm` only (ARC-3); services reuse `domain`
 Agent details, tools and guardrails: [agent.md](agent.md).
 All scanners are read-only (spec.md 5.5, AI-1, AI-6).
 
+### 4a. Scanner Adapters and Check Engine
+Decision (owner): **wrap proven open-source scanners behind our own scanner interface** instead of writing all rules from scratch.
+- **Adapter interface:** `collect(scope, credentials_ref) -> RawFindings`, `normalise(raw) -> CheckResult[]`, `describe() -> {tool, version, required_permissions, licence}`. One adapter per tool; adapters run inside the scanner service container or as sandboxed jobs.
+- **Candidate tools (to be confirmed per source; licence and maintenance reviewed before adoption):**
+  | Source | Candidates |
+  |--------|-----------|
+  | AWS / GCP / Azure | Prowler, Steampipe (with compliance mods), ScoutSuite |
+  | Kubernetes / containers | kubescape, kube-bench, Trivy |
+  | Repos / CI-CD / IaC | Checkov, Semgrep, GitHub/Bitbucket APIs (custom adapter) |
+  | Entra ID, Metabase | Custom adapters (Microsoft Graph, Metabase API) |
+- **Normalised result schema:** `check_id`, `tool`, `tool_version`, `rule_pack_version`, `resource_ref`, `status` (pass/fail/error/not_applicable), `severity`, `evidence_ref`, `raw_ref`, `observed_at`.
+- **Rule metadata:** AUCoFF maintains `check_definitions` (tool check ID -> unified control(s), severity override, rationale, applicability) so scan results roll up into control results ([database-spec.md](database-spec.md) §3.7). Mappings are versioned and reviewed like control mappings.
+- **Rule packs:** pinned tool versions + rule sets per release (`rule_pack_version`); upgrades go through the evaluation suite; results always record tool and rule versions for reproducibility.
+- **Gaps:** controls with no automated check are assessed from documents/evidence uploads or marked `unknown`; custom checks (OPA/Rego or Python) may be added behind the same interface when OSS coverage is missing.
+- **Supply chain:** tools pinned by digest, scanned, SBOM'd; licence compatibility reviewed (some tools have non-OSS or commercial-use restrictions) - constitution SEC-17.
+- **Least privilege:** each connector documents the exact read-only permissions it needs (appendix, filled per connector); `validate()` rejects broader grants where detectable.
+
 ## 5. Messaging
 - Broker: RabbitMQ; durable topic exchange `aucoff.jobs`, per-service queues, dead-letter exchange `aucoff.dlx` with per-queue DLQs.
 - Message envelope (JSON): `message_id`, `idempotency_key`, `tenant_id`, `assessment_id`, `agent_run_id`, `type`, `schema_version`, `payload`, `trace_context`, `created_at`.
@@ -128,6 +145,21 @@ All scanners are read-only (spec.md 5.5, AI-1, AI-6).
 - Every request opens a transaction with `SET LOCAL app.tenant_id`; missing tenant fails closed (DB-3).
 - Authorisation checks in `domain`/dependencies, never only in routers (SEC-1).
 
+Additional roles and permissions (decisions 2026-10-19):
+| Capability | platform_admin (operator) | external_auditor (scoped, time-boxed) | notes |
+|-----------|:--:|:--:|-------|
+| Provision/suspend tenants, offboarding workflows | x | | Operator-provisioned, invite-based tenants in v1 |
+| Access tenant data | break-glass only | scoped read-only | See below |
+| View assigned assessments, evidence, results, reports, audit log slice | | x | Limited to invited assessments/frameworks until expiry |
+| Questionnaires: view/create/draft | | | compliance_officer, ciso (approve/export), engineer (read) |
+| Questionnaire approve / export | | | compliance_officer, ciso |
+| Answer library manage | | | compliance_officer |
+| Regulatory-change approve | | | compliance_officer, ciso |
+| Copilot | | x (scoped data only) | All authenticated users, within their data access |
+| History / compare / export | | x (scoped) | report:read scopes |
+- **Break-glass:** operator access to tenant data requires a time-limited grant (reason, approver, expiry, tenant notified), is read-only by default, and is fully audit-logged (SEC-15).
+- **External auditors:** invited by a tenant admin or compliance officer with scope (assessments/frameworks) and expiry; no access outside scope; every view audit-logged (SEC-16).
+
 ## 9. LLM and Agent Integration
 - `llm` package defines `LLMProvider` (chat, tool use, embeddings) with adapters (Claude default); model, version and parameters from configuration.
 - Redaction pipeline (PII/secrets) runs before every outbound call (AI-8); redaction rules versioned and tested.
@@ -145,6 +177,7 @@ All scanners are read-only (spec.md 5.5, AI-1, AI-6).
 Credentials via secret references; outbound calls have timeouts, retries and circuit breakers.
 
 ## 11. Configuration and Secrets
+Per-tenant connector credentials live in a dedicated secret store addressed by `config_ref` (HashiCorp Vault-style or AWS Secrets Manager on AWS; Kubernetes Secrets are acceptable only for local development and do not scale to many tenants). Tenant secrets are encrypted with per-tenant keys where the store supports it.
 12-factor environment config (ARC-8) validated by Pydantic Settings at start-up; values from Helm values/ConfigMaps; secrets from Kubernetes Secrets (Secrets Manager on AWS); no defaults for secrets; config documented in [infrastructure-spec.md](infrastructure-spec.md).
 
 ## 12. Observability

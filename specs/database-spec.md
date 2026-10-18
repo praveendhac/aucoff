@@ -49,7 +49,9 @@ Related: [constitution.md](constitution.md) · [design.md](design.md) · [backen
 | `users` | People | `id`, `tenant_id`, `email` (unique per tenant), `display_name`, `idp_subject`, `status`, `last_login_at` |
 | `roles` | Role definitions | `id`, `name` (compliance_officer, auditor, engineer, executive, ciso, admin), `permissions jsonb` |
 | `user_roles` | Role assignment | `tenant_id`, `user_id`, `role_id` (PK on the three) |
-| `integrations` | SSO, ticketing, notification, SaaS connectors | `id`, `tenant_id`, `type`, `config_ref` (secret reference, never the secret), `status` |
+| `integrations` | Ticketing (Jira, ServiceNow), notification (Slack, Teams, email) and SSO configuration | `id`, `tenant_id`, `type`, `config_ref` (secret reference, never the secret), `status` |
+| `connectors` | Evidence source connectors (cloud, Kubernetes, repos, Entra ID, Metabase); maps to API `/connectors` | `id`, `tenant_id`, `type`, `name`, `config_ref` (secret reference), `permissions_checked_at`, `status` |
+| `tenant_settings` | Per-tenant configuration | `tenant_id`, `region`, `history_retention_months` (>= 13), `evidence_retention_days`, `llm_monthly_budget_usd`, `questionnaire_detail_level`, `settings jsonb` |
 
 ### 3.2 Reference and unified controls (`ref`, shared across tenants, read-only to the app role)
 | Table | Purpose | Key columns |
@@ -76,7 +78,7 @@ Related: [constitution.md](constitution.md) · [design.md](design.md) · [backen
 | `agent_runs` | One agent execution | `id`, `tenant_id`, `agent_id`, `assessment_id`, `model`, `model_version`, `prompt_version`, `status`, `input_tokens`, `output_tokens`, `cost_usd numeric`, `started_at`, `finished_at` |
 | `agent_steps` | Tool calls and outputs (append-only) | `id`, `tenant_id`, `agent_run_id`, `seq`, `kind`, `input_redacted jsonb`, `output jsonb`, `created_at` |
 | `approvals` | Human decisions on agent actions | `id`, `tenant_id`, `agent_run_id`, `action`, `requested_at`, `decided_by`, `decision`, `decided_at`, `comment` |
-| `embeddings` | RAG vectors | `id`, `tenant_id` (NULL for shared reference text), `source_type`, `source_id`, `chunk_index`, `content`, `embedding vector(1024)` (hosted embedding model via the provider interface; re-embed by migration if the model changes), `model` |
+| `embeddings` | RAG vectors | `id`, `tenant_id` (NULL for shared reference text), `source_type`, `source_id`, `chunk_index`, `content`, `embedding vector(1024)` (hosted embedding model via the provider interface; re-embed by migration if the model changes), `model`. Shared reference chunks (`tenant_id` NULL) are readable by all tenants and writable only by the migrator/catalogue loader: RLS uses separate policies (`SELECT` allows `tenant_id = current tenant OR tenant_id IS NULL`; `INSERT/UPDATE/DELETE` require `tenant_id = current tenant`) |
 
 ### 3.4b Questionnaires (`app`) - see [agent.md](agent.md) section 10
 | Table | Purpose | Key columns |
@@ -116,6 +118,22 @@ All tables have RLS (DB-3); exports also write to `audit.audit_log`.
 - Indexes: (`tenant_id`, `scope_id`, `captured_at DESC`) on `assessment_snapshots`; (`tenant_id`, `metric_id`, `captured_at`) on `metric_points`; (`tenant_id`, `unified_control_id`, `snapshot_id`) on `snapshot_control_results`.
 - Queries: "latest scan vs previous two" uses the three newest snapshots for a scope; any-to-any comparison joins two snapshots on `unified_control_id`; per-control history reads `snapshot_control_results` over the last 12 months.
 - Changing a metric formula increments `formula_version`; old points keep their version (displayed with a marker); recompute jobs write new versions rather than editing.
+
+### 3.7 Check engine, scheduling, notifications, copilot, access control (`app`)
+| Table | Purpose | Key columns |
+|-------|---------|-------------|
+| `rule_packs` | Versioned scanner tool + rule-set bundles | `id`, `tool`, `tool_version`, `rule_pack_version`, `licence`, `released_at`, `status` |
+| `check_definitions` | Tool check -> unified control mapping (shared reference, `ref` schema) | `id`, `rule_pack_id`, `tool_check_id`, `unified_control_ids uuid[]`, `severity_override`, `applicability jsonb`, `rationale`, `approved_by`, `approved_at` |
+| `check_results` | Normalised scanner output per resource | `id`, `tenant_id`, `assessment_id`, `check_definition_id`, `resource_ref`, `status`, `severity`, `evidence_id`, `observed_at`, `rule_pack_version` |
+| `scope_schedules` | Scan schedules (US-24) | `id`, `tenant_id`, `scope_id`, `cron`, `timezone`, `enabled`, `last_run_at`, `next_run_at` |
+| `notification_preferences` | Per-user event/channel settings | `tenant_id`, `user_id`, `event_type`, `channel`, `enabled` |
+| `notifications` | Delivered/in-app notifications | `id`, `tenant_id`, `user_id`, `event_type`, `payload jsonb`, `created_at`, `read_at` |
+| `copilot_conversations`, `copilot_messages` | Copilot history (retention configurable) | `id`, `tenant_id`, `user_id`, `created_at`; messages: `conversation_id`, `role`, `content_redacted`, `citations jsonb`, `agent_run_id` |
+| `regulatory_changes` | Proposed catalogue/mapping changes from the regulatory-change agent | `id`, `framework_id`, `source_url`, `detected_at`, `diff jsonb`, `impact jsonb`, `status`, `decided_by`, `decided_at` (shared reference; who approves - operator or tenant - is TODO) |
+| `evidence_uploads` | Presigned upload sessions and scan status | `id`, `tenant_id`, `scope_id`, `object_key`, `declared_type`, `size`, `sha256`, `malware_scan_status`, `status`, `expires_at` |
+| `auditor_invitations` | Time-boxed external auditor access | `id`, `tenant_id`, `email`, `scope jsonb` (assessment/framework IDs), `invited_by`, `expires_at`, `accepted_at`, `revoked_at` |
+| `operator_access_grants` | Break-glass access for platform operators | `id`, `tenant_id`, `operator_id`, `reason`, `approved_by`, `starts_at`, `expires_at`, `revoked_at`, `read_only` |
+All tenant tables have RLS (DB-3). Break-glass sessions set the tenant context only while a valid grant exists; grants and every access are mirrored to `audit.audit_log`. Retention for new tables follows section 9 (check results with assessment evidence; copilot messages configurable, default TODO; invitations and grants kept with audit retention).
 
 ## 4. Relationships (ER overview)
 ```mermaid
