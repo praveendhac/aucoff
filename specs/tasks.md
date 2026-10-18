@@ -3,7 +3,7 @@
 | Field | Value |
 |-------|-------|
 | Status | Draft |
-| Version | 0.7.0 |
+| Version | 0.8.0 |
 | Owner | Praveen Darshanam |
 | Last updated | 2026-10-19 |
 
@@ -30,7 +30,7 @@ Status values: `todo` · `in-progress` · `blocked` · `done`
 ## Phase 1: Backend
 | ID | Task | Spec ref | Acceptance criteria | Depends on | Status |
 |----|------|----------|---------------------|------------|--------|
-| T-101 | FastAPI skeleton + health endpoint | backend-spec.md | `/health` returns 200; tests pass | T-002 | done (2026-10-19); health endpoints are anonymous and must be replaced by T-120 |
+| T-101 | FastAPI skeleton + health endpoint | backend-spec.md | `/health` returns 200; tests pass | T-002 | done (2026-10-19); anonymous health endpoints replaced by authenticated `GET /api/v1/health` (T-120) |
 | T-102 | Domain models + migrations | backend-spec.md §4 | Migration applies cleanly | T-101 | todo |
 | T-103 | PostgreSQL 18.6 + pgvector schema migrations (tables, indexes) | database-spec.md §3, §5 | Migrations apply from empty DB; ER matches spec | T-102 | todo |
 | T-104 | DB roles, grants, TLS and Row-Level Security | database-spec.md §6, constitution DB-3..5 | RLS and privilege tests pass (database-spec.md §10) | T-103 | todo |
@@ -43,11 +43,11 @@ Status values: `todo` · `in-progress` · `blocked` · `done`
 | T-117 | Tenant provisioning, suspension, offboarding (export + deletion) | spec.md FR-25, api-contract.md §5.8 | Offboarding test removes tenant data and writes audit | T-104, T-107 | todo |
 | T-118 | External auditor invitations (scoped, expiring) and operator break-glass grants | spec.md FR-26, FR-27, constitution SEC-15, SEC-16 | Expiry/revocation tests pass; every access audited | T-107 | todo |
 | T-119 | Scan schedules, drift detection and notifications | spec.md FR-28, FR-30, database-spec.md §3.7 | Schedule triggers run; drift notification emitted | T-110, T-112 | todo |
-| T-120 | **Default-deny authentication for the gateway and BFF** and the route-enumeration test: remove the anonymous `/api/v1/health/*` endpoints and make `/docs`, `/redoc` and the OpenAPI document require a token; add `GET /health` (`ops:read`); test JWKS/keys for tests (no bypass flag) | constitution ZT-1, ZT-8, ZT-9, api-contract.md API-2 | Every route returns 401 without a token and 403 with the wrong scope; CI fails if a route is added without auth; existing health tests updated | T-101 | todo (first task of Session 2: the Build Session 1 scaffold violates ZT-1) |
+| T-120 | **Default-deny authentication for the gateway and BFF** and the route-enumeration test: remove the anonymous `/api/v1/health/*` endpoints and make `/docs`, `/redoc` and the OpenAPI document require a token; add `GET /health` (`ops:read`); test JWKS/keys for tests (no bypass flag) | constitution ZT-1, ZT-8, ZT-9, api-contract.md API-2 | Every route returns 401 without a token and 403 with the wrong scope; CI fails if a route is added without auth; existing health tests updated | T-101 | done (2026-10-19): default-deny middleware, authenticated GET /api/v1/health, route-enumeration and OpenAPI-security tests (17 backend tests); frontend BFF route-handler enforcement still to do with T-301 |
 | T-121 | Service identities: Keycloak service realm and per-service clients, `ServiceClient` (client credentials, token cache), scope-checked internal calls | backend-spec.md §8a, constitution ZT-4 | Internal call without or with the wrong token is rejected in tests | T-107, T-405 | todo |
 | T-122 | Per-service PostgreSQL login roles, `pg_hba` reject-by-default, TLS, credentials from Kubernetes Secrets | database-spec.md §6.1, §6.3, constitution ZT-6, DB-5 | Role-per-service tests; no shared or trust login possible | T-104 | todo |
 | T-123 | RabbitMQ per-service users, TLS, restricted permissions, `user_id` enforcement and sender check | backend-spec.md §5, §8a, constitution ZT-5 | A service cannot publish as or read from another service's queues in tests | T-110, T-405 | todo |
-| T-124 | Exec probes and `python -m app.healthcheck`; remove `httpGet` probes from the Helm chart; authenticated telemetry push; chart/manifests check in CI | constitution ZT-7, ZT-8, infrastructure-spec.md §5 | `helm template` contains no httpGet probes; pods become Ready via exec | T-120, T-402 | todo |
+| T-124 | Exec probes and `python -m app.healthcheck`; remove `httpGet` probes from the Helm chart; authenticated telemetry push; chart/manifests check in CI | constitution ZT-7, ZT-8, infrastructure-spec.md §5 | `helm template` contains no httpGet probes; pods become Ready via exec | T-120, T-402 | in progress: exec probes and `app.healthcheck` done for backend and frontend, `make helm-lint` and CI fail on httpGet; authenticated telemetry push still to do |
 | T-110 | RabbitMQ messaging layer: envelope, outbox relay, DLQs | backend-spec.md §5 | Idempotent consumer tests pass | T-103 | todo |
 | T-111 | Snapshot/metric tables (database-spec §3.6): migrations, partitions, immutability grants | database-spec.md §3.6, constitution DB-9 | UPDATE/DELETE denied; monthly partitions created | T-104 | todo |
 | T-112 | Snapshot writer at assessment finalisation (same transaction) | design.md §12 | Snapshot and metric points written atomically | T-111, T-202 | todo |
@@ -108,7 +108,7 @@ Status values: `todo` · `in-progress` · `blocked` · `done`
 | T-502 | `values-aws.yaml`; verify PostgreSQL 18.x/pgvector on RDS | infrastructure-spec.md §10, database-spec.md §12 | Staging deploy passes smoke/E2E | T-501 | deferred (post-v1) |
 
 ## Blockers and Notes
-- **Known violation of the authentication-everywhere rule (ZT-1) in the pushed scaffold:** `/api/v1/health/live` and `/ready`, `/docs`, `/redoc` and the OpenAPI document are served without a token, and the Helm chart uses `httpGet` probes against them. T-120 and T-124 fix this and must be done before any cluster deployment work (Session 2 starts with T-120).
+- **Authentication-everywhere (ZT-1) gap in the first scaffold is fixed for the backend and the Helm chart** (T-120 done, T-124 partly done on 2026-10-19). Still open: enforcing the same default-deny in the frontend BFF route handlers (T-301), service identities (T-121), per-service database and broker credentials (T-122, T-123) and authenticated telemetry.
 - **v1 scope decision:** v1 (MVP) is local-only on kind; AWS/Terraform/EKS work (T-501, T-502) is deferred to post-v1 and does not gate any v1 task.
 - **Session 2 is waiting on the laptop:** `make doctor` (2026-10-19, after Build Session 1) still reports `kind` missing and the Docker daemon (Colima) stopped; the owner will install kind and run `colima start` before Docker, cluster and database work can start.
 - **Laptop prerequisites found 2026-10-19:** Docker is installed but its Colima daemon is stopped (`colima start`), and `kind` is not installed (`brew install kind`); `make doctor` reports this. T-004 and `make cluster-up` need both.

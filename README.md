@@ -43,6 +43,8 @@ make cluster-up      # create the local kind cluster (needs a running Docker run
 make cluster-down
 ```
 
+The API never runs without authentication: `make backend-run` needs `AUCOFF_OIDC_ISSUER`, `AUCOFF_OIDC_AUDIENCE` and `AUCOFF_OIDC_JWKS_URL` and refuses to start otherwise. There is no anonymous endpoint (health, docs and OpenAPI included); see constitution section 7d.
+
 ## Rules that apply to every change
 
 - Follow [`specs/constitution.md`](specs/constitution.md); cite the spec section and rule IDs in your PR.

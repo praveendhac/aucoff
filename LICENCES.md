@@ -16,7 +16,7 @@ The constitution's allow-list (LIC-1) is: MIT, Apache-2.0, BSD-2/3-Clause, ISC, 
 | Licence | Where it appears | Notes |
 |---------|------------------|-------|
 | PSF-2.0 | Python `typing_extensions` (required by pydantic/FastAPI) | Explicit per-package exception in `backend/scripts/check_licences.py`. Removing it is not realistic. Recommend approving. |
-| MIT-0 | npm `@csstools/*` (Tailwind/PostCSS chain) | MIT without the attribution clause; recommend approving. |
+| MIT-0 | npm `@csstools/*` (Tailwind/PostCSS chain); Python `cffi` (required by `cryptography`, hence by PyJWT) | MIT without the attribution clause; explicit per-package exception for `cffi` in `backend/scripts/check_licences.py`; recommend approving. |
 | BlueOak-1.0.0 | npm `glob`, `minimatch`, `tar`, `lru-cache`, others (11 packages) | Permissive, OSI-approved; recommend approving. |
 | 0BSD | npm `tslib` | Public-domain-equivalent; recommend approving. |
 | CC0-1.0 | npm `language-subtag-registry`, `mdn-data`, `spdx-license-ids` | Public-domain dedication (data); recommend approving. |
@@ -60,6 +60,8 @@ The constitution's allow-list (LIC-1) is: MIT, Apache-2.0, BSD-2/3-Clause, ISC, 
 |---------|-----------|---------|---------|--------|--------|
 | fastapi | Python | 0.146.0 | MIT | Allowed | Read from installed package metadata, 2026-10-19 |
 | pydantic-settings | Python | 2.16.0 | MIT | Allowed | Read from installed package metadata, 2026-10-19 |
+| pyjwt | Python | 2.15.1 | MIT | Allowed | Installed package metadata, 2026-10-19 (JWT validation, ZT-3) |
+| cryptography | Python | 50.0.2 | Apache-2.0 OR BSD-3-Clause | Allowed | Installed package metadata, 2026-10-19 (via pyjwt[crypto]) |
 | uvicorn | Python | 0.54.0 | BSD-3-Clause | Allowed | Read from installed package metadata, 2026-10-19 |
 | httpx | Python | 0.28.1 | BSD License | Allowed | Read from installed package metadata, 2026-10-19 |
 | mypy | Python | 2.4.0 | MIT | Allowed | Read from installed package metadata, 2026-10-19 |

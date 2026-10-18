@@ -3,7 +3,7 @@
 | Field | Value |
 |-------|-------|
 | Status | Draft |
-| Version | 0.6.0 |
+| Version | 0.6.1 |
 | Owner | Praveen Darshanam |
 | Last updated | 2026-10-19 |
 
@@ -152,6 +152,7 @@ Decision (owner): **wrap proven open-source scanners behind our own scanner inte
 - **Databases and object store:** each service has its own login role (database-spec section 6.1) and its own object-store access key limited to its prefix; none shares a credential with another service or with the migrator.
 - **Probes:** `python -m app.healthcheck` runs in-process checks (database and broker connectivity with the service's own credentials) and exits non-zero on failure; Kubernetes `exec` probes call it. There is no anonymous HTTP health endpoint.
 - **Metrics/telemetry:** services push OpenTelemetry data to the collector with an authenticated identity; no anonymous `/metrics` endpoint.
+- **Implementation (T-120):** `app/core/security.py` (`TokenVerifier`: RS256/ES256 only, issuer/audience/expiry and required claims; `AuthMiddleware`; `require_scope`), configured by `AUCOFF_OIDC_ISSUER`, `AUCOFF_OIDC_AUDIENCE` and `AUCOFF_OIDC_JWKS_URL`; the app is created with `create_app()` (run `uvicorn app.main:create_app --factory`) and raises at start-up if any is missing.
 - **Tests (ZT-8, ZT-9):** an authentication-coverage test enumerates `app.routes` and the OpenAPI paths and asserts `401` without a token and `403` with the wrong scope for every operation; tests mint tokens with a test key pair and a test JWKS (no bypass flag exists).
 
 Additional roles and permissions (decisions 2026-10-19):
