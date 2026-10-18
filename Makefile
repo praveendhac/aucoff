@@ -89,6 +89,7 @@ postgres: ## Create the PostgreSQL 18.6 + pgvector 0.8.6 cluster
 	kubectl apply -f deploy/postgres/namespace.yaml
 	kubectl apply -f deploy/postgres/cluster.yaml -f deploy/postgres/networkpolicy.yaml
 	kubectl -n aucoff-data wait --for=condition=Ready cluster/aucoff-pg --timeout=300s
+	scripts/copy-db-ca.sh
 
 deploy: ## Install/upgrade the AUCoFF Helm chart into namespace aucoff
 	kubectl create namespace aucoff --dry-run=client -o yaml | kubectl apply -f -

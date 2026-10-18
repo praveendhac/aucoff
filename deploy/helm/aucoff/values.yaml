@@ -38,6 +38,14 @@ oidc:
   jwksUrl: http://aucoff-keycloak:8080/realms/aucoff/protocol/openid-connect/certs
   gatewayAudience: aucoff-gateway
 
+database:
+  host: aucoff-pg-rw.aucoff-data.svc
+  port: 5432
+  name: aucoff
+  gatewaySecret: aucoff-pg-gateway
+  migratorSecret: aucoff-pg-migrator
+  caConfigMap: aucoff-pg-ca
+
 ingress:
   enabled: true
   className: traefik

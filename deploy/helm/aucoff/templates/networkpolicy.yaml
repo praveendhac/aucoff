@@ -45,4 +45,36 @@ spec:
         - podSelector:
             matchLabels:
               app.kubernetes.io/name: aucoff-frontend
+---
+# Database clients (the gateway and the migration job) may resolve DNS and reach only PostgreSQL.
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: aucoff-db-clients-egress
+  labels:
+    {{- include "aucoff.labels" . | nindent 4 }}
+  annotations:
+    # Installed before the migration hook Job, which itself needs this egress to reach the database.
+    "helm.sh/hook": pre-install,pre-upgrade
+    "helm.sh/hook-weight": "-10"
+    "helm.sh/hook-delete-policy": before-hook-creation
+spec:
+  podSelector:
+    matchLabels:
+      aucoff.io/db-client: "true"
+  policyTypes: ["Egress"]
+  egress:
+    - to:
+        - namespaceSelector:
+            matchLabels:
+              kubernetes.io/metadata.name: kube-system
+      ports:
+        - { port: 53, protocol: UDP }
+        - { port: 53, protocol: TCP }
+    - to:
+        - namespaceSelector:
+            matchLabels:
+              kubernetes.io/metadata.name: aucoff-data
+      ports:
+        - { port: 5432, protocol: TCP }
 {{- end }}

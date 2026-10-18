@@ -52,6 +52,15 @@ spec:
         createdb: false
         createrole: false
         inherit: true
+      # Further NOLOGIN group roles used by the baseline migration's grants.
+      - name: aucoff_readonly
+        ensure: present
+        login: false
+        inherit: true
+      - name: aucoff_audit_reader
+        ensure: present
+        login: false
+        inherit: true
       # One login role per service (ZT-6). More are added with each new service.
       - name: aucoff_gateway
         ensure: present
