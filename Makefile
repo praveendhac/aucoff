@@ -92,6 +92,9 @@ certs: ## Install cert-manager and the local CA issuer (in-cluster TLS, ZT-4)
 	kubectl apply -f deploy/cert-manager/issuers.yaml
 	kubectl wait --for=condition=Ready clusterissuer/aucoff-local-ca --timeout=60s
 
+scan: ## Vulnerability scan + SBOM (Trivy) of every image the stack runs; fails on fixable HIGH/CRITICAL
+	scripts/scan-images.sh
+
 secrets: ## Generate unique per-service credentials in the cluster (idempotent; nothing is stored in git)
 	scripts/make-secrets.sh
 

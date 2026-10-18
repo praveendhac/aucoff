@@ -42,6 +42,7 @@ The constitution's allow-list (LIC-1) is: MIT, Apache-2.0, BSD-2/3-Clause, ISC, 
 | Semgrep / Opengrep engines | LGPL-2.1 | **Not approved** (LIC-2 denies LGPL) |
 | Semgrep rules | Semgrep Rules License (restricts competing/commercial use) | **Not approved** |
 | Redis (current) | Tri-licensed RSALv2 / SSPLv1 / AGPLv3 | **Not approved**; Valkey (BSD-3-Clause per search) is the candidate if a cache is ever needed. v1 avoids a cache by keeping the session in an encrypted cookie. |
+| Trivy v0.76.0 (image scanning and SBOM) | Apache-2.0 (read from the aquasecurity/trivy LICENSE, 2026-10-19); run from a digest-pinned container | Allowed; in use (`make scan`). Its vulnerability data is downloaded at scan time; no data is copied into the repository |
 | Prowler | Apache-2.0 | Candidate (cloud scanning) - confirm from LICENSE on adoption |
 | Trivy, Checkov, kube-bench | Apache-2.0 | Candidates - confirm from LICENSE on adoption |
 | kubescape | Not found in search | **Unverified** - do not adopt until confirmed |
@@ -106,16 +107,16 @@ Every common base image (Debian, Ubuntu, Alpine, distroless) contains GPL or LGP
 
 | Image | Used for | Pinned digest | Status |
 |-------|----------|---------------|--------|
-| `python:3.13-slim` | backend | `sha256:70729b46c69b4f1e97c4822c1af3df53a1476cf5ddc6c087c0c10bc3a5678c2f` (pulled 2026-10-19) | In use; vulnerability scan still to add (T-010) |
-| `node:22-slim` | frontend | `sha256:c3de60bf2f9dd0ac6370e6117950ff62d6e339527e7472301c9c78a017978392` (pulled 2026-10-19) | In use; vulnerability scan still to add (T-010) |
+| `python:3.13-slim` | backend | `sha256:70729b46c69b4f1e97c4822c1af3df53a1476cf5ddc6c087c0c10bc3a5678c2f` (pulled 2026-10-19) | In use; pip and setuptools are uninstalled from the final image (their vendored libraries had 4 HIGH findings); scanned clean (T-010) |
+| `node:24-trixie-slim` (Node 24.22, Debian 13.7) | frontend | `sha256:7f486cabe892bff8fef04c0f7da8dba84a560be3e4e2740b7a86afc57ebec315` (pulled 2026-10-19) | In use; replaced `node:22-slim`, whose Debian 12 layer had 7 fixable HIGH/CRITICAL perl findings with no fixed image available. npm/npx/corepack are deleted from the final image. Scanned clean (T-010) |
 | `kindest/node:v1.37.0` | kind cluster nodes | `sha256:a1ed56cfb0e7b93589bdf97c8cd566405a265939e3620fc4f5de89adff580ae5` (from the kind v0.33.0 release notes; pulled by digest successfully) | In use (local dev only) |
 | `postgres:18` | database tests only (throwaway container) | tag only (test use) | In use in tests; PostgreSQL licence per upstream, confirm (T-009) |
 | `ghcr.io/cloudnative-pg/postgresql:18.6-minimal-trixie` | PostgreSQL 18.6 operand image | `sha256:c9be7f221a05b18fe65259d9136affbabe3b39ad91c3b68f8f2f990a45f35f38` | In use; PostgreSQL licence expected, confirm (T-009) |
 | `ghcr.io/cloudnative-pg/pgvector:0.8.6-18-trixie` | pgvector 0.8.6 extension image volume | `sha256:2da4ddaf07cec8edf9ea265968c5368a5df4568737964d2a268d9843589e3e42` | In use; image label says licence "PostgreSQL" (read from the image on 2026-10-19) |
 | CloudNativePG operator (chart `cnpg/cloudnative-pg` 0.29.1, app 1.30.1) | PostgreSQL operator | pulled by the chart | In use; Apache-2.0 expected (extensions repo is Apache-2.0 per web fetch); confirm (T-009) |
-| `quay.io/keycloak/keycloak:26.8.1` | identity provider | `sha256:79c623a22abacf3fe6c00a5fb30f5b7843d717b234033b80995891c06116d244` (pulled 2026-10-19) | In use; Apache-2.0 for Keycloak itself; vulnerability scan still to add (T-010) |
+| `quay.io/keycloak/keycloak:26.8.1` | identity provider | `sha256:79c623a22abacf3fe6c00a5fb30f5b7843d717b234033b80995891c06116d244` (pulled 2026-10-19) | In use; Apache-2.0 for Keycloak itself; scanned clean 2026-10-19 (T-010) |
 | cert-manager images (chart `jetstack/cert-manager` v1.21.2) | local CA / certificates | pulled by the chart | In use; Apache-2.0; digest pinning to add with T-010 |
-| `docker.io/library/rabbitmq:4.3.6-alpine` | message broker | `sha256:6931816af1a943f471c038b278835d36692d55dec769232739296bb91b7de0f5` (pulled 2026-10-19) | In use; MPL-2.0 for RabbitMQ itself; vulnerability scan still to add (T-010) |
+| `docker.io/library/rabbitmq:4.3.6-alpine` | message broker | `sha256:6931816af1a943f471c038b278835d36692d55dec769232739296bb91b7de0f5` (pulled 2026-10-19) | In use; MPL-2.0 for RabbitMQ itself; scanned clean 2026-10-19 (T-010) |
 | `docker.io/traefik:v3.7.14` (Helm chart `traefik/traefik` 42.0.0) | ingress controller | pulled by the chart | In use; licence MIT per web search 2026-10-19, confirm from LICENSE (T-009) |
 
 ## 6. Fonts, icons, images and content

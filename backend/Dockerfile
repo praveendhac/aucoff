@@ -10,6 +10,9 @@ RUN uv sync --frozen --no-dev --no-install-project
 COPY app ./app
 
 FROM docker.io/library/python@sha256:70729b46c69b4f1e97c4822c1af3df53a1476cf5ddc6c087c0c10bc3a5678c2f
+# pip/setuptools are not needed at run time; removing them (and the HIGH findings in their vendored
+# libraries) shrinks the attack surface. Nothing is added to the base image.
+RUN python -m pip uninstall -y pip setuptools wheel 2>/dev/null || python -m pip uninstall -y pip
 RUN useradd --system --uid 10001 --no-create-home --shell /usr/sbin/nologin aucoff
 WORKDIR /app
 COPY --from=build /app/.venv /app/.venv

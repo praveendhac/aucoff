@@ -1,0 +1,8 @@
+# False positives, reviewed 2026-10-19. The frontend's `sharp` is an empty local stub package
+# (frontend/stubs/sharp, version 0.0.0-aucoff-stub) that replaces the real image library, whose
+# bundled libvips is LGPL (constitution LIC-2). It contains no code, so these advisories for the
+# real `sharp` cannot apply.
+GHSA-54xq-cgqr-rpm3
+GHSA-f88m-g3jw-g9cj
+GHSA-rgj7-g3m4-5g8c
+GHSA-wq5f-xc86-pv6w
