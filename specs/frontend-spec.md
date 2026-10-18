@@ -3,7 +3,7 @@
 | Field | Value |
 |-------|-------|
 | Status | Draft |
-| Version | 0.3.0 |
+| Version | 0.4.0 |
 | Owner | Praveen Darshanam |
 | Last updated | 2026-10-19 |
 
@@ -97,6 +97,7 @@ Related: [spec.md](spec.md) · [api-contract.md](api-contract.md) · [design.md]
 - Login via the external OIDC identity provider (Keycloak locally; Entra ID/Cognito later). SAML handled by the IdP.
 - Next.js server (BFF) performs the code flow with PKCE, holds tokens server-side, and issues an `httpOnly`, `Secure`, `SameSite=Lax` session cookie. Tokens MUST NOT be stored in `localStorage`/`sessionStorage`.
 - API calls from the browser go to Next.js route handlers or a same-site proxy that attach the access token; CSRF protection on state-changing requests.
+- **Authentication everywhere (ZT-1, ZT-2):** a Next.js middleware denies every request without a valid server-side session, except the OIDC login, callback and logout handlers (PKCE, state, nonce), the login page, and static shell assets (which contain no tenant data). Every route handler under `/api/*` requires a session and forwards the user's access token; none is anonymous. An automated test enumerates the route handlers and asserts they reject unauthenticated requests.
 - Role and tenant come from token claims; UI gating is cosmetic only.
 - Session expiry and silent refresh handled server-side; idle timeout TODO.
 

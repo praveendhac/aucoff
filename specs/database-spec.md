@@ -3,7 +3,7 @@
 | Field | Value |
 |-------|-------|
 | Status | Draft |
-| Version | 0.5.0 |
+| Version | 0.6.0 |
 | Owner | Praveen Darshanam |
 | Last updated | 2026-10-19 |
 
@@ -179,11 +179,12 @@ erDiagram
 |---------|---------|------------|
 | `aucoff_owner` | Nobody at runtime | Owns objects; no login in prod |
 | `aucoff_migrator` | Alembic job | DDL on `app`, `ref`, `audit`; used only during deploy |
-| `aucoff_app` | API and workers | DML on `app`; `SELECT` on `ref`; `INSERT`-only on `audit.audit_log`; no DDL; subject to RLS |
+| `aucoff_app` | **NOLOGIN group role** holding the runtime privileges: DML on `app`; `SELECT` on `ref`; `INSERT`-only on `audit.audit_log`; no DDL; subject to RLS | (never logs in) |
+| `aucoff_gateway`, `aucoff_svc_<service>` | One **login role per service** (gateway and each agent service), each a member of `aucoff_app` and granted only the extra privileges that service needs | Own credential per service (ZT-6) |
 | `aucoff_readonly` | Reporting/support | `SELECT` on `app` (subject to RLS); no PII columns where avoidable |
 | `aucoff_audit_reader` | Auditor export | `SELECT` on `audit.audit_log` |
 
-No role is superuser; `aucoff_app` has `NOBYPASSRLS`.
+No role is superuser; `aucoff_app` and every per-service role have `NOBYPASSRLS`. Services never share a login role, and none uses the migrator or owner role.
 
 ### 6.2 Row-Level Security (SEC-11, ARC-6)
 - RLS enabled and FORCED on every tenant table.
@@ -192,7 +193,8 @@ No role is superuser; `aucoff_app` has `NOBYPASSRLS`.
 - RLS tests are mandatory (section 10).
 
 ### 6.3 Authentication and transport
-- `scram-sha-256` password auth only; no `trust` or `md5`.
+- `scram-sha-256` password auth only (or TLS client certificates); no `trust`, `md5`, `password`, or network `peer`/`ident`. `pg_hba.conf` has an explicit `hostssl` line per role and database; the default catch-all is `reject`.
+- Every connection is authenticated with the calling service's **own** credential (ZT-6); credentials are unique per service and environment, come from the secret store, and are rotated. The application never connects as a superuser.
 - TLS required (`hostssl` only), TLS 1.2+ ; certificates managed by the platform (cert-manager locally in v1; ACM/RDS CA post-v1).
 - Credentials come from Kubernetes Secrets locally in v1 (a managed secret store is post-v1); never in images, values files in git, logs or prompts (SEC-3). Rotation procedure TODO.
 

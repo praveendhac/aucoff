@@ -3,7 +3,7 @@
 | Field | Value |
 |-------|-------|
 | Status | Draft |
-| Version | 0.7.0 |
+| Version | 0.8.0 |
 | Owner | Praveen Darshanam |
 | Last updated | 2026-10-19 |
 
@@ -163,13 +163,15 @@ Full definitions in [agent.md](agent.md) section 2.
 | FR-28 | Scan scheduling (cron-style per scope) and drift detection between consecutive scans | US-24 |
 | FR-29 | Deterministic check engine wrapping open-source scanners with versioned rule packs and check-to-control mapping ([backend-spec.md](backend-spec.md) §4a) | US-3, US-5 |
 | FR-30 | Notification event catalogue and per-user channel preferences | US-11 |
+| FR-31 | Per-service identities (OAuth2 client credentials) for internal calls; per-service credentials for database, broker and object store; token validation and scope-based authorisation on every endpoint | NFR-17 |
+| FR-32 | Authentication-coverage test and CI gate (route enumeration, probe and exposure checks) | NFR-17 |
 
 ## 8. Non-Functional Requirements
 | ID | Category | Requirement |
 |----|----------|-------------|
 | NFR-1 | Security | No OWASP Top 10 (web) or OWASP API Security Top 10 vulnerabilities; verified by SAST, DAST and API testing before each release; high/critical findings block release |
 | NFR-2 | Security | Meet constitution section 6 (SEC-1 to SEC-14) |
-| NFR-3 | Availability | v1 (local kind): services expose health/readiness, recover from pod restarts, and scans degrade gracefully when providers fail; the 99.9% monthly availability target *(proposal)* applies post-v1 once hosted |
+| NFR-3 | Availability | v1 (local kind): services report health through authenticated channels (exec probes and the authenticated `GET /health`, never anonymous endpoints), recover from pod restarts, and scans degrade gracefully when providers fail; the 99.9% monthly availability target *(proposal)* applies post-v1 once hosted |
 | NFR-4 | Performance | API p95 < 500 ms for non-agent calls *(proposal)* |
 | NFR-5 | Scan latency and scale | Single-scope assessment completes within TODO (proposal: 30 min for 1,000 resources); N concurrent assessments per tenant TODO; evidence volume per tenant TODO |
 | NFR-6 | Data retention | Per [database-spec.md](database-spec.md) section 9; configurable per tenant within regulatory minimums |
@@ -183,6 +185,7 @@ Full definitions in [agent.md](agent.md) section 2.
 | NFR-14 | UX | Visual design, layout and metrics per [design.md](design.md) section 10 and 11; WCAG 2.2 AA with contrast verified |
 | NFR-15 | Licensing and IP compliance | No FOSS licence issue and no plagiarism/copyright issue in any library, software, container image, font, icon, dataset, content or generated output; only items meeting constitution LIC-1 to LIC-8 are used; if an issue exists, the item is not used and an alternative is chosen |
 | NFR-16 | Project licence | AUCoFF is released under the MIT License (constitution LIC-9); the root `LICENSE` and package metadata agree |
+| NFR-17 | Authentication everywhere | Every REST/SSE endpoint, internal or external, requires a valid token; service-to-service calls use per-service identities; service-to-database/broker/object-store access uses per-service credentials; no anonymous health, docs or metrics endpoints; no auth bypass in any environment (constitution section 7d, ZT-1 to ZT-9) |
 
 ## 9. LLM Approach
 Provider-agnostic cloud LLM API behind an interface (ARC-5), with Anthropic Claude as the default provider. v1 uses Anthropic Claude only, via the provider interface, with redacted data only and US-region processing unless a tenant requires otherwise; a fallback provider and residency-pinned options are revisited with the first EU/India tenants.

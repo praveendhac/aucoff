@@ -3,7 +3,7 @@
 | Field | Value |
 |-------|-------|
 | Status | Draft |
-| Version | 0.3.0 |
+| Version | 0.4.0 |
 | Owner | Praveen Darshanam |
 | Last updated | 2026-10-19 |
 
@@ -18,7 +18,7 @@ Related: [frontend-spec.md](frontend-spec.md) · [backend-spec.md](backend-spec.
 | Format | JSON (`application/json`), UTF-8; errors `application/problem+json` |
 | Identifiers | UUID v7 strings; timestamps ISO 8601 UTC |
 | Tenancy | Derived from the authenticated token, never from client-supplied parameters (see [database-spec.md](database-spec.md) section 6.2) |
-| Auth | `Authorization: Bearer <JWT>` issued by the OIDC provider |
+| Auth | **Every endpoint requires** `Authorization: Bearer <JWT>` issued by the OIDC provider (users) or by the service-identity flow (internal callers); there are no anonymous endpoints (constitution ZT-1). Missing/invalid token: `401`; insufficient scope: `403` |
 | Naming | Plural nouns, kebab-case paths, snake_case JSON fields |
 | Versioning | URI major version; additive changes allowed within `v1`; breaking changes require `v2` and a deprecation period (TODO length, proposal 6 months) with `Deprecation`/`Sunset` headers |
 | Pagination | Cursor-based: `?limit=` (default 25, max 100) and `?cursor=`; response `{ "items": [], "next_cursor": "..." \| null }` |
@@ -31,7 +31,7 @@ Related: [frontend-spec.md](frontend-spec.md) · [backend-spec.md](backend-spec.
 
 ## 2. API Documentation (Swagger / OpenAPI) - Required
 - FastAPI generates an **OpenAPI 3.1** document at `/api/v1/openapi.json`; a copy is committed as `backend/openapi.yaml` and linted with Spectral in CI.
-- **Swagger UI** at `/docs` and **ReDoc** at `/redoc` document all endpoints. In production they require authentication or are disabled per tenant policy (TODO decision).
+- **Swagger UI** at `/docs` and **ReDoc** at `/redoc` document all endpoints. They, and `/api/v1/openapi.json`, require authentication in **every** environment (ZT-1); an unauthenticated documentation page is not allowed. Scope: `docs:read`.
 - Every operation MUST have: `operationId`, summary, description, tags, request/response schemas with examples, all error responses, required scopes (security requirement), and pagination/idempotency parameters where applicable.
 - Every schema field MUST have a type, description, and constraints (format, min/max, enum).
 - CI MUST fail when: generated OpenAPI differs from the committed file; any route lacks documentation or an error response; the document fails linting (Spectral or equivalent - TODO); frontend client generation or contract tests break.
@@ -78,6 +78,9 @@ Related: [frontend-spec.md](frontend-spec.md) · [backend-spec.md](backend-spec.
 | `report:read` / `report:generate` | Reports | compliance_officer, auditor, executive, ciso |
 | `audit:read` | Audit log | auditor, ciso, admin |
 | `admin:write` | Users, roles, SSO, integrations | admin |
+| `docs:read` | API documentation (`/docs`, `/redoc`, OpenAPI document) | any authenticated user |
+| `ops:read` | Health summary and metrics | operators, monitoring identity |
+| `svc:<service>` | Service-to-service calls to the named service (issued only to service identities, audience-scoped) | service identities |
 | `questionnaire:read` / `questionnaire:write` / `questionnaire:approve` | Questionnaires and answer library | compliance_officer, ciso (approve); engineer read |
 | `copilot:use` | Copilot Q&A | all authenticated |
 Scopes derive from roles; the matrix in [backend-spec.md](backend-spec.md) section 8 is authoritative.
@@ -89,7 +92,7 @@ All paths are under `/api/v1`. Status shows the success code.
 | ID | Method | Path | Summary | Scope | OK | Refs |
 |----|--------|------|---------|-------|----|------|
 | API-1 | GET | `/me` | Current user, tenant, roles | any | 200 | US-10 |
-| API-2 | GET | `/health/live`, `/health/ready` | Probes (no auth) | none | 200 | - |
+| API-2 | GET | `/health` | Authenticated health summary for operators and monitoring (dependency status without secrets). Kubernetes probes do NOT use HTTP; they run the in-container health-check command (ZT-7) | ops:read | 200 | NFR-17 |
 
 ### 5.2 Administration
 | ID | Method | Path | Summary | Scope | OK | Refs |
@@ -216,7 +219,7 @@ Naming: `/connectors` = evidence source connectors (DB `connectors`); `/integrat
 | `AuditEvent` | id, occurred_at, actor, action, target, outcome, request_id |
 
 ## 8. Webhooks (inbound)
-Jira/ServiceNow status callbacks to `POST /integrations/{id}/webhook`: signature (HMAC) verified, replay-protected by timestamp, rate-limited, payload schema validated. Details TODO.
+Jira/ServiceNow status callbacks to `POST /integrations/{id}/webhook` are authenticated: the HMAC signature over the body and a timestamp (the per-integration shared secret is the credential) is verified before any processing; requests without a valid signature get `401`, stale timestamps are rejected (replay protection), and requests are rate-limited and schema-validated. Webhooks are never anonymous (ZT-2). Details TODO.
 
 ## 9. Security Requirements (NFR-1)
 OWASP API Security Top 10 mapping in [backend-spec.md](backend-spec.md) section 14; TLS only; CORS limited to the frontend origin; no sensitive data in URLs or logs; response schemas explicit; request size limits; upload content-type/size checks and malware scan (TODO); no secrets or PII in error messages.
@@ -227,10 +230,11 @@ OWASP API Security Top 10 mapping in [backend-spec.md](backend-spec.md) section 
 | 0.1.0 | 2026-10-18 | Initial template | - |
 | 0.2.0 | 2026-10-18 | Conventions, documentation requirement, endpoint catalogue, SSE | - |
 | 0.3.0 | 2026-10-19 | Metrics/history, questionnaire, platform, auditor, schedule and notification endpoints | - |
+| 0.4.0 | 2026-10-19 | All endpoints authenticated: health, docs and OpenAPI no longer anonymous (API-2 is now `GET /health`, `ops:read`); `docs:read`, `ops:read`, `svc:*` scopes; webhook HMAC clarified | Yes (probe paths removed; none were consumed yet) |
 
 ## 11. Open Questions
 - [x] OpenAPI file lives at `backend/openapi.yaml`; lint ruleset: Spectral (rule customisation TODO).
-- [ ] Whether `/docs` is enabled in production.
+- [x] `/docs`, `/redoc` and the OpenAPI document are always authenticated (`docs:read`); never anonymous.
 - [ ] Deprecation period and idempotency retention.
 - [ ] Webhook vs polling for ticket sync.
 - [ ] Bulk endpoints and export formats for reports.

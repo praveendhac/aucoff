@@ -3,7 +3,7 @@
 | Field | Value |
 |-------|-------|
 | Status | Draft |
-| Version | 0.5.1 |
+| Version | 0.6.0 |
 | Owner | Praveen Darshanam |
 | Last updated | 2026-10-19 |
 
@@ -88,7 +88,8 @@ Detailed in [agent.md](agent.md) section 10.
 Services publish run events to RabbitMQ; the gateway relays them to the browser via SSE ([api-contract.md](api-contract.md) section 6).
 
 ## 6. Security Architecture
-- **AuthN/AuthZ:** external OIDC IdP; JWT validated by the API; BFF session cookie for the browser; RBAC enforced in domain code (SEC-1).
+- **AuthN/AuthZ:** external OIDC IdP; JWT validated by the API on **every** request; BFF session cookie for the browser; RBAC enforced in domain code (SEC-1). **No anonymous endpoint exists anywhere**, including health, docs and metrics (ZT-1).
+- **Service-to-service and data-plane authentication:** per-service identities (OAuth2 client credentials, short-lived audience-scoped tokens), per-service RabbitMQ users, per-service PostgreSQL and object-store credentials, all over TLS (ZT-4 to ZT-6). NetworkPolicies are defence in depth, not the control. Kubernetes probes use `exec`, not HTTP (ZT-7).
 - **Tenancy:** `tenant_id` + forced RLS; tenant context set per transaction; tenant-filtered vector queries (SEC-11, DB-3, DB-6).
 - **Data protection:** TLS everywhere; encryption at rest; column-level encryption for restricted fields; classification and retention in [database-spec.md](database-spec.md) (SEC-4, SEC-5).
 - **Secrets:** Kubernetes Secrets on the local cluster in v1 (managed secret store post-v1); connector credentials only by reference (SEC-3).
@@ -122,6 +123,7 @@ Logs, metrics, traces via OpenTelemetry into Prometheus and permissively license
 | ADR-6 | OpenAPI 3.1 as source of truth; generated TS client; Swagger UI for all endpoints | Hand-written clients | Prevents contract drift | Accepted (owner) |
 | ADR-7 | kind + umbrella Helm chart; Terraform + EKS only post-v1 | minikube, per-service charts | Same chart across environments; kind is lighter and matches CI | Accepted (owner) |
 | ADR-13 | **v1 (MVP) is local-only on kind: no AWS or other cloud hosting; everything tested on a laptop** | Early AWS deployment | Faster feedback, no cloud cost or compliance surface in MVP; images and chart stay portable | Accepted (owner) |
+| ADR-14 | **Zero-trust authentication: every API, internal or external, and every service-to-service, service-to-database and service-to-broker call is authenticated; no anonymous health/docs/metrics endpoints; token-based service identity over TLS (no mTLS in v1)** | Network-position trust, anonymous probes, mesh mTLS | Owner requirement; removes the largest class of internal-network attack paths; keeps v1 simple on kind | Accepted (owner) |
 | ADR-8 | Immutable per-assessment snapshots + metric points for 12-month history, rollups for trends | Recompute from live data | Reproducible comparisons independent of later data changes | Proposed |
 | ADR-9 | Light-default theme with dark mode, token-based design system (shadcn/ui + Tailwind) | Single theme, other UI kits | Owner choice; accessibility and consistency | Accepted (owner) |
 | ADR-10 | Wrap vetted open-source scanners behind our adapter interface; map checks to unified controls | Write all rules in OPA/Rego | Broad coverage quickly; keep our control logic and versioning | Accepted (owner) |

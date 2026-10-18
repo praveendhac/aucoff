@@ -3,7 +3,7 @@
 | Field | Value |
 |-------|-------|
 | Status | Draft |
-| Version | 0.4.0 |
+| Version | 0.5.0 |
 | Owner | Praveen Darshanam |
 | Last updated | 2026-10-19 |
 
@@ -90,6 +90,8 @@ All tools are allow-listed per agent, tenant-scoped, rate-limited and audit-logg
 | `web.fetch` | Fetch from allow-listed official regulatory sources | Read (external) | None | AG-11 | No (allow-list only) |
 | `export.render` | Produce Excel/Word/PDF output | Internal | Creates file | AG-9, AG-13 | Export approval |
 No tool performs writes against customer systems.
+
+**Authentication of tool and service calls (ZT-4, ZT-6):** every tool that reaches another AUCoFF service uses the calling agent service's own identity (client-credentials token, scope `svc:<target>`); database and object-store tools use that service's own credential; connector tools use per-tenant scoped read-only credentials from the secret store; the LLM provider is called with an API key from the secret store. No tool exposes or accepts an anonymous endpoint, and no agent can act with another service's identity.
 
 ## 6. Knowledge and Memory
 | Source | Scope | Contents | Notes |

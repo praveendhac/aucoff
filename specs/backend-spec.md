@@ -3,7 +3,7 @@
 | Field | Value |
 |-------|-------|
 | Status | Draft |
-| Version | 0.5.1 |
+| Version | 0.6.0 |
 | Owner | Praveen Darshanam |
 | Last updated | 2026-10-19 |
 
@@ -145,6 +145,15 @@ Decision (owner): **wrap proven open-source scanners behind our own scanner inte
 - Every request opens a transaction with `SET LOCAL app.tenant_id`; missing tenant fails closed (DB-3).
 - Authorisation checks in `domain`/dependencies, never only in routers (SEC-1).
 
+### 8a. Authentication everywhere (ZT-1 to ZT-9)
+- **Default-deny gateway:** an ASGI middleware/dependency applied to the whole application validates the bearer token (JWKS signature, issuer, audience, expiry, scopes) before any route runs, including `/docs`, `/redoc`, `/api/v1/openapi.json` and `/api/v1/health`. A route can only be exempted by the carve-outs in ZT-2 (the BFF's OIDC callback is in the frontend, not here); the gateway has none. Webhook routes verify the HMAC signature and timestamp instead of a bearer token.
+- **Service identities:** each agent service and the gateway is a confidential client (`aucoff-<service>`) in the identity provider's service realm. A shared `ServiceClient` obtains client-credentials tokens (audience = target service, scope `svc:<target>`), caches them until shortly before expiry, and attaches them to every internal HTTP/SSE call. Callees authorise by scope and record the caller identity in logs and audit entries.
+- **Messaging:** per-service RabbitMQ users over TLS with permissions restricted to their own queues/exchanges; the broker's `user_id` check ensures a publisher cannot claim another service's identity; the envelope's `sender` must equal the authenticated user, and consumers re-validate `tenant_id`.
+- **Databases and object store:** each service has its own login role (database-spec section 6.1) and its own object-store access key limited to its prefix; none shares a credential with another service or with the migrator.
+- **Probes:** `python -m app.healthcheck` runs in-process checks (database and broker connectivity with the service's own credentials) and exits non-zero on failure; Kubernetes `exec` probes call it. There is no anonymous HTTP health endpoint.
+- **Metrics/telemetry:** services push OpenTelemetry data to the collector with an authenticated identity; no anonymous `/metrics` endpoint.
+- **Tests (ZT-8, ZT-9):** an authentication-coverage test enumerates `app.routes` and the OpenAPI paths and asserts `401` without a token and `403` with the wrong scope for every operation; tests mint tokens with a test key pair and a test JWKS (no bypass flag exists).
+
 Additional roles and permissions (decisions 2026-10-19):
 | Capability | platform_admin (operator) | external_auditor (scoped, time-boxed) | notes |
 |-----------|:--:|:--:|-------|
@@ -181,7 +190,7 @@ Per-tenant connector credentials live in a dedicated secret store addressed by `
 12-factor environment config (ARC-8) validated by Pydantic Settings at start-up; values from Helm values/ConfigMaps; secrets from Kubernetes Secrets (managed secret store post-v1); no defaults for secrets; config documented in [infrastructure-spec.md](infrastructure-spec.md).
 
 ## 12. Observability
-Structured JSON logs with `request_id`, `tenant_id`, `agent_run_id` (no PII or secrets); OpenTelemetry traces across API, queue and services; Prometheus metrics (request latency, queue depth, run durations, LLM tokens/cost, scanner errors); health endpoints (`/health/live`, `/health/ready`).
+Structured JSON logs with `request_id`, `tenant_id`, `agent_run_id` (no PII or secrets); OpenTelemetry traces across API, queue and services; Prometheus metrics (request latency, queue depth, run durations, LLM tokens/cost, scanner errors); health via authenticated `GET /health` and the exec health-check command (no anonymous probes).
 
 ## 13. Error Handling
 Domain exceptions map to the problem-detail format in [api-contract.md](api-contract.md); unexpected errors return a generic message with a request ID and are logged with stack traces; no internals leaked (COD-6).

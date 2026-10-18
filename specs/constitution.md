@@ -3,7 +3,7 @@
 | Field | Value |
 |-------|-------|
 | Status | Draft |
-| Version | 0.11.0 |
+| Version | 0.12.0 |
 | Owner | Praveen Darshanam |
 | Last updated | 2026-10-19 |
 
@@ -83,7 +83,7 @@ Related: [spec.md](spec.md) · [design.md](design.md) · [agent.md](agent.md) ·
 
 | ID | Rule |
 |----|------|
-| SEC-1 | Authentication is required on every endpoint except health checks; authorisation is role-based and enforced server-side (never only in the UI). |
+| SEC-1 | Authentication is required on **every** endpoint without exception (see section 7d, ZT-1 to ZT-9); authorisation is role-based and enforced server-side (never only in the UI). |
 | SEC-2 | Least privilege for users, services, database roles and Kubernetes service accounts. |
 | SEC-3 | Secrets MUST NOT be in source control, images, logs or prompts; in v1 they come from Kubernetes Secrets on the local cluster (a managed secret store is a post-v1 option). A pre-commit secret scan (Gitleaks) MUST remain enabled. |
 | SEC-4 | Encrypt in transit (TLS) and at rest for all sensitive data. |
@@ -175,6 +175,22 @@ AUCoFF's own licence:
 |----|------|
 | LIC-9 | AUCoFF is licensed under the MIT License, Copyright (c) 2026 Praveen Darshanam. The root `LICENSE` file and the `license` metadata in `backend/pyproject.toml` and `frontend/package.json` MUST agree. Changing the project licence needs an owner decision recorded in this constitution and in `LICENCES.md`. Contributions are accepted only under the same licence, and only from people who may license them. |
 
+## 7d. Authentication Everywhere (zero trust)
+
+Owner requirement (2026-10-19): every REST API call uses an authentication token; there is no unauthenticated internal or external API; microservice-to-microservice and microservice-to-database calls are authenticated. Network position (cluster, namespace, NetworkPolicy) is never a substitute for authentication.
+
+| ID | Rule |
+|----|------|
+| ZT-1 | **No anonymous endpoints.** Every HTTP, SSE, WebSocket or gRPC endpoint of every AUCoFF component (gateway, agent services, BFF route handlers, operator console, webhooks, API documentation, OpenAPI document, health, readiness, metrics, debug) MUST require a valid credential. Frameworks MUST be configured default-deny: a route without an explicit authentication requirement is rejected at start-up or at review, not served. |
+| ZT-2 | **The only carve-outs** are mechanisms whose purpose is to establish authentication, and they are not application REST APIs: (a) the browser's OIDC authorization-code login, callback and logout handled by the BFF (protected by PKCE, state and nonce; they expose no application data); (b) the identity provider's own protocol endpoints (discovery, JWKS, token), which are public or client-authenticated by design; (c) static UI shell assets (HTML/JS/CSS/fonts of the login and app shell), which contain no tenant data. Inbound webhooks are *not* a carve-out: they are authenticated by HMAC signature and timestamp (the shared secret is the credential). |
+| ZT-3 | **Users:** API calls carry an OIDC access token (`Authorization: Bearer`) validated for signature, issuer, audience, expiry and scopes on every request. The browser never holds tokens; the BFF keeps them server-side behind an `httpOnly` session cookie (frontend-spec section 5). |
+| ZT-4 | **Services:** every service has its own identity (a confidential client in the identity provider) and calls other services with a short-lived, audience-scoped token obtained through the OAuth2 client-credentials flow, over TLS. Callees validate the token and authorise by scope (least privilege). No shared service secrets, no long-lived static API keys between services, no trust based on source network. |
+| ZT-5 | **Messaging:** the broker requires authentication (per-service users, no default/guest account), TLS, and per-service permissions limited to that service's queues and exchanges. Consumers verify that a message's declared sender matches the broker-authenticated publisher and re-validate tenant context. |
+| ZT-6 | **Data stores:** every service authenticates to PostgreSQL, the object store and any other store with its **own** credential or client certificate (PostgreSQL: `scram-sha-256` or certificate over TLS; never `trust`, `peer` over the network, or a shared account), mapped to least-privilege roles (DB-4). Credentials come from the secret store, are unique per service and environment, and are rotatable. |
+| ZT-7 | **Probes and telemetry:** Kubernetes liveness/readiness probes MUST NOT call anonymous HTTP endpoints; they use `exec` probes (an in-container health-check command) or authenticated calls. Metrics, logs and traces are pushed to the collector with an authenticated identity or scraped over an authenticated channel; dashboards sit behind SSO. |
+| ZT-8 | **Enforcement:** CI MUST include an automated authentication-coverage test that enumerates all routes of every service (framework route table and OpenAPI) and asserts `401` without credentials and `403` with insufficient scope; it MUST also fail on `httpGet` probes, Services/Ingresses exposing unauthenticated paths, and database/broker configurations that allow unauthenticated access. |
+| ZT-9 | **No bypass, anywhere.** There is no "auth disabled", "dev mode", debug-token or allow-all setting in code or configuration, including on the local kind cluster and in tests (tests mint tokens from a test identity provider/keys instead). Authentication failures fail closed and are audit-logged without logging the credential. |
+
 ## 8. Spec-Driven Development Rules
 
 - **SDD-1** No behaviour change without a spec change in the same PR or earlier.
@@ -217,3 +233,4 @@ AUCoFF's own licence:
 | 0.9.0 | 2026-10-19 | v1 is local-only (kind): ENV-4 added; ARC-11, SEC-3, ENV-1, ENV-3 reworded |
 | 0.10.0 | 2026-10-19 | AUCoFF relicensed from AGPL-3.0 to MIT: LIC-9 added |
 | 0.11.0 | 2026-10-19 | LIC-2: unmodified OS packages in official minimal base images allowed as mere aggregation |
+| 0.12.0 | 2026-10-19 | Authentication everywhere: ZT-1 to ZT-9 added; SEC-1 tightened (no health-check exception) |
