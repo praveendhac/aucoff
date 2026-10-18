@@ -32,11 +32,15 @@ frontend:
     limits: { cpu: 500m, memory: 512Mi }
 
 oidc:
-  # Keycloak is added in the next build session; until then tokens cannot be issued and every
-  # request is rejected with 401 (which is the intended default-deny behaviour, ZT-1).
-  issuer: http://aucoff-keycloak:8080/realms/aucoff
-  jwksUrl: http://aucoff-keycloak:8080/realms/aucoff/protocol/openid-connect/certs
+  # Keycloak (chart aucoff-identity). The issuer must match the identity chart's `hostname` and
+  # every URL is https, verified against the local CA published as the aucoff-identity-ca ConfigMap.
+  issuer: https://aucoff-keycloak.aucoff-identity.svc:8443/realms/aucoff
+  jwksUrl: https://aucoff-keycloak.aucoff-identity.svc:8443/realms/aucoff/protocol/openid-connect/certs
+  tokenUrl: https://aucoff-keycloak.aucoff-identity.svc:8443/realms/aucoff/protocol/openid-connect/token
   gatewayAudience: aucoff-gateway
+  caConfigMap: aucoff-identity-ca
+  # Per-service identity for outbound calls (client_id / client_secret keys), made by `make secrets`.
+  serviceSecret: aucoff-svc-gateway
 
 database:
   host: aucoff-pg-rw.aucoff-data.svc

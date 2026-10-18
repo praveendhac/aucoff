@@ -15,6 +15,15 @@ class Settings(BaseSettings):
     oidc_issuer: str | None = None
     oidc_audience: str | None = None
     oidc_jwks_url: str | None = None
+    # CA bundle used to verify the identity provider's TLS certificate (ZT-4). Unset means the
+    # system trust store, which is correct once a public CA issues the certificate.
+    oidc_ca_file: str | None = None
+
+    # This service's own identity for outbound service-to-service calls (OAuth2 client
+    # credentials, ZT-5). The secret comes from a per-service Kubernetes Secret.
+    oidc_token_url: str | None = None
+    service_client_id: str | None = None
+    service_client_secret: str | None = None
 
     # Database connection (constitution ZT-6, DB-5): each service uses its OWN role and password,
     # always over TLS with the server certificate verified against the cluster CA.

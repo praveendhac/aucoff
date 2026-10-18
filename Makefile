@@ -44,9 +44,11 @@ licences: ## Licence gate for Python and npm dependencies (LIC-1, LIC-2, LIC-5)
 	cd backend && uv run python -m scripts.check_licences
 	cd frontend && npm run -s licences && npm run -s audit:prod
 
-helm-lint: ## Lint the Helm chart and fail on anonymous HTTP probes (ZT-7, ZT-8)
+helm-lint: ## Lint the Helm charts and fail on anonymous HTTP probes (ZT-7, ZT-8)
 	helm lint deploy/helm/aucoff -f deploy/helm/aucoff/values-local.yaml
-	@if helm template aucoff deploy/helm/aucoff -f deploy/helm/aucoff/values-local.yaml | grep -n httpGet; then \
+	helm lint deploy/helm/aucoff-identity -f deploy/helm/aucoff-identity/values-local.yaml
+	@if (helm template aucoff deploy/helm/aucoff -f deploy/helm/aucoff/values-local.yaml; \
+	  helm template aucoff-identity deploy/helm/aucoff-identity -f deploy/helm/aucoff-identity/values-local.yaml) | grep -n httpGet; then \
 	  echo "ERROR: httpGet probes are not allowed (constitution ZT-7); use exec probes"; exit 1; fi
 	@echo "no httpGet probes: ok"
 
@@ -82,6 +84,14 @@ operators: ## Install the CloudNativePG operator (PostgreSQL)
 	helm repo update cnpg >/dev/null
 	helm upgrade --install cnpg cnpg/cloudnative-pg --version 0.29.1 -n cnpg-system --create-namespace --wait --timeout 3m
 
+certs: ## Install cert-manager and the local CA issuer (in-cluster TLS, ZT-4)
+	helm repo add jetstack https://charts.jetstack.io >/dev/null 2>&1 || true
+	helm repo update jetstack >/dev/null
+	helm upgrade --install cert-manager jetstack/cert-manager --version v1.21.2 -n cert-manager --create-namespace \
+	  --set crds.enabled=true --wait --timeout 4m
+	kubectl apply -f deploy/cert-manager/issuers.yaml
+	kubectl wait --for=condition=Ready clusterissuer/aucoff-local-ca --timeout=60s
+
 secrets: ## Generate unique per-service credentials in the cluster (idempotent; nothing is stored in git)
 	scripts/make-secrets.sh
 
@@ -91,6 +101,13 @@ postgres: ## Create the PostgreSQL 18.6 + pgvector 0.8.6 cluster
 	kubectl -n aucoff-data wait --for=condition=Ready cluster/aucoff-pg --timeout=300s
 	scripts/copy-db-ca.sh
 
+identity: ## Install Keycloak (identity provider) into namespace aucoff-identity
+	kubectl create namespace aucoff-identity --dry-run=client -o yaml | kubectl apply -f -
+	kubectl label namespace aucoff-identity pod-security.kubernetes.io/enforce=restricted --overwrite
+	helm upgrade --install aucoff-identity deploy/helm/aucoff-identity -n aucoff-identity \
+	  -f deploy/helm/aucoff-identity/values-local.yaml --wait --timeout 6m
+	scripts/copy-identity-ca.sh
+
 deploy: ## Install/upgrade the AUCoFF Helm chart into namespace aucoff
 	kubectl create namespace aucoff --dry-run=client -o yaml | kubectl apply -f -
 	kubectl label namespace aucoff pod-security.kubernetes.io/enforce=restricted --overwrite
@@ -99,4 +116,4 @@ deploy: ## Install/upgrade the AUCoFF Helm chart into namespace aucoff
 smoke: ## Smoke test the local deployment (unauthenticated requests must be refused)
 	scripts/smoke.sh
 
-up: cluster-up ingress operators secrets postgres images load deploy smoke ## Bring the whole local stack up
+up: cluster-up ingress operators certs secrets postgres identity images load deploy smoke ## Bring the whole local stack up

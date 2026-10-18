@@ -10,6 +10,7 @@
   through `StaticKeyResolver`.
 """
 
+import ssl
 from collections.abc import Awaitable, Callable, MutableMapping
 from dataclasses import dataclass, field
 from typing import Any, Protocol
@@ -71,8 +72,13 @@ class StaticKeyResolver:
 class JWKSKeyResolver:
     """Resolves signing keys from the identity provider's JWKS endpoint (cached)."""
 
-    def __init__(self, jwks_url: str) -> None:
-        self._client = jwt.PyJWKClient(jwks_url, cache_keys=True, lifespan=300)
+    def __init__(self, jwks_url: str, ca_file: str | None = None) -> None:
+        if not jwks_url.lower().startswith("https://"):
+            raise ValueError("the JWKS URL must use https (constitution ZT-4)")
+        context = ssl.create_default_context(cafile=ca_file)
+        self._client = jwt.PyJWKClient(
+            jwks_url, cache_keys=True, lifespan=300, timeout=10, ssl_context=context
+        )
 
     def signing_key(self, token: str) -> Any:
         return self._client.get_signing_key_from_jwt(token).key
@@ -126,7 +132,9 @@ def verifier_from_settings(settings: Settings) -> TokenVerifier:
             "AUCOFF_OIDC_JWKS_URL. The service refuses to start without authentication (ZT-9)."
         )
     return TokenVerifier(
-        JWKSKeyResolver(settings.oidc_jwks_url), settings.oidc_issuer, settings.oidc_audience
+        JWKSKeyResolver(settings.oidc_jwks_url, settings.oidc_ca_file),
+        settings.oidc_issuer,
+        settings.oidc_audience,
     )
 
 

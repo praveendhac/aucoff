@@ -1,7 +1,9 @@
 #!/usr/bin/env bash
-# Smoke test for the local kind deployment (T-410). Every check is anonymous-safe: the point of the
-# test is that the API refuses unauthenticated requests (constitution ZT-1). Authenticated checks
-# arrive with the identity provider (Session 3).
+# Smoke test for the local kind deployment (T-410). First it proves the API refuses requests without
+# credentials (constitution ZT-1); then it obtains REAL tokens from Keycloak with the throwaway
+# smoke clients (client-credentials grant, TLS verified against the local CA) and proves the API
+# accepts a valid token, refuses a token with the wrong audience or an expired one (401), and
+# answers 403 when the required scope is missing.
 set -euo pipefail
 
 NS=${NS:-aucoff}
@@ -34,10 +36,45 @@ check "API docs refuse anonymous calls"     401 "$(pycode /docs)"
 check "ReDoc refuses anonymous calls"       401 "$(pycode /redoc)"
 check "unknown paths refuse anonymous calls" 401 "$(pycode /nope)"
 
+echo "With real tokens from Keycloak (port-forward, TLS verified against the local CA):"
+IDP_NS=${IDP_NS:-aucoff-identity}
+IDP_HOST=aucoff-keycloak.$IDP_NS.svc
+IDP_PORT=${IDP_PORT:-18443}
+workdir=$(mktemp -d)
+kubectl -n "$IDP_NS" port-forward svc/aucoff-keycloak "$IDP_PORT:8443" >/dev/null 2>&1 &
+pf=$!
+trap 'kill $pf 2>/dev/null; rm -rf "$workdir"' EXIT
+kubectl -n cert-manager get secret aucoff-local-ca -o jsonpath='{.data.tls\.crt}' | base64 -d > "$workdir/ca.crt"
+for _ in $(seq 1 20); do nc -z 127.0.0.1 "$IDP_PORT" 2>/dev/null && break; sleep 0.5; done
+secret() { kubectl -n "$IDP_NS" get secret aucoff-keycloak-clients -o jsonpath="{.data.$1}" | base64 -d; }
+token() { # client secret-key [scope]
+  curl -s --max-time 15 --cacert "$workdir/ca.crt" --resolve "$IDP_HOST:$IDP_PORT:127.0.0.1" \
+    -d grant_type=client_credentials -d "client_id=$1" -d "client_secret=$(secret "$2")" ${3:+-d "scope=$3"} \
+    "https://$IDP_HOST:$IDP_PORT/realms/aucoff/protocol/openid-connect/token" \
+    | python3 -c "import sys,json; print(json.load(sys.stdin)['access_token'])"
+}
+authcode() { curl -s -o /dev/null -w '%{http_code}' --max-time 10 --resolve "$HOST:80:127.0.0.1" -H "Authorization: Bearer $1" "http://$HOST$2"; }
+
+good=$(token aucoff-smoke SMOKE_SECRET ops:read)
+check "valid token (ops:read) is accepted"         200 "$(authcode "$good" /api/v1/health)"
+check "valid token without docs:read is forbidden on OpenAPI" 403 "$(authcode "$good" /api/v1/openapi.json)"
+noscope=$(token aucoff-smoke SMOKE_SECRET)
+check "valid token without ops:read is forbidden"  403 "$(authcode "$noscope" /api/v1/health)"
+other=$(token aucoff-smoke-otheraud SMOKE_OTHERAUD_SECRET ops:read)
+check "token for a different audience is refused"  401 "$(authcode "$other" /api/v1/health)"
+short=$(token aucoff-smoke-short SMOKE_SHORT_SECRET ops:read)
+check "fresh short-lived token is accepted"        200 "$(authcode "$short" /api/v1/health)"
+sleep 7
+check "same token after it expired is refused"     401 "$(authcode "$short" /api/v1/health)"
+check "garbage bearer token is refused"            401 "$(authcode not-a-jwt /api/v1/health)"
+check "token signed by someone else is refused"    401 "$(authcode "${good%.*}.AAAA" /api/v1/health)"
+
 echo "Cluster hygiene:"
-httpget=$(kubectl -n "$NS" get pods -o json | grep -c '"httpGet"' || true)
-check "no httpGet probes on running pods" 0 "$httpget"
-nonroot=$(kubectl -n "$NS" get pods -o jsonpath='{range .items[*]}{.spec.securityContext.runAsNonRoot}{"\n"}{end}' | grep -vc true || true)
-check "every pod runs as non-root" 0 "$nonroot"
+for ns in "$NS" "$IDP_NS"; do
+  httpget=$(kubectl -n "$ns" get pods -o json | grep -c '"httpGet"' || true)
+  check "no httpGet probes on pods in $ns" 0 "$httpget"
+  nonroot=$(kubectl -n "$ns" get pods -o jsonpath='{range .items[*]}{.spec.securityContext.runAsNonRoot}{"\n"}{end}' | grep -vc true || true)
+  check "every pod in $ns runs as non-root" 0 "$nonroot"
+done
 
 [ "$fail" = 0 ] && echo "SMOKE TEST PASSED" || { echo "SMOKE TEST FAILED"; exit 1; }
