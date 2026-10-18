@@ -1,0 +1,116 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: aucoff-keycloak
+  labels:
+    app.kubernetes.io/name: aucoff-keycloak
+    {{- include "identity.labels" . | nindent 4 }}
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: aucoff-keycloak
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: aucoff-keycloak
+        aucoff.io/db-client: "true"
+        {{- include "identity.labels" . | nindent 8 }}
+      annotations:
+        checksum/realm: {{ include (print $.Template.BasePath "/realm.yaml") . | sha256sum }}
+    spec:
+      automountServiceAccountToken: false
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 1000
+        runAsGroup: 1000
+        fsGroup: 1000
+        seccompProfile:
+          type: RuntimeDefault
+      volumes:
+        - name: tls
+          secret:
+            secretName: aucoff-keycloak-tls
+            defaultMode: 0440
+        - name: db-ca
+          configMap:
+            name: {{ .Values.database.caConfigMap }}
+        - name: realm
+          configMap:
+            name: aucoff-keycloak-realm
+        - name: tmp
+          emptyDir: {}
+      containers:
+        - name: keycloak
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}@{{ .Values.image.digest }}"
+          args: ["start", "--import-realm"]
+          ports:
+            - name: https
+              containerPort: 8443
+          env:
+            - { name: KC_DB, value: postgres }
+            - name: KC_DB_URL
+              value: "jdbc:postgresql://{{ .Values.database.host }}:{{ .Values.database.port }}/{{ .Values.database.name }}?sslmode=verify-full&sslrootcert=/etc/aucoff/db-ca/ca.crt"
+            - name: KC_DB_USERNAME
+              valueFrom: { secretKeyRef: { name: {{ .Values.database.secret }}, key: username } }
+            - name: KC_DB_PASSWORD
+              valueFrom: { secretKeyRef: { name: {{ .Values.database.secret }}, key: password } }
+            - { name: KC_HOSTNAME, value: {{ .Values.hostname | quote }} }
+            - { name: KC_HOSTNAME_BACKCHANNEL_DYNAMIC, value: "false" }
+            # TLS only: the plain HTTP listener is switched off (ZT-4).
+            - { name: KC_HTTP_ENABLED, value: "false" }
+            - { name: KC_HTTPS_CERTIFICATE_FILE, value: /etc/aucoff/tls/tls.crt }
+            - { name: KC_HTTPS_CERTIFICATE_KEY_FILE, value: /etc/aucoff/tls/tls.key }
+            # No management interface (health/metrics) is enabled: nothing anonymous is exposed.
+            - { name: KC_HEALTH_ENABLED, value: "false" }
+            - { name: KC_METRICS_ENABLED, value: "false" }
+            - { name: KC_CACHE, value: local }
+            - name: KC_BOOTSTRAP_ADMIN_USERNAME
+              valueFrom: { secretKeyRef: { name: aucoff-keycloak-admin, key: username } }
+            - name: KC_BOOTSTRAP_ADMIN_PASSWORD
+              valueFrom: { secretKeyRef: { name: aucoff-keycloak-admin, key: password } }
+            - { name: JAVA_OPTS_KC_HEAP, value: "-XX:MaxRAMPercentage=65" }
+          envFrom:
+            # Client secrets are substituted into the realm import as ${NAME}.
+            - secretRef:
+                name: aucoff-keycloak-clients
+          volumeMounts:
+            - { name: tls, mountPath: /etc/aucoff/tls, readOnly: true }
+            - { name: db-ca, mountPath: /etc/aucoff/db-ca, readOnly: true }
+            - { name: realm, mountPath: /opt/keycloak/data/import, readOnly: true }
+            - { name: tmp, mountPath: /tmp }
+          # TCP check only: it performs no HTTP request, so there is no anonymous endpoint (ZT-7).
+          startupProbe:
+            tcpSocket: { port: 8443 }
+            periodSeconds: 5
+            failureThreshold: 90
+          readinessProbe:
+            tcpSocket: { port: 8443 }
+            periodSeconds: 10
+          livenessProbe:
+            tcpSocket: { port: 8443 }
+            periodSeconds: 20
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+          securityContext:
+            # Keycloak's start (re-augmentation, H2/import work files) needs a writable root
+            # filesystem; every other hardening setting still applies.
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop: ["ALL"]
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: aucoff-keycloak
+  labels:
+    {{- include "identity.labels" . | nindent 4 }}
+spec:
+  selector:
+    app.kubernetes.io/name: aucoff-keycloak
+  ports:
+    - name: https
+      port: 8443
+      targetPort: 8443

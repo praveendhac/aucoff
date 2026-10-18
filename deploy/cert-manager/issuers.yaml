@@ -1,0 +1,34 @@
+# Local certificate authority for in-cluster TLS (constitution ZT-4). The CA key never leaves the
+# cluster (Secret aucoff-local-ca in cert-manager's namespace); v1 is local-only, so a self-managed
+# CA is enough. Services mount only the public CA certificate to verify each other.
+apiVersion: cert-manager.io/v1
+kind: ClusterIssuer
+metadata:
+  name: aucoff-selfsigned-bootstrap
+spec:
+  selfSigned: {}
+---
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: aucoff-local-ca
+  namespace: cert-manager
+spec:
+  isCA: true
+  commonName: aucoff-local-ca
+  secretName: aucoff-local-ca
+  duration: 87600h
+  privateKey:
+    algorithm: ECDSA
+    size: 256
+  issuerRef:
+    name: aucoff-selfsigned-bootstrap
+    kind: ClusterIssuer
+---
+apiVersion: cert-manager.io/v1
+kind: ClusterIssuer
+metadata:
+  name: aucoff-local-ca
+spec:
+  ca:
+    secretName: aucoff-local-ca

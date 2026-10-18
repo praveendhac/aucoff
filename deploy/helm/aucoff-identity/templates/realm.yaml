@@ -1,0 +1,165 @@
+# Realm definition imported at first start. Secrets are NOT here: ${NAME} placeholders are
+# substituted by Keycloak from environment variables backed by the aucoff-keycloak-clients Secret.
+# Keycloak skips the import when the realm already exists; to apply a change in local development,
+# delete the realm in the admin console (or drop the keycloak database) and restart the pod.
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: aucoff-keycloak-realm
+  labels:
+    {{- include "identity.labels" . | nindent 4 }}
+data:
+  aucoff-realm.json: |
+    {
+      "realm": {{ .Values.realm | quote }},
+      "enabled": true,
+      "sslRequired": "all",
+      "registrationAllowed": false,
+      "resetPasswordAllowed": false,
+      "bruteForceProtected": true,
+      "accessTokenLifespan": 300,
+      "defaultSignatureAlgorithm": "RS256",
+      "clientScopes": [
+        {
+          "name": "basic",
+          "protocol": "openid-connect",
+          "attributes": { "include.in.token.scope": "false", "display.on.consent.screen": "false" },
+          "protocolMappers": [
+            {
+              "name": "sub",
+              "protocol": "openid-connect",
+              "protocolMapper": "oidc-sub-mapper",
+              "config": { "access.token.claim": "true", "introspection.token.claim": "true" }
+            }
+          ]
+        },
+        {{- /* Audience of the AUCoFF API gateway: tokens without it are refused (ZT-3). */}}
+        {
+          "name": "aucoff-gateway-audience",
+          "protocol": "openid-connect",
+          "attributes": { "include.in.token.scope": "false", "display.on.consent.screen": "false" },
+          "protocolMappers": [
+            {
+              "name": "audience-gateway",
+              "protocol": "openid-connect",
+              "protocolMapper": "oidc-audience-mapper",
+              "config": {
+                "included.custom.audience": {{ .Values.gatewayAudience | quote }},
+                "access.token.claim": "true",
+                "id.token.claim": "false",
+                "introspection.token.claim": "true"
+              }
+            }
+          ]
+        },
+        {
+          "name": "ops:read",
+          "protocol": "openid-connect",
+          "attributes": { "include.in.token.scope": "true", "display.on.consent.screen": "false" }
+        },
+        {
+          "name": "docs:read",
+          "protocol": "openid-connect",
+          "attributes": { "include.in.token.scope": "true", "display.on.consent.screen": "false" }
+        }
+        {{- if .Values.smokeClients }},
+        {
+          "name": "smoke-other-audience",
+          "protocol": "openid-connect",
+          "attributes": { "include.in.token.scope": "false", "display.on.consent.screen": "false" },
+          "protocolMappers": [
+            {
+              "name": "audience-other",
+              "protocol": "openid-connect",
+              "protocolMapper": "oidc-audience-mapper",
+              "config": {
+                "included.custom.audience": "some-other-service",
+                "access.token.claim": "true",
+                "id.token.claim": "false"
+              }
+            }
+          ]
+        }
+        {{- end }}
+      ],
+      "clients": [
+        {
+          "clientId": "svc-gateway",
+          "name": "AUCoFF API gateway (service identity)",
+          "enabled": true,
+          "protocol": "openid-connect",
+          "publicClient": false,
+          "clientAuthenticatorType": "client-secret",
+          "secret": "${SVC_GATEWAY_SECRET}",
+          "serviceAccountsEnabled": true,
+          "standardFlowEnabled": false,
+          "implicitFlowEnabled": false,
+          "directAccessGrantsEnabled": false,
+          "defaultClientScopes": ["basic"],
+          "optionalClientScopes": ["ops:read", "docs:read"]
+        },
+        {
+          "clientId": "aucoff-web",
+          "name": "AUCoFF web (BFF, authorization code + PKCE)",
+          "enabled": true,
+          "protocol": "openid-connect",
+          "publicClient": false,
+          "clientAuthenticatorType": "client-secret",
+          "secret": "${WEB_SECRET}",
+          "standardFlowEnabled": true,
+          "implicitFlowEnabled": false,
+          "directAccessGrantsEnabled": false,
+          "serviceAccountsEnabled": false,
+          "redirectUris": [{{ .Values.webRedirectUri | quote }}],
+          "webOrigins": [],
+          "attributes": { "pkce.code.challenge.method": "S256" },
+          "defaultClientScopes": ["basic", "aucoff-gateway-audience"],
+          "optionalClientScopes": ["ops:read", "docs:read"]
+        }
+        {{- if .Values.smokeClients }},
+        {
+          "clientId": "aucoff-smoke",
+          "name": "Local smoke test (valid audience, scopes on request)",
+          "enabled": true,
+          "protocol": "openid-connect",
+          "publicClient": false,
+          "clientAuthenticatorType": "client-secret",
+          "secret": "${SMOKE_SECRET}",
+          "serviceAccountsEnabled": true,
+          "standardFlowEnabled": false,
+          "directAccessGrantsEnabled": false,
+          "defaultClientScopes": ["basic", "aucoff-gateway-audience"],
+          "optionalClientScopes": ["ops:read", "docs:read"]
+        },
+        {
+          "clientId": "aucoff-smoke-otheraud",
+          "name": "Local smoke test (token for a different audience)",
+          "enabled": true,
+          "protocol": "openid-connect",
+          "publicClient": false,
+          "clientAuthenticatorType": "client-secret",
+          "secret": "${SMOKE_OTHERAUD_SECRET}",
+          "serviceAccountsEnabled": true,
+          "standardFlowEnabled": false,
+          "directAccessGrantsEnabled": false,
+          "defaultClientScopes": ["basic", "smoke-other-audience"],
+          "optionalClientScopes": ["ops:read"]
+        },
+        {
+          "clientId": "aucoff-smoke-short",
+          "name": "Local smoke test (token that expires after 5 seconds)",
+          "enabled": true,
+          "protocol": "openid-connect",
+          "publicClient": false,
+          "clientAuthenticatorType": "client-secret",
+          "secret": "${SMOKE_SHORT_SECRET}",
+          "serviceAccountsEnabled": true,
+          "standardFlowEnabled": false,
+          "directAccessGrantsEnabled": false,
+          "attributes": { "access.token.lifespan": "5" },
+          "defaultClientScopes": ["basic", "aucoff-gateway-audience"],
+          "optionalClientScopes": ["ops:read"]
+        }
+        {{- end }}
+      ]
+    }

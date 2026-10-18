@@ -26,3 +26,13 @@ spec:
       ports:
         - port: 5432
           protocol: TCP
+    - from:
+        - namespaceSelector:
+            matchLabels:
+              kubernetes.io/metadata.name: aucoff-identity
+          podSelector:
+            matchLabels:
+              aucoff.io/db-client: "true"
+      ports:
+        - port: 5432
+          protocol: TCP

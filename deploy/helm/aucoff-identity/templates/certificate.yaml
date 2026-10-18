@@ -1,0 +1,23 @@
+# TLS certificate for Keycloak, issued by the local CA (ZT-4). cert-manager renews it automatically.
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: aucoff-keycloak
+  labels:
+    {{- include "identity.labels" . | nindent 4 }}
+spec:
+  secretName: aucoff-keycloak-tls
+  duration: 2160h
+  renewBefore: 360h
+  dnsNames:
+    - aucoff-keycloak
+    - aucoff-keycloak.{{ .Release.Namespace }}
+    - aucoff-keycloak.{{ .Release.Namespace }}.svc
+    - aucoff-keycloak.{{ .Release.Namespace }}.svc.cluster.local
+  privateKey:
+    algorithm: RSA
+    size: 2048
+    encoding: PKCS8
+  issuerRef:
+    name: aucoff-local-ca
+    kind: ClusterIssuer

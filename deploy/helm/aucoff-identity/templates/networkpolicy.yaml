@@ -1,0 +1,58 @@
+# Defence in depth only: every call is also authenticated (ZT-5).
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: identity-default-deny
+  labels:
+    {{- include "identity.labels" . | nindent 4 }}
+spec:
+  podSelector: {}
+  policyTypes: ["Ingress", "Egress"]
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: keycloak-ingress-from-clients
+  labels:
+    {{- include "identity.labels" . | nindent 4 }}
+spec:
+  podSelector:
+    matchLabels:
+      app.kubernetes.io/name: aucoff-keycloak
+  policyTypes: ["Ingress"]
+  ingress:
+    - from:
+        - namespaceSelector:
+            matchLabels:
+              kubernetes.io/metadata.name: aucoff
+          podSelector:
+            matchLabels:
+              aucoff.io/idp-client: "true"
+      ports:
+        - { port: 8443, protocol: TCP }
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: keycloak-egress-database
+  labels:
+    {{- include "identity.labels" . | nindent 4 }}
+spec:
+  podSelector:
+    matchLabels:
+      aucoff.io/db-client: "true"
+  policyTypes: ["Egress"]
+  egress:
+    - to:
+        - namespaceSelector:
+            matchLabels:
+              kubernetes.io/metadata.name: kube-system
+      ports:
+        - { port: 53, protocol: UDP }
+        - { port: 53, protocol: TCP }
+    - to:
+        - namespaceSelector:
+            matchLabels:
+              kubernetes.io/metadata.name: aucoff-data
+      ports:
+        - { port: {{ .Values.database.port }}, protocol: TCP }

@@ -1,0 +1,28 @@
+# Keycloak 26.8.1 (Apache-2.0, licence read from the project LICENSE.txt on 2026-10-19), pinned by digest.
+image:
+  repository: quay.io/keycloak/keycloak
+  tag: "26.8.1"
+  digest: sha256:79c623a22abacf3fe6c00a5fb30f5b7843d717b234033b80995891c06116d244
+
+realm: aucoff
+# Token audience the AUCoFF API gateway accepts (ZT-3). Must equal oidc.gatewayAudience in the aucoff chart.
+gatewayAudience: aucoff-gateway
+# The issuer clients validate: scheme + host + port of the in-cluster service.
+hostname: https://aucoff-keycloak.aucoff-identity.svc:8443
+# Redirect URI of the web BFF (Auth.js), used from build session 4.
+webRedirectUri: http://aucoff.localtest.me/api/auth/callback/keycloak
+
+database:
+  host: aucoff-pg-rw.aucoff-data.svc
+  port: 5432
+  name: keycloak
+  secret: aucoff-pg-keycloak
+  caConfigMap: aucoff-pg-ca
+
+# Throwaway clients used only by `make smoke` to prove the API accepts/refuses real tokens. They are
+# imported with the realm, so enable them in local environments only (v1 is local-only).
+smokeClients: false
+
+resources:
+  requests: { cpu: 250m, memory: 768Mi }
+  limits: { cpu: "1500m", memory: 1536Mi }

@@ -70,6 +70,15 @@ spec:
         inRoles: [aucoff_app]
         passwordSecret:
           name: aucoff-pg-gateway
+      # Keycloak's own login role: owns only the `keycloak` database and is NOT in aucoff_app, so it
+      # cannot read tenant data (ZT-6, least privilege).
+      - name: aucoff_keycloak
+        ensure: present
+        login: true
+        superuser: false
+        inherit: false
+        passwordSecret:
+          name: aucoff-pg-keycloak
   enableSuperuserAccess: false
 ---
 apiVersion: postgresql.cnpg.io/v1
@@ -85,3 +94,14 @@ spec:
   extensions:
     - name: vector
       version: "0.8.6"
+---
+apiVersion: postgresql.cnpg.io/v1
+kind: Database
+metadata:
+  name: aucoff-keycloak-db
+  namespace: aucoff-data
+spec:
+  name: keycloak
+  owner: aucoff_keycloak
+  cluster:
+    name: aucoff-pg
