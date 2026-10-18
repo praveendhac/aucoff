@@ -1,0 +1,163 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>AUCoFF Session Summary</title>
+<style>
+:root{--bg:#fff;--surface:#f8fafc;--border:#e2e8f0;--text:#0f172a;--muted:#475569;--brand:#1d4ed8;--deep:#0b2a6f;--teal:#0f766e;--pass:#15803d;--warn:#b45309;--fail:#b91c1c}
+@media (prefers-color-scheme:dark){:root{--bg:#0b1220;--surface:#111a2e;--border:#1e293b;--text:#e5e7eb;--muted:#9ca3af;--brand:#60a5fa;--deep:#93c5fd;--teal:#2dd4bf;--pass:#4ade80;--warn:#fbbf24;--fail:#f87171}}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--text);font:15px/1.6 Inter,system-ui,-apple-system,Segoe UI,sans-serif}
+header{background:linear-gradient(135deg,#0b2a6f,#1d4ed8);color:#fff;padding:40px 16px}
+header .wrap{max-width:1100px;margin:0 auto}
+h1{margin:0 0 6px;font-size:30px}
+header p{margin:0;opacity:.9}
+main{max-width:1100px;margin:0 auto;padding:24px 16px 64px}
+h2{margin:40px 0 12px;font-size:22px;color:var(--deep);border-bottom:2px solid var(--border);padding-bottom:6px}
+h3{margin:20px 0 8px;font-size:16px}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px}
+.card{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:14px 16px}
+.kpi{font-size:32px;font-weight:700;color:var(--brand);font-variant-numeric:tabular-nums}
+.muted{color:var(--muted)}
+table{width:100%;border-collapse:collapse;margin:8px 0 16px;font-size:14px;display:block;overflow-x:auto}
+th,td{text-align:left;padding:8px 10px;border-bottom:1px solid var(--border);vertical-align:top}
+th{background:var(--surface);font-weight:600;white-space:nowrap}
+code{background:var(--surface);border:1px solid var(--border);border-radius:6px;padding:1px 5px;font-size:13px}
+.tag{display:inline-block;border-radius:999px;padding:1px 10px;font-size:12px;font-weight:600;border:1px solid currentColor}
+.ok{color:var(--pass)}.warn{color:var(--warn)}.bad{color:var(--fail)}
+ul{padding-left:20px}
+li{margin:3px 0}
+footer{color:var(--muted);font-size:13px;text-align:center;padding:24px}
+</style>
+</head>
+<body>
+<header><div class="wrap">
+<h1>AUCoFF: Session Summary</h1>
+<p>AgenticAI Unified Compliance Framework for Fintechs. Specification-driven development, planning session of 18-19 October 2026.</p>
+</div></header>
+<main>
+
+<h2>1. Outcome at a glance</h2>
+<div class="grid">
+<div class="card"><div class="kpi">10</div><div class="muted">spec documents in <code>specs/</code></div></div>
+<div class="card"><div class="kpi">14</div><div class="muted">commits on <code>main</code>, including the one adding this file</div></div>
+<div class="card"><div class="kpi">13</div><div class="muted">agents (microservices) defined</div></div>
+<div class="card"><div class="kpi">64</div><div class="muted">tasks (T-001 to T-502)</div></div>
+<div class="card"><div class="kpi">71</div><div class="muted">API endpoint entries (API-1 to API-153; some cover several methods)</div></div>
+<div class="card"><div class="kpi">20</div><div class="muted">catalogued metrics (M-01 to M-20)</div></div>
+</div>
+<p class="muted">Repository: <code>praveendhac/aucoff</code>, branch <code>main</code>. Counts are derived from the specs as of 19 October 2026. Hand-rolled SDD, no Spec Kit. No application code has been written yet.</p>
+
+<h2>2. Specification inventory</h2>
+<table>
+<tr><th>File</th><th>Version</th><th>Purpose</th></tr>
+<tr><td><code>constitution.md</code></td><td>0.8.0</td><td>Non-negotiable rules: architecture, design, coding, quality, security, AI behaviour, database, API, licensing (LIC-1 to LIC-8)</td></tr>
+<tr><td><code>spec.md</code></td><td>0.5.1</td><td>Product spec: personas, frameworks, user stories US-1..24, FR-1..30, NFR-1..15, risks, open questions</td></tr>
+<tr><td><code>design.md</code></td><td>0.4.0</td><td>Architecture, data flows, STRIDE, ADR-1..12, UX/visual design (colour, layout), metrics catalogue, 12-month history</td></tr>
+<tr><td><code>agent.md</code></td><td>0.4.0</td><td>13 agents, LangGraph orchestration, models, tools, RAG, guardrails, approvals, questionnaire workflow, evaluation</td></tr>
+<tr><td><code>backend-spec.md</code></td><td>0.4.0</td><td>FastAPI gateway, agent services, RabbitMQ, check engine/adapters, RBAC, OWASP API Top 10 mapping</td></tr>
+<tr><td><code>frontend-spec.md</code></td><td>0.3.0</td><td>Next.js app: routes, screens, components, BFF auth, accessibility, testing</td></tr>
+<tr><td><code>api-contract.md</code></td><td>0.3.0</td><td>REST /api/v1, OpenAPI 3.1 + Swagger for all endpoints, SSE, problem details, endpoint catalogue</td></tr>
+<tr><td><code>database-spec.md</code></td><td>0.4.0</td><td>PostgreSQL 18.6 + pgvector 0.8.6, tables, RLS, secure config, history snapshots, retention</td></tr>
+<tr><td><code>infrastructure-spec.md</code></td><td>0.4.0</td><td>kind + umbrella Helm chart, NetworkPolicies, CI/CD, observability, AWS/Terraform migration</td></tr>
+<tr><td><code>tasks.md</code></td><td>0.4.0</td><td>Phased task breakdown with spec traceability and blockers</td></tr>
+</table>
+
+<h2>3. Key decisions</h2>
+<h3>Product and scope</h3>
+<ul>
+<li>Multi-tenant SaaS; operator-provisioned, invite-based tenants in v1; audited break-glass operator access; time-boxed scoped external auditor access.</li>
+<li>Personas: compliance officer, auditor, engineer, executive, CISO, tenant admin, platform operator, external auditor.</li>
+<li>All listed frameworks in v1 (PCI DSS v4.0.1, PCI 3DS, SOC 2, ISO 27001:2022, ISO 27701:2025, ISO 20022-1:2026 Ed.3, GDPR, DPDP, RBI DPSC and PPI, FFIEC BSA/AML 2026 and IT Handbook, FTC Safeguards, GLBA, NYDFS 500, PSD2, DORA). Framework versions are owner-supplied and must be verified.</li>
+<li>Scanning is read-only; remediation is advisory. Due-diligence questionnaire agent drafts answers from real environment evidence; no auto-submission.</li>
+<li>1 year of history (stored 13 months) with any-to-any scan comparison; severity counts for the latest scan against the previous two.</li>
+</ul>
+<h3>Technology</h3>
+<table>
+<tr><th>Area</th><th>Choice</th></tr>
+<tr><td>Frontend</td><td>Next.js (App Router), TypeScript strict, shadcn/ui + Tailwind, TanStack Query, generated OpenAPI client, Auth.js BFF session</td></tr>
+<tr><td>Backend</td><td>Python 3.13, FastAPI gateway + agent microservices over RabbitMQ, SQLAlchemy 2 + Alembic, LangGraph with Postgres checkpoints</td></tr>
+<tr><td>Data</td><td>PostgreSQL 18.6 + pgvector 0.8.6 (owner-confirmed), Row-Level Security tenancy, 1024-dim embeddings</td></tr>
+<tr><td>LLM</td><td>Anthropic Claude via provider interface; redacted data only; tiered strong/small models</td></tr>
+<tr><td>Check engine</td><td>Wrap vetted open-source scanners behind adapters; checks map to unified controls</td></tr>
+<tr><td>Platform</td><td>kind + umbrella Helm chart, CloudNativePG, NGINX ingress (<code>aucoff.localtest.me</code>), cert-manager; Terraform + EKS later</td></tr>
+<tr><td>API</td><td>REST /api/v1, OpenAPI at <code>backend/openapi.yaml</code> linted with Spectral, Swagger/ReDoc for every endpoint, SSE, cursor pagination, Idempotency-Key</td></tr>
+</table>
+<h3>UX and design</h3>
+<ul>
+<li>Light default with dark mode; professional, Gen-Z feel (rounded 8-12 px, soft shadows, large KPI numerals, gradients only on hero KPI cards).</li>
+<li>Deep blue brand, teal accent; status colours with icon and text; contrast computed (text at least 4.5:1, UI at least 3:1).</li>
+<li>Left sidebar, top bar with global time-range and scan selector, right detail drawer; desktop-first, tablet OK, mobile for dashboard and approvals.</li>
+</ul>
+<h3>Agents and AI controls</h3>
+<ul>
+<li>13 agents: orchestrator, mapping, four scanners, document analyzer, remediation advisor, report generator, reviewer, regulatory-change, copilot, questionnaire.</li>
+<li>Eval gates: citation correctness 98% or more, hallucination 1% or less, agreement 90% or more, redaction recall 99% or more.</li>
+<li>Budgets: USD 25 per assessment, USD 10 per questionnaire; approvals expire after 7 days and never auto-approve.</li>
+<li>Outputs leaving the tenant must be human-approved, redacted and audit-logged (AI-16).</li>
+</ul>
+
+<h2>4. Licensing and provenance rule</h2>
+<p>Owner directive: no FOSS-licence or plagiarism issue is acceptable. Only permissive licences (MIT, Apache-2.0, BSD, ISC, PostgreSQL, MPL-2.0 unmodified, OFL fonts) are allowed; if an item has an issue it is replaced. Standards text is never copied; only own summaries and clause references are stored. See constitution LIC-1 to LIC-8, NFR-15, risk R-7.</p>
+<table>
+<tr><th>Tool named in specs</th><th>Concern (assistant recollection, unverified)</th><th>Status</th></tr>
+<tr><td>MinIO</td><td>AGPL-3.0</td><td><span class="tag bad">not approved</span> alternative needed (candidate: SeaweedFS)</td></tr>
+<tr><td>Grafana, Loki, Tempo</td><td>AGPL-3.0</td><td><span class="tag bad">not approved</span> candidates: Perses, Jaeger, VictoriaLogs</td></tr>
+<tr><td>Steampipe</td><td>AGPL-3.0</td><td><span class="tag bad">not approved</span></td></tr>
+<tr><td>ScoutSuite</td><td>GPL</td><td><span class="tag bad">not approved</span></td></tr>
+<tr><td>Semgrep rules</td><td>Restrictive rules licence</td><td><span class="tag warn">review</span> alternatives: Opengrep, own rules</td></tr>
+<tr><td>Redis, Keycloak, RabbitMQ, others</td><td>Not yet checked</td><td><span class="tag warn">audit under T-009</span></td></tr>
+</table>
+
+<h2>5. Commit timeline</h2>
+<table>
+<tr><th>Commit</th><th>Date</th><th>Summary</th></tr>
+<tr><td><code>cd0b4b0</code></td><td>2026-10-18</td><td>Initial commit</td></tr>
+<tr><td><code>ce2de66</code></td><td>2026-10-18</td><td>Add specs folder</td></tr>
+<tr><td><code>60b8eb0</code></td><td>2026-10-18</td><td>Add SDD spec templates (nine files)</td></tr>
+<tr><td><code>84dfa95</code></td><td>2026-10-18</td><td>Flesh out constitution</td></tr>
+<tr><td><code>3d65082</code></td><td>2026-10-18</td><td>Add database-spec, flesh out spec.md</td></tr>
+<tr><td><code>c3dd93f</code></td><td>2026-10-18</td><td>Frontend, backend, API contract, infrastructure specs</td></tr>
+<tr><td><code>7a32593</code></td><td>2026-10-18</td><td>Agent spec and questionnaire agent alignment</td></tr>
+<tr><td><code>ed72bc7</code></td><td>2026-10-19</td><td>Design spec, 12-month history, framework versions</td></tr>
+<tr><td><code>fecdd31</code></td><td>2026-10-19</td><td>Decisions on versions, Postgres operator, ingress, auth, OpenAPI, LLM, embeddings</td></tr>
+<tr><td><code>b01ce3d</code></td><td>2026-10-19</td><td>Close pre-build gaps (check engine, tenant lifecycle, auditor access)</td></tr>
+<tr><td><code>69817cc</code></td><td>2026-10-19</td><td>Record pgvector 0.8.6, bump versions</td></tr>
+<tr><td><code>10ac976</code></td><td>2026-10-19</td><td>Licensing, provenance and content rules</td></tr>
+<tr><td><code>b16a682</code></td><td>2026-10-19</td><td>ISO 20022-1:2026 and FFIEC BSA/AML 2026 versions</td></tr>
+<tr><td>(this commit)</td><td>2026-10-19</td><td>Add session summary page</td></tr>
+</table>
+
+<h2>6. Build readiness</h2>
+<h3>Next tasks (from <code>tasks.md</code>)</h3>
+<table>
+<tr><th>Task</th><th>What</th><th>Why it matters</th></tr>
+<tr><td>T-001</td><td>Sign off constitution and spec</td><td>Gate for everything</td></tr>
+<tr><td>T-009</td><td>Licence and provenance audit; licence register</td><td>Gates scanner, object-store and observability choices</td></tr>
+<tr><td>T-004</td><td>Verify CloudNativePG + PostgreSQL 18.6 + pgvector 0.8.6 image; Python 3.13 library compatibility</td><td>Version pins and database image</td></tr>
+<tr><td>T-005</td><td>Verify owner-supplied framework instruments</td><td>Catalogue accuracy</td></tr>
+<tr><td>T-006</td><td>Owner authors the v1 unified control set</td><td>Mapping and scanners need it</td></tr>
+<tr><td>T-002 / T-003</td><td>Repo scaffold; README, CLAUDE.md, CODEOWNERS, PR template</td><td>Start of implementation</td></tr>
+<tr><td>T-101+</td><td>Backend, database, RLS, messaging, OpenAPI pipeline</td><td>Foundation services</td></tr>
+</table>
+<h3>Open items still unresolved</h3>
+<ul>
+<li>Audit-log retention period, RPO/RTO, coverage thresholds, numeric NFR targets.</li>
+<li>Final model IDs, reranker, staleness thresholds, regulatory source allow-list.</li>
+<li>Report templates, notification templates, session store choice, ingress details.</li>
+<li>Brand name, locales, high-contrast theme (deferrable).</li>
+</ul>
+<p class="muted">Deferred without blocking the build: KEDA, mTLS, image signing, plan limits, concurrency numbers.</p>
+
+<h2>7. Working agreements</h2>
+<ul>
+<li>Plan mode is used between work rounds; files are written, committed and pushed only after the owner approves.</li>
+<li>Commits carry the Co-Authored-By trailer; <code>git pull --rebase origin main</code> before every push; Gitleaks runs in the pre-commit hook.</li>
+<li>Version claims supplied by the owner (PostgreSQL/pgvector compatibility, framework instruments) are recorded as owner-supplied and flagged for verification.</li>
+</ul>
+
+</main>
+<footer>Generated 19 October 2026 from the planning session. Source of truth: the <code>specs/</code> directory.</footer>
+</body>
+</html>
