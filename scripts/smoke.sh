@@ -18,6 +18,9 @@ echo "Deployments ready:"
 kubectl -n "$NS" rollout status deployment/aucoff-backend --timeout=120s
 kubectl -n "$NS" rollout status deployment/aucoff-frontend --timeout=120s
 
+# A rollout can finish before the ingress controller has picked up the new endpoints.
+for _ in $(seq 1 30); do [ "$(code /login)" = 200 ] && break; sleep 1; done
+
 echo "Through the ingress (no credentials):"
 check "web app redirects anonymous users to login" 307 "$(code /)"
 check "login page is public"                200 "$(code /login)"
