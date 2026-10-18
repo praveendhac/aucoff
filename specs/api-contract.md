@@ -9,11 +9,13 @@
 
 > Purpose: the contract between frontend and backend. FastAPI's generated OpenAPI must match this document.
 
-Related: [frontend-spec.md](frontend-spec.md) · [backend-spec.md](backend-spec.md)
+Related: [frontend-spec.md](frontend-spec.md) · [backend-spec.md](backend-spec.md) · [database-spec.md](database-spec.md)
 
 ## 1. Conventions
 - Base URL: `/api/v1` (TODO confirm)
 - Format: JSON, UTF-8
+- Identifiers: UUID v7 strings; timestamps ISO 8601 UTC
+- Tenancy: tenant derived from the authenticated token, never from client-supplied parameters (see [database-spec.md](database-spec.md) section 6.2)
 - Versioning policy: TODO
 - Auth: `Authorization: Bearer <token>` (TODO confirm)
 - Pagination: TODO (cursor vs page)

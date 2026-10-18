@@ -9,7 +9,7 @@
 
 > Purpose: how AUCoFF is packaged, deployed and operated. Phase 1: local Kubernetes via Helm on a laptop. Phase 2: AWS.
 
-Related: [design.md](design.md) · [backend-spec.md](backend-spec.md) · [frontend-spec.md](frontend-spec.md)
+Related: [design.md](design.md) · [backend-spec.md](backend-spec.md) · [frontend-spec.md](frontend-spec.md) · [database-spec.md](database-spec.md)
 
 ## 1. Environments
 | Env | Platform | Purpose | Status |
@@ -47,14 +47,16 @@ deploy/helm/aucoff/
 Config maps, secrets (LLM API keys, DB creds) in local k8s: TODO
 
 ## 6. Data Services
-Postgres, vector store, queue: in-cluster for local; managed on AWS. TODO
+- PostgreSQL 18.6 with pgvector: in-cluster for local (StatefulSet or operator, PVC, NetworkPolicy allowing only backend/worker pods, TLS, credentials from Kubernetes Secrets); managed RDS/Aurora on AWS. Details in [database-spec.md](database-spec.md).
+- Migrations run as a Helm pre-upgrade hook Job using the `aucoff_migrator` role.
+- Object store and queue: TODO.
 
 ## 7. AWS Migration Notes (future)
 <!-- Update when moving to AWS. -->
 | Local | AWS equivalent | Notes |
 |-------|----------------|-------|
 | kind / minikube | EKS | TODO |
-| In-cluster Postgres | RDS / Aurora | TODO |
+| In-cluster PostgreSQL 18.6 + pgvector | RDS / Aurora PostgreSQL | Confirm 18.x and pgvector support; see [database-spec.md](database-spec.md) section 12 |
 | k8s Secrets | Secrets Manager + External Secrets | TODO |
 | Local registry | ECR | TODO |
 | Ingress | ALB Ingress Controller | TODO |

@@ -3,13 +3,13 @@
 | Field | Value |
 |-------|-------|
 | Status | Draft |
-| Version | 0.2.0 |
+| Version | 0.3.0 |
 | Owner | Praveen Darshanam |
 | Last updated | 2026-10-18 |
 
 > Purpose: the non-negotiable rules every spec, design decision and code change must obey. If another spec conflicts with this file, this file wins. Rules use RFC 2119 keywords: **MUST**, **MUST NOT**, **SHOULD**, **MAY**. Each rule has an ID so specs, tasks and reviews can cite it.
 
-Related: [spec.md](spec.md) · [design.md](design.md) · [agent.md](agent.md) · [backend-spec.md](backend-spec.md) · [frontend-spec.md](frontend-spec.md) · [infrastructure-spec.md](infrastructure-spec.md) · [tasks.md](tasks.md)
+Related: [spec.md](spec.md) · [design.md](design.md) · [agent.md](agent.md) · [backend-spec.md](backend-spec.md) · [database-spec.md](database-spec.md) · [frontend-spec.md](frontend-spec.md) · [infrastructure-spec.md](infrastructure-spec.md) · [tasks.md](tasks.md)
 
 ## 1. Mission and Principles
 
@@ -120,6 +120,21 @@ Applies to every agent in [agent.md](agent.md).
 | AI-14 | **No autonomous legal conclusions.** AUCoFF output supports compliance decisions; it is not legal advice and states this where relevant. |
 | AI-15 | **Fail safe.** On model outage, timeout or policy violation the system degrades to manual workflow and records the event. |
 
+## 7a. Database Rules
+
+Detail in [database-spec.md](database-spec.md).
+
+| ID | Rule |
+|----|------|
+| DB-1 | The database is PostgreSQL 18.6 with `pgvector`; versions are pinned and changed only via spec update. |
+| DB-2 | Schema changes MUST be made only through versioned Alembic migrations (COD-9). |
+| DB-3 | Every tenant table MUST have `tenant_id` and enforced Row-Level Security; the application role MUST NOT bypass RLS. |
+| DB-4 | Application roles are least-privilege: no superuser, no DDL at runtime, `INSERT`-only on the audit log. |
+| DB-5 | Connections MUST use TLS and `scram-sha-256`; credentials come from the secret store, never source or logs. |
+| DB-6 | Similarity (vector) queries MUST always be tenant-filtered. |
+| DB-7 | Audit and agent-step tables are append-only; audit rows are hash-chained for tamper evidence. |
+| DB-8 | Cardholder data MUST NOT be stored in any table (SEC-6); non-production databases hold synthetic data only (ENV-2). |
+
 ## 8. Spec-Driven Development Rules
 
 - **SDD-1** No behaviour change without a spec change in the same PR or earlier.
@@ -145,10 +160,11 @@ Applies to every agent in [agent.md](agent.md).
 - [ ] Confirm coverage thresholds (QA-3).
 - [ ] Define audit log retention period (SEC-10).
 - [ ] Choose approved LLM providers and data classes allowed per provider (AI-8, SEC-14).
-- [ ] Confirm frameworks in scope for SEC-13.
+- [x] Frameworks in scope for SEC-13 are listed in [spec.md](spec.md) section 4 (still need exact versions).
 
 ## 12. Changelog
 | Version | Date | Change |
 |---------|------|--------|
 | 0.1.0 | 2026-10-18 | Initial template |
 | 0.2.0 | 2026-10-18 | Added architectural, design, coding, quality, security and AI rules |
+| 0.3.0 | 2026-10-18 | Added database rules DB-1 to DB-8; frameworks in scope resolved |

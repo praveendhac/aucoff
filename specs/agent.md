@@ -9,7 +9,7 @@
 
 > Purpose: defines the agentic AI layer: roles, tools, orchestration, guardrails and evaluation.
 
-Related: [constitution.md](constitution.md) (section 5) · [spec.md](spec.md) · [backend-spec.md](backend-spec.md)
+Related: [constitution.md](constitution.md) (section 5) · [spec.md](spec.md) · [backend-spec.md](backend-spec.md) · [database-spec.md](database-spec.md)
 
 ## 1. Agent Overview
 <!-- Single agent or multi-agent? Why? -->
@@ -38,7 +38,8 @@ TODO
 
 ## 6. Knowledge and Memory
 - RAG sources (regulations, policies, evidence): TODO
-- Vector store / chunking / refresh cadence: TODO
+- Vector store: PostgreSQL `pgvector` (`embeddings` table, always tenant-filtered, DB-6); schema in [database-spec.md](database-spec.md) section 3.4
+- Chunking / refresh cadence: TODO
 - Short-term vs long-term memory: TODO
 
 ## 7. Prompts

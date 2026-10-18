@@ -9,12 +9,12 @@
 
 > Purpose: services, domain logic and persistence behind the API defined in [api-contract.md](api-contract.md).
 
-Related: [spec.md](spec.md) · [design.md](design.md) · [agent.md](agent.md) · [infrastructure-spec.md](infrastructure-spec.md)
+Related: [spec.md](spec.md) · [design.md](design.md) · [agent.md](agent.md) · [infrastructure-spec.md](infrastructure-spec.md) · [database-spec.md](database-spec.md)
 
 ## 1. Tech Choices
 - Python version / FastAPI version: TODO
-- ORM and migrations (e.g. SQLAlchemy + Alembic): TODO
-- Database: TODO
+- ORM and migrations: SQLAlchemy 2.x (async) + Alembic (see [database-spec.md](database-spec.md) section 7)
+- Database: PostgreSQL 18.6 + pgvector (see [database-spec.md](database-spec.md)); the API sets `SET LOCAL app.tenant_id` per transaction to enforce RLS
 - Async/background jobs: TODO
 - Validation (Pydantic): TODO
 - Testing (pytest, httpx): TODO
