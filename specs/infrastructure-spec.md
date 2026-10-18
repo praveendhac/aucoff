@@ -3,7 +3,7 @@
 | Field | Value |
 |-------|-------|
 | Status | Draft |
-| Version | 0.8.0 |
+| Version | 0.9.0 |
 | Owner | Praveen Darshanam |
 | Last updated | 2026-10-19 |
 
@@ -162,3 +162,9 @@ Controls referenced from constitution section 6: network policies, image scannin
 - Realm clients: `svc-gateway` (client credentials), `aucoff-web` (authorization code + PKCE, for the BFF), and local-only `aucoff-smoke*` clients. Scopes `ops:read` and `docs:read`; audience mapper `aucoff-gateway`.
 - Network policies: default deny in `aucoff-identity`; only pods labelled `aucoff.io/idp-client` in `aucoff` may reach Keycloak on 8443; Keycloak may reach DNS and PostgreSQL only. Defence in depth only; every call is also authenticated.
 - `make smoke` obtains real tokens from Keycloak and asserts 200/403/401 as described in tasks T-121.
+
+## Implementation status: messaging (Build Session 4, 2026-10-19)
+
+- `make messaging` applies `deploy/rabbitmq/rabbitmq.yaml` into namespace `aucoff-messaging`: RabbitMQ 4.3.6 pinned by digest, AMQPS on 5671 only (certificate from the local CA), all plugins off (no management or metrics port), exec probes, read-only root filesystem, 1 GiB volume.
+- Vhost `aucoff`; exchanges `aucoff.work` and `aucoff.events` (topic); one quorum inbox queue per service; users `aucoff_gateway` and `aucoff_scanner` with no configure rights, write only to the two exchanges (routing keys prefixed by the sender), and read only their own queues.
+- Only pods labelled `aucoff.io/mq-client` in `aucoff` may reach the broker; defence in depth, every connection also authenticates.

@@ -70,3 +70,50 @@ kubectl -n aucoff create secret generic aucoff-web-oidc \
 kubectl -n aucoff create secret generic aucoff-web-session --from-literal=secret="$sess" \
   --dry-run=client -o yaml | kubectl -n aucoff apply -f - >/dev/null
 echo "secrets aucoff-web-oidc and aucoff-web-session ready"
+
+# RabbitMQ: one user per service (ZT-5). The definitions file holds the generated passwords, so it
+# lives only in a Secret. A service may configure nothing, publish only to the shared exchanges
+# and read only its own queues. `aucoff_scanner` is reserved for the first scanner service.
+kubectl create namespace aucoff-messaging --dry-run=client -o yaml | kubectl apply -f - >/dev/null
+ensure_basic_auth aucoff-mq-gateway aucoff_gateway aucoff-messaging aucoff
+ensure_basic_auth aucoff-mq-scanner aucoff_scanner aucoff-messaging aucoff
+gw_pw=$(kubectl -n aucoff-messaging get secret aucoff-mq-gateway -o jsonpath='{.data.password}' | base64 -d)
+sc_pw=$(kubectl -n aucoff-messaging get secret aucoff-mq-scanner -o jsonpath='{.data.password}' | base64 -d)
+GW_PW="$gw_pw" SC_PW="$sc_pw" python3 - <<'PY' > /dev/stdout | kubectl -n aucoff-messaging create secret generic aucoff-rabbitmq-definitions --from-file=definitions.json=/dev/stdin --dry-run=client -o yaml | kubectl apply -f - >/dev/null
+import json, os
+services = {"aucoff_gateway": os.environ["GW_PW"], "aucoff_scanner": os.environ["SC_PW"]}
+V = "aucoff"
+defs = {
+    "users": [{"name": u, "password": p, "tags": ""} for u, p in services.items()],
+    "vhosts": [{"name": V}],
+    "permissions": [
+        # configure: nothing (no declaring/deleting); write: the shared exchanges only;
+        # read: the service's own queues only.
+        {"user": u, "vhost": V, "configure": "^$", "write": "^aucoff\\.(work|events)$",
+         "read": "^aucoff\\." + u.split("_", 1)[1] + "\\..*"}
+        for u in services
+    ],
+    "topic_permissions": [
+        # Routing keys start with the sender: work.<sender>.<recipient>.<type>, events.<sender>.<type>.
+        {"user": u, "vhost": V, "exchange": "aucoff.work", "write": "^work\\." + u.split("_", 1)[1] + "\\..*", "read": "^$"}
+        for u in services
+    ] + [
+        {"user": u, "vhost": V, "exchange": "aucoff.events", "write": "^events\\." + u.split("_", 1)[1] + "\\..*", "read": "^events\\..*"}
+        for u in services
+    ],
+    "exchanges": [
+        {"name": "aucoff.work", "vhost": V, "type": "topic", "durable": True, "auto_delete": False, "internal": False, "arguments": {}},
+        {"name": "aucoff.events", "vhost": V, "type": "topic", "durable": True, "auto_delete": False, "internal": False, "arguments": {}},
+    ],
+    "queues": [
+        {"name": f"aucoff.{u.split('_', 1)[1]}.inbox", "vhost": V, "durable": True, "auto_delete": False, "arguments": {"x-queue-type": "quorum"}}
+        for u in services
+    ],
+    "bindings": [
+        {"source": "aucoff.work", "vhost": V, "destination": f"aucoff.{u.split('_', 1)[1]}.inbox", "destination_type": "queue", "routing_key": f"work.*.{u.split('_', 1)[1]}.#", "arguments": {}}
+        for u in services
+    ],
+}
+print(json.dumps(defs))
+PY
+echo "secret aucoff-rabbitmq-definitions ready"

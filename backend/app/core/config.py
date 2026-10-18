@@ -35,6 +35,14 @@ class Settings(BaseSettings):
     db_ca_file: str | None = None
     db_ssl: bool = True  # only the throwaway test database may turn this off
 
+    # Message broker (constitution ZT-5): TLS only, this service's OWN RabbitMQ user.
+    mq_host: str | None = None
+    mq_port: int = 5671
+    mq_vhost: str = "aucoff"
+    mq_user: str | None = None
+    mq_password: str | None = None
+    mq_ca_file: str | None = None
+
 
 def get_settings() -> Settings:
     return Settings()

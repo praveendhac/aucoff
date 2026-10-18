@@ -51,7 +51,7 @@ The constitution's allow-list (LIC-1) is: MIT, Apache-2.0, BSD-2/3-Clause, ISC, 
 | VictoriaLogs | Apache-2.0 (single-node and cluster) | Candidate log store replacing Loki |
 | Jaeger | Not found in search | **Unverified** - candidate for traces; confirm |
 | Prometheus | Not checked | **Unverified** - confirm before adopting |
-| RabbitMQ | Server MPL-2.0 (client libraries Apache-2.0/MPL-2.0 dual) | Allowed (MPL-2.0 unmodified) - confirm on adoption |
+| RabbitMQ 4.3.6 | Server MPL-2.0 with some Apache-2.0 files (read from the rabbitmq-server LICENSE and the image's /opt/rabbitmq/LICENSE, 2026-10-19) | Allowed (MPL-2.0, unmodified official image); in use |
 | Keycloak 26.8.1 | Apache-2.0 (read from `LICENSE.txt` in the keycloak/keycloak repository, 2026-10-19) | Allowed; in use (identity provider) |
 | cert-manager v1.21.2 | Apache-2.0 (read from `LICENSE` in the cert-manager/cert-manager repository, 2026-10-19) | Allowed; in use (local CA, in-cluster TLS) |
 | PostgreSQL, pgvector, CloudNativePG | PostgreSQL licence (PostgreSQL); pgvector uses the PostgreSQL licence; CloudNativePG Apache-2.0 - **not confirmed in this pass** | **Unverified** - confirm on adoption |
@@ -68,6 +68,7 @@ The constitution's allow-list (LIC-1) is: MIT, Apache-2.0, BSD-2/3-Clause, ISC, 
 | asyncpg | Python | 0.32.0 | Apache-2.0 | Allowed | Installed package metadata, 2026-10-19 (chosen over psycopg, which is LGPL) |
 | alembic | Python | 1.20.0 | MIT | Allowed | Installed package metadata, 2026-10-19 |
 | greenlet | Python | 3.5.6 | MIT AND PSF-2.0 | Allowed with per-package exception (PSF-2.0 pending owner approval) | Installed package metadata, 2026-10-19 (via sqlalchemy[asyncio]) |
+| aio-pika | Python | 10.1.1 | Apache-2.0 | Allowed | Passed the Python licence gate, 2026-10-19 (AMQP client; with aiormq 7.2.2, pamqp 4.0.1, yarl, multidict, propcache, idna) |
 | pytest-asyncio | Python | 1.4.0 | Apache-2.0 | Allowed (dev) | Installed package metadata, 2026-10-19 |
 | uvicorn | Python | 0.54.0 | BSD-3-Clause | Allowed | Read from installed package metadata, 2026-10-19 |
 | httpx | Python | 0.28.1 | BSD License | Allowed | Read from installed package metadata, 2026-10-19 |
@@ -114,6 +115,7 @@ Every common base image (Debian, Ubuntu, Alpine, distroless) contains GPL or LGP
 | CloudNativePG operator (chart `cnpg/cloudnative-pg` 0.29.1, app 1.30.1) | PostgreSQL operator | pulled by the chart | In use; Apache-2.0 expected (extensions repo is Apache-2.0 per web fetch); confirm (T-009) |
 | `quay.io/keycloak/keycloak:26.8.1` | identity provider | `sha256:79c623a22abacf3fe6c00a5fb30f5b7843d717b234033b80995891c06116d244` (pulled 2026-10-19) | In use; Apache-2.0 for Keycloak itself; vulnerability scan still to add (T-010) |
 | cert-manager images (chart `jetstack/cert-manager` v1.21.2) | local CA / certificates | pulled by the chart | In use; Apache-2.0; digest pinning to add with T-010 |
+| `docker.io/library/rabbitmq:4.3.6-alpine` | message broker | `sha256:6931816af1a943f471c038b278835d36692d55dec769232739296bb91b7de0f5` (pulled 2026-10-19) | In use; MPL-2.0 for RabbitMQ itself; vulnerability scan still to add (T-010) |
 | `docker.io/traefik:v3.7.14` (Helm chart `traefik/traefik` 42.0.0) | ingress controller | pulled by the chart | In use; licence MIT per web search 2026-10-19, confirm from LICENSE (T-009) |
 
 ## 6. Fonts, icons, images and content

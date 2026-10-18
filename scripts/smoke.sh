@@ -79,8 +79,11 @@ trap 'kill $pf $pf2 2>/dev/null; rm -rf "$workdir"' EXIT
 for _ in $(seq 1 20); do nc -z 127.0.0.1 8443 2>/dev/null && break; sleep 0.5; done
 python3 scripts/web-login-test.py "$workdir/ca.crt" || fail=1
 
+echo "Message broker permissions (in-cluster service pod):"
+scripts/run-broker-test.sh 2>&1 | grep -v "error when creating transport" || fail=1
+
 echo "Cluster hygiene:"
-for ns in "$NS" "$IDP_NS"; do
+for ns in "$NS" "$IDP_NS" aucoff-messaging; do
   httpget=$(kubectl -n "$ns" get pods -o json | grep -c '"httpGet"' || true)
   check "no httpGet probes on pods in $ns" 0 "$httpget"
   nonroot=$(kubectl -n "$ns" get pods -o jsonpath='{range .items[*]}{.spec.securityContext.runAsNonRoot}{"\n"}{end}' | grep -vc true || true)

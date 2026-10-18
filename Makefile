@@ -101,6 +101,11 @@ postgres: ## Create the PostgreSQL 18.6 + pgvector 0.8.6 cluster
 	kubectl -n aucoff-data wait --for=condition=Ready cluster/aucoff-pg --timeout=300s
 	scripts/copy-db-ca.sh
 
+messaging: ## Install RabbitMQ (TLS only, one user per service) into namespace aucoff-messaging
+	kubectl apply -f deploy/rabbitmq/rabbitmq.yaml
+	kubectl -n aucoff-messaging rollout status statefulset/aucoff-rabbitmq --timeout=300s
+	scripts/copy-mq-ca.sh
+
 identity: ## Install Keycloak (identity provider) into namespace aucoff-identity
 	kubectl create namespace aucoff-identity --dry-run=client -o yaml | kubectl apply -f -
 	kubectl label namespace aucoff-identity pod-security.kubernetes.io/enforce=restricted --overwrite
@@ -119,4 +124,4 @@ idp-forward: ## Expose Keycloak for the browser at https://idp.localtest.me:8443
 smoke: ## Smoke test the local deployment (unauthenticated requests must be refused)
 	scripts/smoke.sh
 
-up: cluster-up ingress operators certs secrets postgres identity images load deploy smoke ## Bring the whole local stack up
+up: cluster-up ingress operators certs secrets postgres identity messaging images load deploy smoke ## Bring the whole local stack up
