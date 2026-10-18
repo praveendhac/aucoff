@@ -3,7 +3,7 @@
 | Field | Value |
 |-------|-------|
 | Status | Draft |
-| Version | 0.6.0 |
+| Version | 0.6.1 |
 | Owner | Praveen Darshanam |
 | Last updated | 2026-10-19 |
 
@@ -231,7 +231,7 @@ Detailed definitions and formulas are in the metrics catalogue ([design.md](desi
 - [ ] Report formats and templates per framework.
 - [ ] Pricing/tenant plan limits (if any) affecting quotas.
 - [ ] Which cloud providers and SaaS scanners ship first.
-- [ ] Final list of open-source scanners per source after licence review (Steampipe and ScoutSuite believed AGPL/GPL and not approved; Semgrep rules licence restrictive - verify under T-009).
+- [ ] Final list of open-source scanners per source after licence review (Steampipe AGPL-3.0, ScoutSuite GPL-2.0, Semgrep/Opengrep engines LGPL-2.1 and the Semgrep rules licence are not approved per the first-pass audit in LICENCES.md; confirm and finish under T-009).
 - [ ] Licence audit (T-009) results and the replacements chosen for object store and observability stack.
 - [ ] Notification templates and per-event defaults.
 - [ ] Tenant offboarding retention exceptions (legal holds).

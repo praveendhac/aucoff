@@ -3,7 +3,7 @@
 | Field | Value |
 |-------|-------|
 | Status | Draft |
-| Version | 0.5.0 |
+| Version | 0.6.0 |
 | Owner | Praveen Darshanam |
 | Last updated | 2026-10-19 |
 
@@ -17,27 +17,27 @@ Status values: `todo` · `in-progress` · `blocked` · `done`
 | ID | Task | Spec ref | Acceptance criteria | Depends on | Status |
 |----|------|----------|---------------------|------------|--------|
 | T-001 | Fill in constitution and spec | constitution.md, spec.md | Reviewed and versioned 1.0.0 | - | todo |
-| T-002 | Repo scaffold (frontend/, backend/, deploy/) | design.md | Directories and tooling committed | T-001 | todo |
-| T-003 | Repo conventions: root README, CLAUDE.md, CODEOWNERS, PR template, branch protection, commit conventions, pre-commit hooks (keep Gitleaks) | constitution.md §4, COD-10 | Files committed; rules documented | T-001 | todo |
-| T-004 | Pre-build verification: CloudNativePG supports PostgreSQL 18.6 and a pgvector 0.8.6 image exists or can be built (PostgreSQL 18.6 + pgvector 0.8.6 compatibility is owner-confirmed), Python 3.13 compatibility of LangGraph/asyncpg/SQLAlchemy | database-spec.md §1, §12 | Findings recorded in the specs; versions pinned or fallbacks chosen | T-001 | todo |
+| T-002 | Repo scaffold (frontend/, backend/, deploy/) | design.md | Directories and tooling committed | T-001 | done (2026-10-19; `make check` passes locally) |
+| T-003 | Repo conventions: root README, CLAUDE.md, CODEOWNERS, PR template, branch protection, commit conventions, pre-commit hooks (keep Gitleaks) | constitution.md §4, COD-10 | Files committed; rules documented | T-001 | done (2026-10-19; branch protection to be enabled in GitHub settings by the owner) |
+| T-004 | Pre-build verification: CloudNativePG supports PostgreSQL 18.6 and a pgvector 0.8.6 image exists or can be built (PostgreSQL 18.6 + pgvector 0.8.6 compatibility is owner-confirmed), Python 3.13 compatibility of LangGraph/asyncpg/SQLAlchemy | database-spec.md §1, §12 | Findings recorded in the specs; versions pinned or fallbacks chosen | T-001 | in progress: pgvector 0.8.6 PostgreSQL 18 support and CloudNativePG PG18 image-volume extensions confirmed by web search; still to check: kind node image K8s >= 1.35 / containerd >= 2.1 (kind not installed), CloudNativePG operator version, LangGraph/asyncpg on Python 3.13 |
 | T-005 | Verify owner-supplied framework instruments/versions against official sources | spec.md §4 | Table updated with source links | T-001 | todo |
 | T-006 | Author v1 unified control set (owner) and versioning scheme; decide licensing for source texts | spec.md §10a | Control set v1 reviewed and checked in as data | T-001 | todo |
 | T-007 | Tool vetting for scanners (maintenance, supply chain; licence per T-009) and chosen list per source | backend-spec.md §4a, constitution SEC-17 | Approved tool list with versions | T-009 | todo |
 | T-008 | Per-connector least-privilege permission policies (AWS, GCP, Azure, Kubernetes, GitHub, Bitbucket, Entra, Metabase) | backend-spec.md §7 | Policies documented and testable | T-007 | todo |
-| T-009 | Licence and provenance audit of every named dependency, tool, container image, font, icon, dataset and content source: verify licence from the official source, apply the permissive allow-list (LIC-1, LIC-2), choose alternatives for failures (object store, observability stack, scanners, Redis if used), create the licence register and NOTICE file | constitution LIC-1 to LIC-8, spec.md NFR-15, R-7 | Licence register committed; no disallowed or unknown licence remains; replacements recorded in the specs | T-001 | todo |
-| T-010 | CI SBOM generation and licence-scan gate that fails on disallowed/unknown licences; originality review step for generated documents | constitution LIC-5, LIC-8 | PR with a disallowed licence fails CI | T-002, T-009 | todo |
+| T-009 | Licence and provenance audit of every named dependency, tool, container image, font, icon, dataset and content source: verify licence from the official source, apply the permissive allow-list (LIC-1, LIC-2), choose alternatives for failures (object store, observability stack, scanners, Redis if used), create the licence register and NOTICE file | constitution LIC-1 to LIC-8, spec.md NFR-15, R-7 | Licence register committed; no disallowed or unknown licence remains; replacements recorded in the specs | T-001 | in progress: first pass in LICENCES.md (flagged tools checked by web search; sharp/LGPL fixed; owner decisions pending) |
+| T-010 | CI SBOM generation and licence-scan gate that fails on disallowed/unknown licences; originality review step for generated documents | constitution LIC-5, LIC-8 | PR with a disallowed licence fails CI | T-002, T-009 | in progress: Python and npm licence gates run in `make check` and CI; SBOM generation still to add |
 
 ## Phase 1: Backend
 | ID | Task | Spec ref | Acceptance criteria | Depends on | Status |
 |----|------|----------|---------------------|------------|--------|
-| T-101 | FastAPI skeleton + health endpoint | backend-spec.md | `/health` returns 200; tests pass | T-002 | todo |
+| T-101 | FastAPI skeleton + health endpoint | backend-spec.md | `/health` returns 200; tests pass | T-002 | done (2026-10-19) |
 | T-102 | Domain models + migrations | backend-spec.md §4 | Migration applies cleanly | T-101 | todo |
 | T-103 | PostgreSQL 18.6 + pgvector schema migrations (tables, indexes) | database-spec.md §3, §5 | Migrations apply from empty DB; ER matches spec | T-102 | todo |
 | T-104 | DB roles, grants, TLS and Row-Level Security | database-spec.md §6, constitution DB-3..5 | RLS and privilege tests pass (database-spec.md §10) | T-103 | todo |
 | T-105 | Audit log hash chain and append-only enforcement | database-spec.md §3.5 | Chain verification test passes; UPDATE/DELETE denied | T-104 | todo |
 | T-106 | Synthetic seed data and catalogue loader (frameworks, unified controls) | spec.md §4, database-spec.md §3.2 | Seed loads; no real data | T-103 | todo |
 | T-107 | Auth: OIDC JWT validation, tenant context, RBAC dependencies | backend-spec.md §8 | Unauthorised/cross-tenant calls rejected in tests | T-104 | todo |
-| T-108 | OpenAPI pipeline: committed `backend/openapi.yaml`, drift check, Spectral lint, Swagger/ReDoc | api-contract.md §2 | CI fails on drift or undocumented route | T-101 | todo |
+| T-108 | OpenAPI pipeline: committed `backend/openapi.yaml`, drift check, Spectral lint, Swagger/ReDoc | api-contract.md §2 | CI fails on drift or undocumented route | T-101 | in progress: export, drift check and Spectral lint work locally and are in CI; CI not yet run on GitHub |
 | T-109 | Catalogue/admin APIs (API-1x, API-2x) | api-contract.md §5.1-5.3 | Endpoints documented and tested | T-107, T-108 | todo |
 | T-116 | Check engine: adapter interface, normalised result schema, `rule_packs`/`check_definitions`/`check_results` | backend-spec.md §4a, database-spec.md §3.7 | First adapter results map to unified controls in tests | T-103, T-007 | todo |
 | T-117 | Tenant provisioning, suspension, offboarding (export + deletion) | spec.md FR-25, api-contract.md §5.8 | Offboarding test removes tenant data and writes audit | T-104, T-107 | todo |
@@ -70,7 +70,7 @@ Status values: `todo` · `in-progress` · `blocked` · `done`
 ## Phase 3: Frontend
 | ID | Task | Spec ref | Acceptance criteria | Depends on | Status |
 |----|------|----------|---------------------|------------|--------|
-| T-301 | Next.js skeleton + BFF auth shell (Keycloak) | frontend-spec.md §5 | App builds; login flow works | T-002 | todo |
+| T-301 | Next.js skeleton + BFF auth shell (Keycloak) | frontend-spec.md §5 | App builds; login flow works | T-002 | in progress: app skeleton builds and tests pass; Keycloak login flow not started |
 | T-302 | Generated API client + TanStack Query setup | frontend-spec.md §1, §7 | Build fails on contract drift | T-108, T-301 | todo |
 | T-303 | Design system components (DataTable, AiBadge, CitationList, ApprovalDialog) | frontend-spec.md §4 | Component and axe tests pass | T-301 | todo |
 | T-304 | Catalogue, scopes, connectors, evidence screens | frontend-spec.md §2 | E2E covers create/list flows | T-302, T-109 | todo |
@@ -93,7 +93,7 @@ Status values: `todo` · `in-progress` · `blocked` · `done`
 | T-406 | NetworkPolicies, Pod Security, ServiceAccounts/RBAC | infrastructure-spec.md §4 | Default-deny verified; policy tests pass | T-402 | todo |
 | T-407 | Observability stack (OTel, Prometheus + permissively licensed dashboard/log/trace backends selected under T-009) + dashboards | infrastructure-spec.md §8 | Traces, logs, metrics visible for a sample run | T-402 | todo |
 | T-408 | Makefile local workflow (cluster-up, deploy, seed, e2e) | infrastructure-spec.md §6 | Fresh clone to running stack documented | T-402 | todo |
-| T-409 | GitHub Actions pipelines (PR, build, chart, E2E on kind) | infrastructure-spec.md §7 | All required checks gate merges | T-401 | todo |
+| T-409 | GitHub Actions pipelines (PR, build, chart, E2E on kind) | infrastructure-spec.md §7 | All required checks gate merges | T-401 | in progress: `.github/workflows/ci.yml` written (backend, frontend, helm, gitleaks); not yet run on GitHub; no deploy job by design |
 | T-410 | Laptop smoke test and resource profile: measure CPU/RAM of the full stack on kind, define `values-local-min.yaml`, document `make` targets and prerequisites; verify cold start from a clean clone on a laptop | infrastructure-spec.md §5a, constitution ENV-4 | Fresh clone to working stack in the documented time on a 16 GB laptop; minimal profile runs on 8 GB | T-408 | todo |
 
 ## Post-v1 (out of scope for the MVP): AWS
@@ -104,6 +104,7 @@ Status values: `todo` · `in-progress` · `blocked` · `done`
 
 ## Blockers and Notes
 - **v1 scope decision:** v1 (MVP) is local-only on kind; AWS/Terraform/EKS work (T-501, T-502) is deferred to post-v1 and does not gate any v1 task.
+- **Laptop prerequisites found 2026-10-19:** Docker is installed but its Colima daemon is stopped (`colima start`), and `kind` is not installed (`brew install kind`); `make doctor` reports this. T-004 and `make cluster-up` need both.
 - T-004 (pre-build verification) can change version pins and the Postgres/pgvector image (pgvector 0.8.6 with PostgreSQL 18.6 is owner-confirmed; image and operator support still to verify); do it before the T-002 scaffold is finalised.
 - T-009 (licence and provenance audit) gates T-007, T-405, T-407 and the scanner choices; no tool or image is adopted until it passes constitution LIC-1 to LIC-5.
 - T-006 (unified control set authored by owner) gates meaningful scanner-to-control mapping and mapping-agent evaluation.

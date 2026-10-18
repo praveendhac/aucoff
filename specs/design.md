@@ -3,7 +3,7 @@
 | Field | Value |
 |-------|-------|
 | Status | Draft |
-| Version | 0.5.0 |
+| Version | 0.5.1 |
 | Owner | Praveen Darshanam |
 | Last updated | 2026-10-19 |
 
@@ -43,9 +43,9 @@ Next.js frontend (BFF session) -> FastAPI gateway -> PostgreSQL (+ pgvector) and
 | Agent runtime | 13 agents / microservices, LangGraph graphs | Python, LangGraph | [agent.md](agent.md) |
 | Relational DB + vector store | System of record, RLS tenancy, embeddings, history snapshots | PostgreSQL 18.6 + pgvector | [database-spec.md](database-spec.md) |
 | Queue | Job and event transport | RabbitMQ (post-v1 hosted option: Amazon MQ) | [backend-spec.md](backend-spec.md) §5 |
-| Object store | Evidence files, reports, exports | S3-compatible store locally (MinIO believed AGPL, not approved; permissive candidate TBD under T-009), S3 on AWS | [infrastructure-spec.md](infrastructure-spec.md) |
+| Object store | Evidence files, reports, exports | S3-compatible store locally (MinIO is AGPL-3.0, not approved; candidate SeaweedFS to be confirmed under T-009), S3 on AWS | [infrastructure-spec.md](infrastructure-spec.md) |
 | Identity provider | OIDC login, SAML brokering | Keycloak locally; Entra ID/Cognito later | [frontend-spec.md](frontend-spec.md) §5 |
-| Observability | Logs, metrics, traces | OpenTelemetry, Prometheus + permissively licensed dashboards/logs/traces (Grafana/Loki/Tempo believed AGPL, not approved; T-009) | [infrastructure-spec.md](infrastructure-spec.md) §8 |
+| Observability | Logs, metrics, traces | OpenTelemetry, Prometheus + permissively licensed dashboards/logs/traces (Grafana/Loki/Tempo are AGPLv3, not approved; Perses and VictoriaLogs are candidates, T-009) | [infrastructure-spec.md](infrastructure-spec.md) §8 |
 
 ## 4. Data Model
 Defined in [database-spec.md](database-spec.md) sections 3 to 5 (tables, ER diagram, indexes). Design-level decisions:

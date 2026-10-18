@@ -3,7 +3,7 @@
 | Field | Value |
 |-------|-------|
 | Status | Draft |
-| Version | 0.5.0 |
+| Version | 0.5.1 |
 | Owner | Praveen Darshanam |
 | Last updated | 2026-10-19 |
 
@@ -21,7 +21,7 @@ Related: [spec.md](spec.md) · [design.md](design.md) · [agent.md](agent.md) ·
 | Queue | RabbitMQ via `aio-pika` | Jobs from API to agent services |
 | Agent orchestration | LangGraph | Checkpoints in PostgreSQL; interrupt nodes for human approval |
 | LLM access | Provider-agnostic interface; Claude default | ARC-5, AI-8, AI-12 |
-| Object store | S3 API via `boto3` (local S3-compatible store in v1; AWS S3 is post-v1; local store TBD - MinIO is believed AGPL and not approved, see constitution LIC-1/LIC-2) | Presigned URLs |
+| Object store | S3 API via `boto3` (local S3-compatible store in v1; AWS S3 is post-v1; local store TBD - MinIO is AGPL-3.0 and its community repo was archived in April 2026, so it is not approved; see LICENCES.md and constitution LIC-1/LIC-2) | Presigned URLs |
 | Cloud/SaaS SDKs | boto3, Google, Azure, GitHub/Bitbucket, Microsoft Graph, Metabase API | Read-only scopes only |
 | Logging / tracing | structlog (JSON), OpenTelemetry | COD-8 |
 | Tooling | Ruff, mypy, pytest, httpx, testcontainers | COD-1, QA |
@@ -96,9 +96,9 @@ Decision (owner): **wrap proven open-source scanners behind our own scanner inte
 - **Candidate tools (to be confirmed per source; licence and maintenance reviewed before adoption):**
   | Source | Candidates |
   |--------|-----------|
-  | AWS / GCP / Azure | Prowler (licence to verify); Steampipe (believed AGPL) and ScoutSuite (believed GPL) are NOT approved unless verified otherwise |
+  | AWS / GCP / Azure | Prowler (Apache-2.0 per web search 2026-10-19; confirm from its LICENSE on adoption); Steampipe (AGPL-3.0) and ScoutSuite (GPL-2.0) are NOT approved (LICENCES.md) |
   | Kubernetes / containers | kubescape, kube-bench, Trivy |
-  | Repos / CI-CD / IaC | Checkov (licence to verify), Semgrep engine/rules only if their licences pass LIC-1/LIC-2 (rules licence believed restrictive; alternatives such as Opengrep or own rules), GitHub/Bitbucket APIs (custom adapter) |
+  | Repos / CI-CD / IaC | Checkov (Apache-2.0 per web search; confirm on adoption) and own rules; Semgrep and Opengrep (engines LGPL-2.1) and the Semgrep rules (restrictive rules licence) are NOT approved, GitHub/Bitbucket APIs (custom adapter) |
   | Entra ID, Metabase | Custom adapters (Microsoft Graph, Metabase API) |
 - **Normalised result schema:** `check_id`, `tool`, `tool_version`, `rule_pack_version`, `resource_ref`, `status` (pass/fail/error/not_applicable), `severity`, `evidence_ref`, `raw_ref`, `observed_at`.
 - **Rule metadata:** AUCoFF maintains `check_definitions` (tool check ID -> unified control(s), severity override, rationale, applicability) so scan results roll up into control results ([database-spec.md](database-spec.md) §3.7). Mappings are versioned and reviewed like control mappings.

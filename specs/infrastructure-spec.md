@@ -3,7 +3,7 @@
 | Field | Value |
 |-------|-------|
 | Status | Draft |
-| Version | 0.5.0 |
+| Version | 0.5.1 |
 | Owner | Praveen Darshanam |
 | Last updated | 2026-10-19 |
 
@@ -27,9 +27,9 @@ Same images and chart in all environments, differing only by values (ENV-1).
 | agent services (9) | `backend/services/*` | assessment-orchestrator, mapping-agent, cloud-scanner, k8s-scanner, repo-scanner, saas-scanner, document-analyzer, remediation-advisor, report-generator |
 | PostgreSQL 18.6 + pgvector 0.8.6 | CloudNativePG operator + pgvector-enabled PostgreSQL 18.6 image (image source to verify, T-004) | [database-spec.md](database-spec.md) |
 | RabbitMQ | Official chart/image | Queues per [backend-spec.md](backend-spec.md) section 5 |
-| Object store | S3-compatible; **MinIO is believed AGPL-3.0 and is NOT approved**; permissive candidate (e.g. SeaweedFS) to be verified under T-009 | Evidence/report store |
+| Object store | S3-compatible; **MinIO is AGPL-3.0 (community repo archived April 2026) and is NOT approved**; candidate SeaweedFS (Apache-2.0 per web search 2026-10-19) to be confirmed and tested under T-009 | Evidence/report store |
 | Keycloak | Official chart/image | Local OIDC/SAML IdP |
-| Observability | OpenTelemetry Collector, Prometheus; dashboards/logs/traces on permissively licensed tools (Grafana, Loki, Tempo believed AGPL-3.0 and NOT approved; candidates Perses, Jaeger, VictoriaLogs - verify under T-009) | Section 8 |
+| Observability | OpenTelemetry Collector, Prometheus; dashboards/logs/traces on permissively licensed tools (Grafana, Loki and Tempo have been AGPLv3 since 2021 and are NOT approved; candidates Perses and VictoriaLogs are Apache-2.0 per web search, Jaeger and Prometheus still unverified - confirm under T-009) | Section 8 |
 | Ingress + cert-manager | NGINX Ingress + cert-manager | Local CA for TLS |
 
 ### Image standards
@@ -80,6 +80,7 @@ deploy/helm/aucoff/
 - **Prerequisites:** Docker (or a compatible runtime), kind, kubectl, helm, make; internet access only for pulling images and the LLM API.
 - **Resources (proposal, to be measured in T-410):** about 8 CPUs and 16 GB RAM for the full stack; a minimal profile (`values-local-min.yaml`) disables observability and optional scanners for 8 GB machines.
 - **Offline mode:** the LLM provider can run in recorded/mock mode so tests and demos work without network access; cloud scanners use recorded fixtures unless a read-only test account is configured.
+- **Node image requirement (verified 2026-10-19 by web search):** CloudNativePG loads `pgvector` as an image-volume extension, which needs PostgreSQL 18, Kubernetes 1.35 or later and containerd 2.1 or later. The kind node image must satisfy this; pin `kindest/node` by tag and digest in `deploy/kind/kind-config.yaml` once checked with `kind` installed (T-004). If it cannot be met, fall back to a PostgreSQL image that bundles `pgvector`.
 - **Data:** synthetic data only (ENV-2); persistent volumes live inside the kind cluster and are recreated with `make cluster-down` / `make cluster-up`.
 
 ## 6. Local Workflow
