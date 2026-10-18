@@ -30,7 +30,7 @@ Related: [frontend-spec.md](frontend-spec.md) · [backend-spec.md](backend-spec.
 | Long-running work | `202 Accepted` with a resource to poll plus SSE stream |
 
 ## 2. API Documentation (Swagger / OpenAPI) - Required
-- FastAPI generates an **OpenAPI 3.1** document at `/api/v1/openapi.json`; a copy is committed as `specs/openapi.yaml` (or `backend/openapi.yaml` - TODO location).
+- FastAPI generates an **OpenAPI 3.1** document at `/api/v1/openapi.json`; a copy is committed as `backend/openapi.yaml` and linted with Spectral in CI.
 - **Swagger UI** at `/docs` and **ReDoc** at `/redoc` document all endpoints. In production they require authentication or are disabled per tenant policy (TODO decision).
 - Every operation MUST have: `operationId`, summary, description, tags, request/response schemas with examples, all error responses, required scopes (security requirement), and pagination/idempotency parameters where applicable.
 - Every schema field MUST have a type, description, and constraints (format, min/max, enum).
@@ -212,7 +212,7 @@ OWASP API Security Top 10 mapping in [backend-spec.md](backend-spec.md) section 
 | 0.2.0 | 2026-10-18 | Conventions, documentation requirement, endpoint catalogue, SSE | - |
 
 ## 11. Open Questions
-- [ ] Where the committed OpenAPI file lives and the lint ruleset.
+- [x] OpenAPI file lives at `backend/openapi.yaml`; lint ruleset: Spectral (rule customisation TODO).
 - [ ] Whether `/docs` is enabled in production.
 - [ ] Deprecation period and idempotency retention.
 - [ ] Webhook vs polling for ticket sync.

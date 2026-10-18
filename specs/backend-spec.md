@@ -14,7 +14,7 @@ Related: [spec.md](spec.md) · [design.md](design.md) · [agent.md](agent.md) ·
 ## 1. Tech Choices
 | Area | Choice | Notes |
 |------|--------|-------|
-| Language | Python (version TODO, pinned) | COD-1 |
+| Language | Python 3.13 (pinned); FastAPI latest stable, exact version pinned at scaffold (T-002) | COD-1 |
 | API | FastAPI + Pydantic v2 | OpenAPI 3.1 generated and committed |
 | ORM / migrations | SQLAlchemy 2.x (async) + Alembic | [database-spec.md](database-spec.md) |
 | Database | PostgreSQL 18.6 + pgvector | RLS; `SET LOCAL app.tenant_id` per transaction |
@@ -176,9 +176,9 @@ Domain exceptions map to the problem-detail format in [api-contract.md](api-cont
 - Security: SAST, dependency audit, DAST/API scan against kind deployment.
 
 ## 16. Open Questions
-- [ ] Python and FastAPI versions.
+- [x] Python 3.13 + latest stable FastAPI (pin exact FastAPI version at scaffold).
 - [ ] Final permission matrix and custom roles.
 - [ ] Ticket sync: webhook vs polling.
 - [ ] Per-scanner concurrency and rate limits.
-- [ ] Embedding model and dimension.
+- [x] Embeddings: hosted embedding API via the provider interface, 1024 dimensions (placeholder; re-embed via migration if the model changes).
 - [ ] Checkpointer retention policy for LangGraph state.

@@ -21,7 +21,7 @@ Related: [spec.md](spec.md) · [api-contract.md](api-contract.md) · [design.md]
 | Forms / validation | React Hook Form + Zod | Zod schemas mirror API schemas |
 | Charts | Recharts (proposal; visx for the heatmap if needed) | Dashboards (US-8); every chart has a data-table alternative |
 | Design tokens / theming | CSS variables via Tailwind theme; light default + dark mode (`prefers-color-scheme` with user override) | Colours, typography and layout defined in [design.md](design.md) §10 |
-| Auth | Server-side session via BFF pattern (Auth.js or equivalent - TODO) | See section 5 |
+| Auth | Server-side session via BFF pattern using Auth.js (NextAuth) with the OIDC provider; session in an encrypted httpOnly cookie, optional Redis/DB session store | See section 5 |
 | Unit/component tests | Vitest + Testing Library | |
 | E2E / a11y tests | Playwright + axe-core | |
 | Lint/format | ESLint + Prettier | COD-2 |
@@ -138,7 +138,7 @@ frontend/
 - Visual regression: TODO.
 
 ## 14. Open Questions
-- [ ] BFF auth library choice and session store.
+- [x] BFF auth: Auth.js (NextAuth) with OIDC. [ ] Session store (cookie-only vs Redis/DB) still open.
 - [ ] Charting library.
 - [ ] i18n requirements and target locales (India/EU).
 - [ ] Dark mode and branding.

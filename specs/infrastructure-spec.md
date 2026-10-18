@@ -25,12 +25,12 @@ Same images and chart in all environments, differing only by values (ENV-1).
 | frontend | `frontend/` (Next.js standalone) | Port 3000 (TODO) |
 | backend gateway | `backend/app` (FastAPI) | Port 8000 (TODO) |
 | agent services (9) | `backend/services/*` | assessment-orchestrator, mapping-agent, cloud-scanner, k8s-scanner, repo-scanner, saas-scanner, document-analyzer, remediation-advisor, report-generator |
-| PostgreSQL 18.6 + pgvector | Official/operator image with pgvector (TODO choose) | [database-spec.md](database-spec.md) |
+| PostgreSQL 18.6 + pgvector | CloudNativePG operator + pgvector-enabled PostgreSQL 18 image (image TODO) | [database-spec.md](database-spec.md) |
 | RabbitMQ | Official chart/image | Queues per [backend-spec.md](backend-spec.md) section 5 |
 | MinIO | Official chart/image | S3-compatible evidence/report store |
 | Keycloak | Official chart/image | Local OIDC/SAML IdP |
 | Observability | OpenTelemetry Collector, Prometheus, Grafana, Loki, Tempo | Section 8 |
-| Ingress + cert-manager | NGINX Ingress (or Traefik - TODO) + cert-manager | Local CA for TLS |
+| Ingress + cert-manager | NGINX Ingress + cert-manager | Local CA for TLS |
 
 ### Image standards
 - Multi-stage builds, minimal base (distroless or slim), non-root user, read-only root filesystem where possible (SEC-8).
@@ -86,7 +86,7 @@ make seed           # load synthetic seed data and framework catalogue
 make e2e            # Playwright E2E against the cluster
 make logs / make down / make cluster-down
 ```
-- Access via ingress hostnames (e.g. `aucoff.localtest.me`, TODO) or `kubectl port-forward`.
+- Access via ingress hostnames (`aucoff.localtest.me`, wildcard DNS to 127.0.0.1) or `kubectl port-forward`.
 - Target: cold start of the full stack on a 16 GB laptop in < 10 minutes (proposal); lightweight profile (`values-local-min.yaml`) disables observability and extra scanners.
 - LLM calls: real provider key optional locally; default to a recorded/mock provider for tests (QA-8).
 
@@ -134,8 +134,8 @@ Scanners access customer accounts via customer-granted read-only roles (cross-ac
 Controls referenced from constitution section 6: network policies, image scanning, non-root, RBAC least privilege, encryption in transit and at rest, audit logging of cluster changes (AWS CloudTrail/EKS audit later), no manual changes (ARC-11), dependency and SBOM tracking, regional deployment for data residency (SEC-14).
 
 ## 12. Open Questions
-- [ ] Ingress controller choice; local hostnames.
-- [ ] PostgreSQL deployment (StatefulSet vs CloudNativePG) and pgvector image.
+- [x] Ingress: NGINX; local host `aucoff.localtest.me`.
+- [x] PostgreSQL via CloudNativePG operator. [ ] pgvector-enabled image choice still open.
 - [ ] Queue autoscaling approach (KEDA).
 - [ ] mTLS/service mesh need.
 - [ ] Image registry and signing.

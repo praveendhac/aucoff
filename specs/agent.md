@@ -225,8 +225,8 @@ Each run writes `agent_runs` and `agent_steps` ([database-spec.md](database-spec
 | Model/provider data retention | Approved providers only, data class rules, region pinning (SEC-14) |
 
 ## 15. Open Questions
-- [ ] Final model IDs per tier and fallback provider.
-- [ ] Embedding model and dimension; reranker choice.
+- [ ] Final model IDs per tier. Provider decision: Anthropic Claude only for v1 (fallback provider revisited with first EU/India tenants).
+- [x] Embeddings: hosted embedding API via provider interface, 1024 dims (placeholder). [ ] Reranker choice still open.
 - [ ] Staleness thresholds per evidence type.
 - [ ] Targets for mapping and questionnaire evaluation metrics.
 - [ ] Allow-listed regulatory sources per jurisdiction (include watch items: PSD3/PSR, DPDP phased milestones).

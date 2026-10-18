@@ -175,7 +175,7 @@ Detail in [api-contract.md](api-contract.md).
 ## 11. Open Items
 - [ ] Confirm coverage thresholds (QA-3).
 - [ ] Define audit log retention period (SEC-10).
-- [ ] Choose approved LLM providers and data classes allowed per provider (AI-8, SEC-14).
+- [x] LLM providers: Anthropic Claude only for v1 via the provider interface; redacted data only; US region unless a tenant requires otherwise. Fallback provider and residency-pinned options to be revisited with the first EU/India tenants (AI-8, SEC-14).
 - [x] Frameworks in scope for SEC-13 are listed in [spec.md](spec.md) section 4 (still need exact versions).
 
 ## 12. Changelog

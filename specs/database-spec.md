@@ -16,7 +16,7 @@ Related: [constitution.md](constitution.md) · [design.md](design.md) · [backen
 |------|-------|-------|
 | Engine | PostgreSQL 18.6 | Confirmed by owner |
 | Database name | `aucoff` | One database; tenant isolation by `tenant_id` + RLS |
-| Vector extension | `pgvector` (version TODO) | Verify the pinned release supports PostgreSQL 18 before adoption |
+| Vector extension | `pgvector` (version pinned at build; image TODO) | Verify the pinned release supports PostgreSQL 18 before adoption |
 | Other extensions | `pgcrypto`, `pg_audit` (TODO confirm availability locally and on AWS), `pg_stat_statements` | |
 | ORM | SQLAlchemy 2.x (async) | See [backend-spec.md](backend-spec.md) |
 | Migrations | Alembic | Versioned, forward-only in prod (COD-9) |
@@ -26,7 +26,7 @@ Related: [constitution.md](constitution.md) · [design.md](design.md) · [backen
 ### Environments
 | Env | Deployment | Notes |
 |-----|-----------|-------|
-| local | PostgreSQL 18.6 + pgvector in the Helm chart (StatefulSet or operator such as CloudNativePG - TODO decide), PVC storage | Synthetic data only (ENV-2) |
+| local | PostgreSQL 18.6 + pgvector in the Helm chart (CloudNativePG operator with a pgvector-enabled PostgreSQL 18 image), PVC storage | Synthetic data only (ENV-2) |
 | aws (future) | RDS or Aurora PostgreSQL | Confirm 18.x and `pgvector` support at migration time; see section 12 |
 
 ## 2. Conventions
@@ -76,7 +76,7 @@ Related: [constitution.md](constitution.md) · [design.md](design.md) · [backen
 | `agent_runs` | One agent execution | `id`, `tenant_id`, `agent_id`, `assessment_id`, `model`, `model_version`, `prompt_version`, `status`, `input_tokens`, `output_tokens`, `cost_usd numeric`, `started_at`, `finished_at` |
 | `agent_steps` | Tool calls and outputs (append-only) | `id`, `tenant_id`, `agent_run_id`, `seq`, `kind`, `input_redacted jsonb`, `output jsonb`, `created_at` |
 | `approvals` | Human decisions on agent actions | `id`, `tenant_id`, `agent_run_id`, `action`, `requested_at`, `decided_by`, `decision`, `decided_at`, `comment` |
-| `embeddings` | RAG vectors | `id`, `tenant_id` (NULL for shared reference text), `source_type`, `source_id`, `chunk_index`, `content`, `embedding vector(N)` (N depends on embedding model - TODO), `model` |
+| `embeddings` | RAG vectors | `id`, `tenant_id` (NULL for shared reference text), `source_type`, `source_id`, `chunk_index`, `content`, `embedding vector(1024)` (hosted embedding model via the provider interface; re-embed by migration if the model changes), `model` |
 
 ### 3.4b Questionnaires (`app`) - see [agent.md](agent.md) section 10
 | Table | Purpose | Key columns |
@@ -240,8 +240,8 @@ No role is superuser; `aucoff_app` has `NOBYPASSRLS`.
 | PVC storage | gp3/io2 with KMS | |
 
 ## 13. Open Questions
-- [ ] Exact pgvector version and embedding dimension (depends on embedding model).
-- [ ] Local deployment: plain StatefulSet vs CloudNativePG operator.
+- [x] Embedding dimension 1024 (placeholder). [ ] Exact pgvector version and image.
+- [x] Local deployment: CloudNativePG operator with a pgvector-enabled image.
 - [ ] Column-level encryption approach and key management.
 - [ ] Retention periods and RPO/RTO targets.
 - [ ] Tenant region model: one database per region vs per tenant.

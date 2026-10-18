@@ -29,7 +29,7 @@ Status values: `todo` · `in-progress` · `blocked` · `done`
 | T-105 | Audit log hash chain and append-only enforcement | database-spec.md §3.5 | Chain verification test passes; UPDATE/DELETE denied | T-104 | todo |
 | T-106 | Synthetic seed data and catalogue loader (frameworks, unified controls) | spec.md §4, database-spec.md §3.2 | Seed loads; no real data | T-103 | todo |
 | T-107 | Auth: OIDC JWT validation, tenant context, RBAC dependencies | backend-spec.md §8 | Unauthorised/cross-tenant calls rejected in tests | T-104 | todo |
-| T-108 | OpenAPI pipeline: committed spec, drift check, lint, Swagger/ReDoc | api-contract.md §2 | CI fails on drift or undocumented route | T-101 | todo |
+| T-108 | OpenAPI pipeline: committed `backend/openapi.yaml`, drift check, Spectral lint, Swagger/ReDoc | api-contract.md §2 | CI fails on drift or undocumented route | T-101 | todo |
 | T-109 | Catalogue/admin APIs (API-1x, API-2x) | api-contract.md §5.1-5.3 | Endpoints documented and tested | T-107, T-108 | todo |
 | T-110 | RabbitMQ messaging layer: envelope, outbox relay, DLQs | backend-spec.md §5 | Idempotent consumer tests pass | T-103 | todo |
 | T-111 | Snapshot/metric tables (database-spec §3.6): migrations, partitions, immutability grants | database-spec.md §3.6, constitution DB-9 | UPDATE/DELETE denied; monthly partitions created | T-104 | todo |
@@ -75,7 +75,7 @@ Status values: `todo` · `in-progress` · `blocked` · `done`
 |----|------|----------|---------------------|------------|--------|
 | T-401 | Dockerfiles for frontend and backend | infrastructure-spec.md §2 | Images build and run | T-101, T-301 | todo |
 | T-402 | Helm chart + values-local.yaml | infrastructure-spec.md §3 | `helm install` brings up stack locally | T-401 | todo |
-| T-403 | PostgreSQL in Helm chart (PVC, NetworkPolicy, Secrets, migration hook Job) | infrastructure-spec.md §6, database-spec.md §6, §7 | DB reachable only from backend; migrations run on upgrade | T-402, T-104 | todo |
+| T-403 | PostgreSQL via CloudNativePG in Helm chart (PVC, NetworkPolicy, Secrets, migration hook Job) | infrastructure-spec.md §6, database-spec.md §6, §7 | DB reachable only from backend; migrations run on upgrade | T-402, T-104 | todo |
 | T-404 | Backup/restore procedure for local DB | database-spec.md §11 | Restore drill documented and passes | T-403 | todo |
 | T-405 | RabbitMQ, MinIO, Keycloak in chart; ingress + cert-manager TLS | infrastructure-spec.md §2, §3, §5 | Stack reachable over TLS locally | T-402 | todo |
 | T-406 | NetworkPolicies, Pod Security, ServiceAccounts/RBAC | infrastructure-spec.md §4 | Default-deny verified; policy tests pass | T-402 | todo |

@@ -171,7 +171,7 @@ Full definitions in [agent.md](agent.md) section 2.
 | NFR-14 | UX | Visual design, layout and metrics per [design.md](design.md) section 10 and 11; WCAG 2.2 AA with contrast verified |
 
 ## 9. LLM Approach
-Provider-agnostic cloud LLM API behind an interface (ARC-5), with Anthropic Claude as the default provider. Approved providers and data classes allowed per provider remain to be decided (constitution open items).
+Provider-agnostic cloud LLM API behind an interface (ARC-5), with Anthropic Claude as the default provider. v1 uses Anthropic Claude only, via the provider interface, with redacted data only and US-region processing unless a tenant requires otherwise; a fallback provider and residency-pinned options are revisited with the first EU/India tenants.
 
 ## 10. Success Metrics
 Detailed definitions and formulas are in the metrics catalogue ([design.md](design.md) section 11): time to audit readiness = M-09, control coverage % = M-02, agent accuracy/citation correctness = M-13, remediation cycle time = M-08.
