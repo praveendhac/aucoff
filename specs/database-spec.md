@@ -78,6 +78,16 @@ Related: [constitution.md](constitution.md) · [design.md](design.md) · [backen
 | `approvals` | Human decisions on agent actions | `id`, `tenant_id`, `agent_run_id`, `action`, `requested_at`, `decided_by`, `decision`, `decided_at`, `comment` |
 | `embeddings` | RAG vectors | `id`, `tenant_id` (NULL for shared reference text), `source_type`, `source_id`, `chunk_index`, `content`, `embedding vector(N)` (N depends on embedding model - TODO), `model` |
 
+### 3.4b Questionnaires (`app`) - see [agent.md](agent.md) section 10
+| Table | Purpose | Key columns |
+|-------|---------|-------------|
+| `questionnaires` | Uploaded/created due-diligence questionnaire | `id`, `tenant_id`, `name`, `template` (sig, caiq, hecvat, vsa, custom), `source_type` (file, link), `object_key`, `requester_label`, `status`, `detail_level`, `created_by`, `created_at` |
+| `questionnaire_questions` | Normalised questions | `id`, `tenant_id`, `questionnaire_id`, `position`, `text`, `category`, `unified_control_ids uuid[]` |
+| `questionnaire_answers` | Drafted/approved answers (append-only versions) | `id`, `tenant_id`, `question_id`, `version`, `text`, `source` (library, live, manual), `confidence`, `citations jsonb`, `evidence_ts timestamptz`, `redaction_summary jsonb`, `status` (draft, approved, rejected, needs_input), `decided_by`, `decided_at` |
+| `answer_library` | Approved reusable answers | `id`, `tenant_id`, `question_text`, `answer_text`, `unified_control_ids uuid[]`, `evidence_ids uuid[]`, `status` (approved, stale, retired), `approved_by`, `approved_at`, `fresh_until`, embedding via `embeddings` |
+| `questionnaire_exports` | Export audit | `id`, `tenant_id`, `questionnaire_id`, `format`, `object_key`, `answer_ids uuid[]`, `exported_by`, `exported_at`, `recipient_label` |
+All tables have RLS (DB-3); exports also write to `audit.audit_log`.
+
 ### 3.4a Orchestration support (`app`)
 | Table | Purpose |
 |-------|---------|

@@ -42,7 +42,13 @@ Status values: `todo` · `in-progress` · `blocked` · `done`
 | T-204 | Remaining scanners (cloud, k8s, repo, saas) | spec.md §5.2, §5.6 | Each service passes contract and eval tests | T-203 | todo |
 | T-205 | document-analyzer (RAG, tenant-filtered pgvector) | agent.md §6, DB-6 | Cross-tenant retrieval test passes | T-201 | todo |
 | T-206 | mapping-agent, remediation-advisor, report-generator | spec.md §5.6 | Outputs validate against schemas and cite sources | T-202 | todo |
-| T-207 | Agent evaluation suite and CI gate | agent.md §10, constitution AI-11 | Thresholds enforced in CI | T-202 | todo |
+| T-207 | Agent evaluation suite and CI gate | agent.md §11, constitution AI-11 | Gates (citation >= 98%, hallucination <= 1%, agreement >= 90%, redaction >= 99%) enforced in CI | T-202 | todo |
+| T-208 | reviewer-agent and citation validator | agent.md §2, §8 | Unresolvable citations rejected in tests | T-202 | todo |
+| T-209 | questionnaire-agent: parsing, answer library, drafting with live evidence | agent.md §10, database-spec.md §3.4b | Fixture questionnaires produce cited drafts; stale answers trigger re-scan | T-203, T-205, T-208 | todo |
+| T-210 | Redaction pipeline and approval-gated export | agent.md §8, §10, constitution AI-16 | Redaction recall >= 99% on seeded corpus; export blocked without approval | T-209 | todo |
+| T-211 | regulatory-change-agent (allow-listed sources, diff proposals) | agent.md §2, FR-20 | Proposals created, never auto-applied | T-202 | todo |
+| T-212 | copilot-agent (tenant-scoped retrieval, SSE, refusal when ungrounded) | agent.md §2, FR-21 | Cross-tenant leakage tests pass | T-205 | todo |
+| T-213 | Budget enforcement, kill switch, approval expiry | agent.md §3, §4, §9 | Hard stop at 100% budget; approvals expire at 7 days without auto-approval | T-202 | todo |
 
 ## Phase 3: Frontend
 | ID | Task | Spec ref | Acceptance criteria | Depends on | Status |

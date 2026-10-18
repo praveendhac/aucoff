@@ -3,7 +3,7 @@
 | Field | Value |
 |-------|-------|
 | Status | Draft |
-| Version | 0.4.0 |
+| Version | 0.5.0 |
 | Owner | Praveen Darshanam |
 | Last updated | 2026-10-18 |
 
@@ -119,6 +119,7 @@ Applies to every agent in [agent.md](agent.md).
 | AI-13 | **Transparency to users.** The UI labels AI-generated content and shows its sources and approval status. |
 | AI-14 | **No autonomous legal conclusions.** AUCoFF output supports compliance decisions; it is not legal advice and states this where relevant. |
 | AI-15 | **Fail safe.** On model outage, timeout or policy violation the system degrades to manual workflow and records the event. |
+| AI-16 | **Outputs leaving the tenant.** Any agent output shared outside the tenant (questionnaire answers, reports, exports) MUST be human-approved, redacted by default for sensitive details, and audit-logged. Agents MUST NOT auto-submit to external parties. |
 
 ## 7a. Database Rules
 
@@ -182,3 +183,4 @@ Detail in [api-contract.md](api-contract.md).
 | 0.2.0 | 2026-10-18 | Added architectural, design, coding, quality, security and AI rules |
 | 0.3.0 | 2026-10-18 | Added database rules DB-1 to DB-8; frameworks in scope resolved |
 | 0.4.0 | 2026-10-18 | Added API rules API-1 to API-6 |
+| 0.5.0 | 2026-10-18 | Added AI-16 (outputs leaving the tenant) |

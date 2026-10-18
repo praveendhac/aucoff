@@ -83,6 +83,11 @@ Rules: `api -> domain -> db/messaging/llm` only (ARC-3); services reuse `domain`
 | `document-analyzer` | Parse, chunk, embed, RAG-assess documents | `analysis.document` | evidence + candidate results | FR-5, FR-7 |
 | `remediation-advisor` | Findings and advisory remediation | `finding.requested` | findings | FR-8 |
 | `report-generator` | Cited reports and evidence packs | `report.requested` | report objects | FR-12 |
+| `reviewer-agent` | Independent verification of citations/conclusions | `review.requested` | review flags | AI-3 |
+| `regulatory-change-agent` | Monitor allow-listed sources; propose catalogue changes | `regchange.scan` (scheduled) | change proposals | FR-20 |
+| `copilot-agent` | Read-only cited Q&A | HTTP/SSE via gateway | answers | FR-21 |
+| `questionnaire-agent` | Due-diligence questionnaire drafting | `questionnaire.requested` | drafted answers, exports | FR-16..19 |
+Agent details, tools and guardrails: [agent.md](agent.md).
 All scanners are read-only (spec.md 5.5, AI-1, AI-6).
 
 ## 5. Messaging

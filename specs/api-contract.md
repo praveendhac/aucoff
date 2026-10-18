@@ -78,6 +78,8 @@ Related: [frontend-spec.md](frontend-spec.md) · [backend-spec.md](backend-spec.
 | `report:read` / `report:generate` | Reports | compliance_officer, auditor, executive, ciso |
 | `audit:read` | Audit log | auditor, ciso, admin |
 | `admin:write` | Users, roles, SSO, integrations | admin |
+| `questionnaire:read` / `questionnaire:write` / `questionnaire:approve` | Questionnaires and answer library | compliance_officer, ciso (approve); engineer read |
+| `copilot:use` | Copilot Q&A | all authenticated |
 Scopes derive from roles; the matrix in [backend-spec.md](backend-spec.md) section 8 is authoritative.
 
 ## 5. Endpoints
@@ -150,6 +152,20 @@ All paths are under `/api/v1`. Status shows the success code.
 | API-80 | GET | `/audit-log` | Audit events (paged, filtered) | audit:read | 200 | US-7, FR-10 |
 | API-81 | POST | `/audit-log:verify` | Verify hash-chain integrity for a range | audit:read | 200 | SEC-10 |
 | API-90 | GET/PUT | `/notification-preferences` | Per-user event channels | any | 200 | US-11, FR-14 |
+
+### 5.7 Questionnaires, regulatory changes and copilot
+| ID | Method | Path | Summary | Scope | OK | Refs |
+|----|--------|------|---------|-------|----|------|
+| API-100 | POST | `/questionnaires` | Create from upload (presigned file) or pasted/link questions; starts drafting | questionnaire:write | 202 | US-14, FR-16 |
+| API-101 | GET | `/questionnaires`, `/questionnaires/{id}` | List / status and progress | questionnaire:read | 200 | FR-16 |
+| API-102 | GET | `/questionnaires/{id}/answers` | Questions with drafted answers, confidence, citations, flags | questionnaire:read | 200 | FR-17 |
+| API-103 | POST | `/questionnaire-answers/{id}/decision` | Approve / edit / reject an answer (batch variant `:batch-decision`) | questionnaire:approve | 200 | US-16, FR-18 |
+| API-104 | POST | `/questionnaires/{id}/exports` | Request redacted export of approved answers (needs export approval) | questionnaire:approve | 202 | FR-19 |
+| API-105 | GET | `/questionnaire-exports/{id}` | Status and download link | questionnaire:read | 200 | FR-19 |
+| API-106 | GET/PATCH | `/answer-library`, `/answer-library/{id}` | Browse; retire/refresh entries | questionnaire:approve | 200 | US-15, FR-18 |
+| API-110 | GET | `/regulatory-changes` | Proposed catalogue/mapping changes | mapping:write | 200 | US-17, FR-20 |
+| API-111 | POST | `/regulatory-changes/{id}/decision` | Approve/reject proposal | mapping:write | 200 | FR-20 |
+| API-120 | POST | `/copilot/messages` | Ask copilot (SSE response with citations) | copilot:use | 200 | US-18, FR-21 |
 
 ## 6. Streaming (SSE)
 - Endpoint: `GET /agent-runs/{id}/events`, `Accept: text/event-stream`, auth by the same session/token.

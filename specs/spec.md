@@ -91,6 +91,11 @@ Python microservices coordinated by the backend (see [agent.md](agent.md)); name
 | `assessment-orchestrator` | Plan and coordinate runs, aggregate control results |
 | `remediation-advisor` | Draft findings and remediation guidance |
 | `report-generator` | Build cited reports and evidence packs |
+| `reviewer-agent` | Independent verification of citations and conclusions before human review |
+| `regulatory-change-agent` | Monitor allow-listed official sources and propose catalogue/mapping changes for approval |
+| `copilot-agent` | Read-only Q&A on posture, controls and findings with citations |
+| `questionnaire-agent` | Draft answers to customer due-diligence questionnaires from the answer library and live evidence |
+Full definitions in [agent.md](agent.md) section 2.
 
 ## 6. User Stories
 | ID | Story | Acceptance criteria | Priority |
@@ -108,6 +113,11 @@ Python microservices coordinated by the backend (see [agent.md](agent.md)); name
 | US-11 | As a CISO, I want notifications in Slack/Teams/email for findings and approvals so that nothing is missed | Configurable per event type | P1 |
 | US-12 | As a compliance officer, I want continuous/scheduled assessments so that drift is detected | Schedules per scope; changes flagged | P1 |
 | US-13 | As a CISO, I want to see regional regulation coverage (RBI, DPDP, GDPR, PSD2, DORA, NYDFS) so that I know jurisdictional gaps | Filter results by jurisdiction | P1 |
+| US-14 | As a compliance officer, I want to upload a customer's due-diligence questionnaire (Excel/Word/PDF, or SIG/CAIQ/HECVAT/VSA) so that drafted answers are produced from our real environment | Questions parsed; each answer has confidence, citations and evidence timestamps | P0 |
+| US-15 | As a compliance officer, I want approved past answers reused and flagged when stale so that responses are fast and consistent | Library answers shown with freshness; stale answers trigger a read-only re-scan | P0 |
+| US-16 | As a CISO, I want only approved, redacted answers exported so that sensitive detail is not leaked to customers | Export blocked until approval; sensitive details redacted by default; export audit-logged | P0 |
+| US-17 | As a compliance officer, I want to be alerted to regulation or standard changes with proposed mapping updates so that the catalogue stays current | Proposed diffs shown for approval; nothing applied automatically | P1 |
+| US-18 | As any user, I want to ask a copilot about my posture, controls and findings and get cited answers | Answers cite sources; refuses when ungrounded; read-only | P2 |
 
 ## 7. Functional Requirements
 | ID | Requirement | Traces to |
@@ -127,6 +137,12 @@ Python microservices coordinated by the backend (see [agent.md](agent.md)); name
 | FR-13 | OIDC/SAML SSO, RBAC, tenant admin | US-10 |
 | FR-14 | Notifications via email, Slack, Microsoft Teams | US-11 |
 | FR-15 | Agent run tracing: model, prompt version, tools, cost | constitution AI-10 |
+| FR-16 | Questionnaire ingestion (Excel, Word, PDF, standard templates, link-based drafting only) and question normalisation | US-14 |
+| FR-17 | Answer drafting from answer library and live evidence, with on-demand read-only re-scan when evidence is stale | US-14, US-15 |
+| FR-18 | Per-answer and batch approval, edit and reject; answer-library management (approve, stale, retire) | US-15, US-16 |
+| FR-19 | Redacted export of approved answers with configurable detail level; export audit log | US-16 |
+| FR-20 | Regulatory-change monitoring from allow-listed sources with approval-gated catalogue/mapping proposals | US-17 |
+| FR-21 | Copilot Q&A with citations, read-only | US-18 |
 
 ## 8. Non-Functional Requirements
 | ID | Category | Requirement |
@@ -161,6 +177,7 @@ Provider-agnostic cloud LLM API behind an interface (ARC-5), with Anthropic Clau
 - Storing or processing cardholder data (PAN, CVV).
 - Legal advice or regulator filings submitted automatically.
 - Frameworks not listed in section 4.
+- Automatic submission of questionnaire answers to external portals (answers are drafted for manual entry).
 
 ## 12. Assumptions, Risks, Dependencies
 | ID | Item | Mitigation |
