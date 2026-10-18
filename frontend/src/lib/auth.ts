@@ -92,6 +92,7 @@ export function buildAuthOptions(): NextAuthOptions {
             refreshToken: account.refresh_token,
             expiresAt: (account.expires_at ?? 0) * 1000,
             tenantId: typeof claims.tenant_id === "string" ? claims.tenant_id : undefined,
+            roles: Array.isArray(claims.roles) ? claims.roles.map(String) : [],
           };
         }
         const expiresAt = typeof token.expiresAt === "number" ? token.expiresAt : 0;
@@ -103,6 +104,7 @@ export function buildAuthOptions(): NextAuthOptions {
         return {
           ...session,
           tenantId: token.tenantId,
+          roles: token.roles ?? [],
           error: token.error,
         };
       },

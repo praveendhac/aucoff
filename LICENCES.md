@@ -92,6 +92,7 @@ Last updated: 2026-10-19. Status: **T-009 in progress** (first pass; not complet
 | license-checker-rseidelsohn | npm | 5.0.1 | BSD-3-Clause | Allowed | Read from installed package metadata, 2026-10-19 |
 | next | npm | 16.4.2 | MIT | Allowed | Read from installed package metadata, 2026-10-19 |
 | prettier | npm | 3.9.10 | MIT | Allowed | Read from installed package metadata, 2026-10-19 |
+| lucide-react | npm | 1.59.0 | ISC | Allowed | Read from the installed package and its LICENSE (ISC; a few icons derived from Feather are MIT), 2026-10-19; design.md icon set |
 | next-auth (Auth.js v4) | npm | 4.24.15 | ISC | Allowed | Registry metadata and installed package, 2026-10-19 (BFF login). v5 is still a beta release, so the stable v4 line is used. Its dependencies jose, openid-client, oauth, cookie, @panva/hkdf, uuid, preact and preact-render-to-string are all MIT (read from installed metadata). |
 | react | npm | 19.3.0 | MIT | Allowed | Read from installed package metadata, 2026-10-19 |
 | react-dom | npm | 19.3.0 | MIT | Allowed | Read from installed package metadata, 2026-10-19 |
