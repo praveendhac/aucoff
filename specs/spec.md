@@ -3,7 +3,7 @@
 | Field | Value |
 |-------|-------|
 | Status | Draft |
-| Version | 0.5.0 |
+| Version | 0.5.1 |
 | Owner | Praveen Darshanam |
 | Last updated | 2026-10-19 |
 
@@ -37,12 +37,12 @@ Fintechs must satisfy many overlapping frameworks and regional regulations at on
 | SOC 2 | AICPA 2017 Trust Services Criteria with revised points of focus (2022/2023) | Global | Attestation framework | Common Criteria (Security) plus optional Availability, Confidentiality, Processing Integrity, Privacy |
 | ISO/IEC 27001 | 2022 | Global | Standard | |
 | ISO/IEC 27701 | 2025 | Global | Standard | Privacy management extension |
-| ISO 20022 | TODO | Global | Messaging standard | Scoped as data-format / message-handling controls, not a control framework |
+| ISO 20022 | ISO 20022-1:2026 (Edition 3) | Global | Messaging standard | Scoped as data-format / message-handling controls, not a control framework |
 | GDPR | EU 2016/679 | EU | Regulation | |
 | DPDP | DPDP Act 2023 and DPDP Rules, 2025 (G.S.R. 846(E), 13 Nov 2025) | India | Regulation | Phased compliance timeline; track milestones |
 | RBI DPSC | RBI (Commercial Banks - Digital Payment Security Controls) Directions, 2026 (updated as on 1 Oct 2026) | India | Regulation | Evolved from 2021 baseline |
 | RBI PPI | RBI Master Directions on Prepaid Payment Instruments (MD-PPI) | India | Regulation | Under Payment and Settlement Systems Act, 2007; periodically updated |
-| FFIEC BSA/AML Examination Manual | TODO edition | US | Examination guidance | |
+| FFIEC BSA/AML Examination Manual | 2026 reference version | US | Examination guidance | Owner-supplied version |
 | FFIEC IT Examination Handbook | Current handbook with 2026 updates | US | Examination guidance | Joint supervisory framework (OCC, FDIC, Federal Reserve, NCUA) |
 | FTC Safeguards Rule | 16 CFR Part 314 | US | Regulation | Implements GLBA safeguards: encryption, MFA, risk assessment |
 | GLBA | Gramm-Leach-Bliley Act | US | Statute | Assessed through the FTC Safeguards Rule (and FFIEC guidance for banks) |
@@ -223,7 +223,7 @@ Detailed definitions and formulas are in the metrics catalogue ([design.md](desi
 | D-1 | Dependencies | LLM provider, identity providers, Jira/ServiceNow, cloud and SaaS APIs |
 
 ## 13. Open Questions
-- [ ] Verify owner-supplied instrument names/versions (section 4) against official sources; FFIEC BSA/AML edition still open.
+- [ ] Verify owner-supplied instrument names/versions (section 4) against official sources; FFIEC BSA/AML 2026 reference version and ISO 20022-1:2026 (Edition 3) are also owner-supplied and to be verified.
 - [ ] How ISO 20022 translates into assessable controls.
 - [ ] Numeric targets for NFR-3, NFR-4, NFR-5, NFR-8 and section 10 metrics.
 - [ ] Order of delivery of frameworks within v1 (internal milestones).
