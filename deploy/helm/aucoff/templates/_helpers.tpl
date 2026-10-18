@@ -6,6 +6,8 @@ helm.sh/chart: {{ .Chart.Name }}-{{ .Chart.Version }}
 
 {{- define "aucoff.podSecurityContext" -}}
 runAsNonRoot: true
+# Lets the non-root service user read mounted TLS keys (mode 0440).
+fsGroup: 10001
 seccompProfile:
   type: RuntimeDefault
 {{- end -}}

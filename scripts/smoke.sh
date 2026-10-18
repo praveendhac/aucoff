@@ -9,10 +9,12 @@ set -euo pipefail
 NS=${NS:-aucoff}
 HOST=${HOST:-aucoff.localtest.me}
 fail=0
+CA=$(mktemp)
+kubectl -n cert-manager get secret aucoff-local-ca -o jsonpath='{.data.tls\.crt}' | base64 -d > "$CA"
 check() { # description expected actual
   if [ "$2" = "$3" ]; then printf '  ok    %s (%s)\n' "$1" "$3"; else printf '  FAIL  %s: expected %s, got %s\n' "$1" "$2" "$3"; fail=1; fi
 }
-code() { curl -s -o /dev/null -w '%{http_code}' --max-time 10 --resolve "$HOST:80:127.0.0.1" "http://$HOST$1"; }
+code() { curl -s -o /dev/null -w '%{http_code}' --max-time 10 --cacert "$CA" --resolve "$HOST:443:127.0.0.1" "https://$HOST$1"; }
 
 echo "Deployments ready:"
 kubectl -n "$NS" rollout status deployment/aucoff-backend --timeout=120s
@@ -22,6 +24,7 @@ kubectl -n "$NS" rollout status deployment/aucoff-frontend --timeout=120s
 for _ in $(seq 1 30); do [ "$(code /login)" = 200 ] && break; sleep 1; done
 
 echo "Through the ingress (no credentials):"
+check "plain HTTP only redirects to HTTPS" 301 "$(curl -s -o /dev/null -w '%{http_code}' --max-time 10 --resolve "$HOST:80:127.0.0.1" "http://$HOST/")"
 check "web app redirects anonymous users to login" 307 "$(code /)"
 check "login page is public"                200 "$(code /login)"
 check "BFF proxy refuses anonymous calls"  401 "$(code /bff/health)"
@@ -33,9 +36,11 @@ check "backend docs are not routed outside (web app redirects to login)" 307 "$(
 
 echo "Directly against the backend pod (no credentials):"
 pycode() { kubectl -n "$NS" exec deploy/aucoff-backend -- python -c "
-import urllib.request, urllib.error
+import urllib.request, urllib.error, ssl
+ctx = ssl.create_default_context(cafile='/etc/aucoff/tls/ca.crt')
+ctx.check_hostname = False
 try:
-    print(urllib.request.urlopen('http://127.0.0.1:8000$1').status)
+    print(urllib.request.urlopen('https://127.0.0.1:8000$1', context=ctx).status)
 except urllib.error.HTTPError as e:
     print(e.code)"; }
 check "API docs refuse anonymous calls"     401 "$(pycode /docs)"
@@ -49,7 +54,7 @@ IDP_PORT=${IDP_PORT:-18443}
 workdir=$(mktemp -d)
 kubectl -n "$IDP_NS" port-forward svc/aucoff-keycloak "$IDP_PORT:8443" >/dev/null 2>&1 &
 pf=$!
-trap 'kill $pf 2>/dev/null; rm -rf "$workdir"' EXIT
+trap 'kill $pf 2>/dev/null; rm -rf "$workdir" "$CA"' EXIT
 kubectl -n cert-manager get secret aucoff-local-ca -o jsonpath='{.data.tls\.crt}' | base64 -d > "$workdir/ca.crt"
 for _ in $(seq 1 20); do nc -z 127.0.0.1 "$IDP_PORT" 2>/dev/null && break; sleep 0.5; done
 secret() { kubectl -n "$IDP_NS" get secret aucoff-keycloak-clients -o jsonpath="{.data.$1}" | base64 -d; }
@@ -59,7 +64,7 @@ token() { # client secret-key [scope]
     "https://$IDP_HOST:$IDP_PORT/realms/aucoff/protocol/openid-connect/token" \
     | python3 -c "import sys,json; print(json.load(sys.stdin)['access_token'])"
 }
-authcode() { curl -s -o /dev/null -w '%{http_code}' --max-time 10 --resolve "$HOST:80:127.0.0.1" -H "Authorization: Bearer $1" "http://$HOST$2"; }
+authcode() { curl -s -o /dev/null -w '%{http_code}' --max-time 10 --cacert "$CA" --resolve "$HOST:443:127.0.0.1" -H "Authorization: Bearer $1" "https://$HOST$2"; }
 
 good=$(token aucoff-smoke SMOKE_SECRET ops:read)
 check "valid token (ops:read) is accepted"         200 "$(authcode "$good" /api/v1/health)"
@@ -78,7 +83,7 @@ check "token signed by someone else is refused"    401 "$(authcode "${good%.*}.A
 echo "Browser-style login through Keycloak (code + PKCE) and the BFF:"
 kubectl -n "$IDP_NS" port-forward svc/aucoff-keycloak 8443:8443 >/dev/null 2>&1 &
 pf2=$!
-trap 'kill $pf $pf2 2>/dev/null; rm -rf "$workdir"' EXIT
+trap 'kill $pf $pf2 2>/dev/null; rm -rf "$workdir" "$CA"' EXIT
 for _ in $(seq 1 20); do nc -z 127.0.0.1 8443 2>/dev/null && break; sleep 0.5; done
 python3 scripts/web-login-test.py "$workdir/ca.crt" || fail=1
 

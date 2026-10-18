@@ -3,7 +3,7 @@
 | Field | Value |
 |-------|-------|
 | Status | Approved (v1 baseline, owner sign-off 2026-10-19) |
-| Version | 0.5.0 |
+| Version | 0.6.0 |
 | Owner | Praveen Darshanam |
 | Last updated | 2026-10-19 |
 
@@ -160,4 +160,4 @@ frontend/
 - `src/proxy.ts` (Next.js 16 name for middleware) denies every request without a session except `isPublicPath` (`/login`, `/api/auth/*`, static assets). Route handlers outside `/api/auth` call `requireSession` themselves; a test fails if any does not.
 - `/bff/*` is the only way the browser reaches the API: the handler adds the user's bearer token, forwards to `/api/v1/*`, drops cookies, and rejects path-traversal segments. The ingress sends only `/api/v1` to the gateway, where a missing or invalid token is refused.
 - The issuer in tokens is the public URL `https://idp.localtest.me:8443/realms/aucoff` (reached with `make idp-forward`); pods use the service name (backchannel) for discovery and tokens.
-- Known gaps: the local ingress is plain HTTP, so the session cookie cannot be `Secure` yet (serve the app over TLS with the local CA to fix); the frontend-to-backend hop inside the cluster is plain HTTP with a bearer token (backend TLS still to add); user roles are not yet mapped to scopes (the dev user gets `ops:read`); idle timeout is still open.
+- TLS (Session 5): the app is served at `https://aucoff.localtest.me` (certificate from the local CA; plain HTTP only redirects) so the session cookie is `Secure`, and the BFF calls the gateway over HTTPS verified against the local CA. Known gaps: the ingress-to-frontend hop is still plain HTTP inside the cluster (Next.js standalone has no TLS listener; a sidecar or mesh is post-v1); user roles are not yet mapped to scopes (the dev user gets `ops:read`); idle timeout is still open.

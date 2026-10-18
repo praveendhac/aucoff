@@ -3,7 +3,7 @@
 | Field | Value |
 |-------|-------|
 | Status | Approved (v1 baseline, owner sign-off 2026-10-19) |
-| Version | 0.9.0 |
+| Version | 0.10.0 |
 | Owner | Praveen Darshanam |
 | Last updated | 2026-10-19 |
 
@@ -168,3 +168,11 @@ Controls referenced from constitution section 6: network policies, image scannin
 - `make messaging` applies `deploy/rabbitmq/rabbitmq.yaml` into namespace `aucoff-messaging`: RabbitMQ 4.3.6 pinned by digest, AMQPS on 5671 only (certificate from the local CA), all plugins off (no management or metrics port), exec probes, read-only root filesystem, 1 GiB volume.
 - Vhost `aucoff`; exchanges `aucoff.work` and `aucoff.events` (topic); one quorum inbox queue per service; users `aucoff_gateway` and `aucoff_scanner` with no configure rights, write only to the two exchanges (routing keys prefixed by the sender), and read only their own queues.
 - Only pods labelled `aucoff.io/mq-client` in `aucoff` may reach the broker; defence in depth, every connection also authenticates.
+
+## Implementation status: TLS at the edge and to the gateway (Build Session 5, 2026-10-19)
+
+- Traefik serves `https://aucoff.localtest.me` with a cert-manager certificate (local CA); port 80 only redirects (301). Browsers must trust the local CA (README).
+- The gateway serves HTTPS only (uvicorn with a cert-manager certificate). Traefik re-encrypts to it through a `ServersTransport` that verifies the certificate against the local CA; the web app's BFF verifies it with `NODE_EXTRA_CA_CERTS`. The Traefik CRD provider is enabled for `ServersTransport` only.
+- Remaining plain-HTTP hop: ingress to the Next.js frontend (no TLS listener in the standalone server).
+- Traefik runs with a Recreate strategy because its hostPorts 80/443 prevent a surge pod.
+- `scripts/reset-realm.sh` re-imports the Keycloak realm after a realm change.

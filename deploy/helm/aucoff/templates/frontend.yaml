@@ -34,7 +34,7 @@ spec:
             - containerPort: {{ .Values.frontend.port }}
           env:
             - name: NEXTAUTH_URL
-              value: "http://{{ .Values.global.host }}"
+              value: "https://{{ .Values.global.host }}"
             - name: NEXTAUTH_SECRET
               valueFrom: { secretKeyRef: { name: {{ .Values.oidc.webSessionSecret }}, key: secret } }
             - name: OIDC_ISSUER
@@ -46,7 +46,7 @@ spec:
             - name: OIDC_CLIENT_SECRET
               valueFrom: { secretKeyRef: { name: {{ .Values.oidc.webSecret }}, key: client_secret } }
             - name: BACKEND_URL
-              value: "http://aucoff-backend:{{ .Values.backend.port }}"
+              value: "https://aucoff-backend:{{ .Values.backend.port }}"
             # Trust the local CA for the identity provider's certificate (ZT-4).
             - name: NODE_EXTRA_CA_CERTS
               value: /etc/aucoff/idp-ca/ca.crt

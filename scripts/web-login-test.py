@@ -18,7 +18,7 @@ import urllib.error
 import urllib.parse
 import urllib.request
 
-APP = "http://aucoff.localtest.me"
+APP = "https://aucoff.localtest.me"
 ca = sys.argv[1]
 
 
@@ -98,5 +98,5 @@ status, _, text = call(f"{APP}/bff/openapi.json")
 check("user token lacks docs:read (403 through the BFF)", status == 403, f"({status})")
 
 session_cookies = [c for c in jar if "session-token" in c.name]
-check("session cookie is set and httpOnly", bool(session_cookies) and all(c.has_nonstandard_attr("HttpOnly") for c in session_cookies))
+check("session cookie is httpOnly and Secure", bool(session_cookies) and all(c.has_nonstandard_attr("HttpOnly") and c.secure for c in session_cookies))
 sys.exit(1 if failed else 0)

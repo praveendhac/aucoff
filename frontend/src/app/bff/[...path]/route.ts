@@ -3,7 +3,7 @@ import { requireSession, unauthorised } from "@/lib/session";
 
 // Backend-for-frontend proxy: the browser never holds an access token. This handler checks the
 // session, then forwards the call to the FastAPI gateway with the user's token as a bearer token.
-const BACKEND = process.env.BACKEND_URL ?? "http://aucoff-backend:8000";
+const BACKEND = process.env.BACKEND_URL ?? "https://aucoff-backend:8000";
 const FORWARDED_REQUEST_HEADERS = ["content-type", "accept", "if-none-match"];
 
 async function forward(request: NextRequest, ctx: { params: Promise<{ path: string[] }> }) {

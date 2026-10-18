@@ -10,8 +10,11 @@ providers:
   kubernetesIngress:
     enabled: true
     ingressClass: traefik
+  # CRDs are needed only for ServersTransport: Traefik re-encrypts to the backend and verifies its
+  # certificate against the local CA (constitution ZT-4). No IngressRoute is used.
   kubernetesCRD:
-    enabled: false
+    enabled: true
+    allowCrossNamespace: false
 
 # No dashboard or API: they would be anonymous endpoints (constitution ZT-1).
 api:
@@ -23,6 +26,12 @@ ingressRoute:
 ports:
   web:
     hostPort: 80
+    # Plain HTTP only redirects to HTTPS; nothing is served on it.
+    http:
+      redirections:
+        entryPoint:
+          to: websecure
+          scheme: https
   websecure:
     hostPort: 443
 
@@ -37,3 +46,9 @@ tolerations:
     operator: Exists
     effect: NoSchedule
 
+
+# The pod uses hostPorts 80/443 on the single ingress node, so a surge pod can never schedule:
+# replace the old pod first.
+updateStrategy:
+  type: Recreate
+  rollingUpdate: null

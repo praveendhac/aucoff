@@ -1,0 +1,45 @@
+# Certificates issued by the local CA (cert-manager, ZT-4): the public host for browsers, and the
+# gateway's own server certificate for traffic from the ingress controller and the web app.
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: aucoff-web
+  labels:
+    {{- include "aucoff.labels" . | nindent 4 }}
+spec:
+  secretName: aucoff-web-tls
+  duration: 2160h
+  renewBefore: 360h
+  dnsNames:
+    - {{ .Values.global.host }}
+  privateKey: { algorithm: RSA, size: 2048, encoding: PKCS8 }
+  issuerRef: { name: aucoff-local-ca, kind: ClusterIssuer }
+---
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: aucoff-backend
+  labels:
+    {{- include "aucoff.labels" . | nindent 4 }}
+spec:
+  secretName: aucoff-backend-tls
+  duration: 2160h
+  renewBefore: 360h
+  dnsNames:
+    - aucoff-backend
+    - aucoff-backend.{{ .Release.Namespace }}
+    - aucoff-backend.{{ .Release.Namespace }}.svc
+  privateKey: { algorithm: RSA, size: 2048, encoding: PKCS8 }
+  issuerRef: { name: aucoff-local-ca, kind: ClusterIssuer }
+---
+# Traefik verifies the gateway's certificate against the CA found in the Secret above.
+apiVersion: traefik.io/v1alpha1
+kind: ServersTransport
+metadata:
+  name: aucoff-backend
+  labels:
+    {{- include "aucoff.labels" . | nindent 4 }}
+spec:
+  serverName: aucoff-backend
+  rootCAsSecrets:
+    - aucoff-backend-tls

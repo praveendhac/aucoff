@@ -7,6 +7,9 @@ metadata:
     {{- include "aucoff.labels" . | nindent 4 }}
 spec:
   ingressClassName: {{ .Values.ingress.className }}
+  tls:
+    - hosts: [{{ .Values.global.host }}]
+      secretName: aucoff-web-tls
   rules:
     - host: {{ .Values.global.host }}
       http:

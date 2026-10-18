@@ -12,7 +12,7 @@ gatewayAudience: aucoff-gateway
 # cluster use the service name instead (backchannel), but still see this issuer in every token.
 hostname: https://idp.localtest.me:8443
 # Redirect URI of the web BFF (Auth.js), used from build session 4.
-webRedirectUri: http://aucoff.localtest.me/api/auth/callback/keycloak
+webRedirectUri: https://aucoff.localtest.me/api/auth/callback/keycloak
 
 database:
   host: aucoff-pg-rw.aucoff-data.svc
