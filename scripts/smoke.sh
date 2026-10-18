@@ -68,6 +68,8 @@ authcode() { curl -s -o /dev/null -w '%{http_code}' --max-time 10 --cacert "$CA"
 
 good=$(token aucoff-smoke SMOKE_SECRET ops:read)
 check "valid token (ops:read) is accepted"         200 "$(authcode "$good" /api/v1/health)"
+check "metrics endpoint accepts a monitoring token (ops:read)" 200 "$(authcode "$good" /api/v1/metrics)"
+check "metrics endpoint refuses anonymous calls" 401 "$(code /api/v1/metrics)"
 check "valid token without docs:read is forbidden on OpenAPI" 403 "$(authcode "$good" /api/v1/openapi.json)"
 noscope=$(token aucoff-smoke SMOKE_SECRET)
 check "valid token without ops:read is forbidden"  403 "$(authcode "$noscope" /api/v1/health)"

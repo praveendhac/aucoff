@@ -59,6 +59,23 @@ paths:
       summary: Health summary
       tags:
       - health
+  /api/v1/metrics:
+    get:
+      description: Gateway request metrics in the Prometheus text format. Requires
+        a token with scope `ops:read`; a monitoring identity uses the client-credentials
+        flow.
+      operationId: metricsExposition
+      responses:
+        '200':
+          content:
+            text/plain:
+              example: '# HELP aucoff_http_requests_total ...'
+          description: Successful Response
+      security:
+      - HTTPBearer: []
+      summary: Request metrics
+      tags:
+      - health
 servers:
 - description: Local kind cluster (v1)
   url: http://aucoff.localtest.me

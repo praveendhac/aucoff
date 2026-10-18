@@ -3,7 +3,7 @@
 | Field | Value |
 |-------|-------|
 | Status | Approved (v1 baseline, owner sign-off 2026-10-19) |
-| Version | 0.4.0 |
+| Version | 0.5.0 |
 | Owner | Praveen Darshanam |
 | Last updated | 2026-10-19 |
 
@@ -92,6 +92,7 @@ All paths are under `/api/v1`. Status shows the success code.
 | ID | Method | Path | Summary | Scope | OK | Refs |
 |----|--------|------|---------|-------|----|------|
 | API-1 | GET | `/me` | Current user, tenant, roles | any | 200 | US-10 |
+| API-2a | GET | `/metrics` | Gateway request metrics in the Prometheus text format (counts and latency by route template); a monitoring identity uses client credentials | ops:read | 200 | NFR-17 |
 | API-2 | GET | `/health` | Authenticated health summary for operators and monitoring (dependency status without secrets). Kubernetes probes do NOT use HTTP; they run the in-container health-check command (ZT-7) | ops:read | 200 | NFR-17 |
 
 ### 5.2 Administration
@@ -230,6 +231,7 @@ OWASP API Security Top 10 mapping in [backend-spec.md](backend-spec.md) section 
 | 0.1.0 | 2026-10-18 | Initial template | - |
 | 0.2.0 | 2026-10-18 | Conventions, documentation requirement, endpoint catalogue, SSE | - |
 | 0.3.0 | 2026-10-19 | Metrics/history, questionnaire, platform, auditor, schedule and notification endpoints | - |
+| 0.5.0 | 2026-10-19 | Added `GET /metrics` (API-2a, `ops:read`) | No (additive) |
 | 0.4.0 | 2026-10-19 | All endpoints authenticated: health, docs and OpenAPI no longer anonymous (API-2 is now `GET /health`, `ops:read`); `docs:read`, `ops:read`, `svc:*` scopes; webhook HMAC clarified | Yes (probe paths removed; none were consumed yet) |
 
 ## 11. Open Questions
