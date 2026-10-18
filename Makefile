@@ -5,7 +5,7 @@ CLUSTER := aucoff
 SPECTRAL := npx --yes @stoplight/spectral-cli@6
 
 .PHONY: help doctor setup lint typecheck test openapi openapi-check spectral licences helm-lint check \
-        backend-run frontend-dev cluster-up cluster-down images load ingress deploy smoke up
+        backend-run frontend-dev cluster-up cluster-down images load ingress operators secrets postgres deploy smoke up
 
 help: ## Show this help
 	@grep -E '^[a-zA-Z_-]+:.*?## ' $(MAKEFILE_LIST) | awk 'BEGIN {FS = ":.*?## "}; {printf "  %-16s %s\n", $$1, $$2}'
@@ -77,6 +77,19 @@ ingress: ## Install the Traefik ingress controller (ingress-nginx is retired)
 	helm upgrade --install traefik traefik/traefik --version 42.0.0 -n traefik --create-namespace \
 	  -f deploy/traefik/values-local.yaml --wait --timeout 3m
 
+operators: ## Install the CloudNativePG operator (PostgreSQL)
+	helm repo add cnpg https://cloudnative-pg.github.io/charts >/dev/null 2>&1 || true
+	helm repo update cnpg >/dev/null
+	helm upgrade --install cnpg cnpg/cloudnative-pg --version 0.29.1 -n cnpg-system --create-namespace --wait --timeout 3m
+
+secrets: ## Generate unique per-service credentials in the cluster (idempotent; nothing is stored in git)
+	scripts/make-secrets.sh
+
+postgres: ## Create the PostgreSQL 18.6 + pgvector 0.8.6 cluster
+	kubectl apply -f deploy/postgres/namespace.yaml
+	kubectl apply -f deploy/postgres/cluster.yaml -f deploy/postgres/networkpolicy.yaml
+	kubectl -n aucoff-data wait --for=condition=Ready cluster/aucoff-pg --timeout=300s
+
 deploy: ## Install/upgrade the AUCoFF Helm chart into namespace aucoff
 	kubectl create namespace aucoff --dry-run=client -o yaml | kubectl apply -f -
 	kubectl label namespace aucoff pod-security.kubernetes.io/enforce=restricted --overwrite
@@ -85,4 +98,4 @@ deploy: ## Install/upgrade the AUCoFF Helm chart into namespace aucoff
 smoke: ## Smoke test the local deployment (unauthenticated requests must be refused)
 	scripts/smoke.sh
 
-up: cluster-up ingress images load deploy smoke ## Bring the whole local stack up
+up: cluster-up ingress operators secrets postgres images load deploy smoke ## Bring the whole local stack up

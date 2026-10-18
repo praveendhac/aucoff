@@ -1,0 +1,78 @@
+# PostgreSQL 18.6 + pgvector 0.8.6 on CloudNativePG (v1 local kind cluster).
+# Specs: database-spec.md sections 1, 6; constitution DB-1 to DB-5, ZT-6.
+# Secrets (one per role) are created by `make secrets`; none is stored in git.
+apiVersion: postgresql.cnpg.io/v1
+kind: Cluster
+metadata:
+  name: aucoff-pg
+  namespace: aucoff-data
+spec:
+  instances: 1
+  # The *minimal* image is used on purpose: the standard image bundles its own pgvector (0.8.7 when
+  # checked), which shadows the pinned extension image below. Minimal + the extension image gives
+  # exactly pgvector 0.8.6.
+  imageName: ghcr.io/cloudnative-pg/postgresql:18.6-minimal-trixie@sha256:c9be7f221a05b18fe65259d9136affbabe3b39ad91c3b68f8f2f990a45f35f38
+  storage:
+    size: 5Gi
+  resources:
+    requests: { cpu: 100m, memory: 256Mi }
+    limits: { cpu: "1", memory: 1Gi }
+  postgresql:
+    # pgvector is mounted as an immutable image volume (needs PostgreSQL 18, Kubernetes 1.35+,
+    # containerd 2.1+; verified on the kind node image).
+    extensions:
+      - name: pgvector
+        image:
+          reference: ghcr.io/cloudnative-pg/pgvector:0.8.6-18-trixie@sha256:2da4ddaf07cec8edf9ea265968c5368a5df4568737964d2a268d9843589e3e42
+    parameters:
+      password_encryption: scram-sha-256
+      ssl_min_protocol_version: TLSv1.2
+      log_connections: "on"
+      log_disconnections: "on"
+      log_statement: ddl
+      idle_in_transaction_session_timeout: 60s
+    pg_hba:
+      # The operator always appends a final `host all all all scram-sha-256` rule, so TLS is
+      # enforced by rejecting every non-TLS connection before it is reached (DB-5).
+      - hostnossl all all all reject
+  bootstrap:
+    initdb:
+      database: aucoff
+      owner: aucoff_migrator
+      secret:
+        name: aucoff-pg-migrator
+      dataChecksums: true
+  managed:
+    roles:
+      # Group role carrying the runtime privileges (database-spec 6.1); never logs in.
+      - name: aucoff_app
+        ensure: present
+        login: false
+        superuser: false
+        createdb: false
+        createrole: false
+        inherit: true
+      # One login role per service (ZT-6). More are added with each new service.
+      - name: aucoff_gateway
+        ensure: present
+        login: true
+        superuser: false
+        inherit: true
+        inRoles: [aucoff_app]
+        passwordSecret:
+          name: aucoff-pg-gateway
+  enableSuperuserAccess: false
+---
+apiVersion: postgresql.cnpg.io/v1
+kind: Database
+metadata:
+  name: aucoff-vector
+  namespace: aucoff-data
+spec:
+  name: aucoff
+  owner: aucoff_migrator
+  cluster:
+    name: aucoff-pg
+  extensions:
+    - name: vector
+      version: "0.8.6"
