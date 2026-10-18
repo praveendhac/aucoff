@@ -5,9 +5,9 @@ FROM docker.io/library/python@sha256:70729b46c69b4f1e97c4822c1af3df53a1476cf5ddc
 ENV UV_COMPILE_BYTECODE=1 UV_LINK_MODE=copy
 RUN pip install --no-cache-dir uv==0.10.11
 WORKDIR /app
-COPY pyproject.toml uv.lock ./
+COPY backend/pyproject.toml backend/uv.lock ./
 RUN uv sync --frozen --no-dev --no-install-project
-COPY app ./app
+COPY backend/app ./app
 
 FROM docker.io/library/python@sha256:70729b46c69b4f1e97c4822c1af3df53a1476cf5ddc6c087c0c10bc3a5678c2f
 # pip/setuptools are not needed at run time; removing them (and the HIGH findings in their vendored
@@ -17,8 +17,10 @@ RUN useradd --system --uid 10001 --no-create-home --shell /usr/sbin/nologin auco
 WORKDIR /app
 COPY --from=build /app/.venv /app/.venv
 COPY --from=build /app/app /app/app
-COPY alembic.ini /app/alembic.ini
-COPY migrations /app/migrations
+COPY backend/alembic.ini /app/alembic.ini
+COPY backend/migrations /app/migrations
+# The owner-authored control catalogue ships with the image (read at run time by GET /unified-controls).
+COPY data/controls /app/data/controls
 ENV PATH="/app/.venv/bin:$PATH" PYTHONUNBUFFERED=1 PYTHONDONTWRITEBYTECODE=1
 USER 10001
 EXPOSE 8000

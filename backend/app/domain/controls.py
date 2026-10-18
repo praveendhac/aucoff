@@ -95,3 +95,16 @@ def validate_directory(directory: Path) -> list[str]:
     if len(versions) > 1:
         errors.append(f"files disagree on catalogue_version: {sorted(versions)}")
     return errors
+
+
+def load_catalogue(directory: Path) -> list[Control]:
+    """All controls in the catalogue, ordered by id. Raises ValueError if any file is invalid."""
+    errors = validate_directory(directory)
+    if errors:
+        raise ValueError("; ".join(errors))
+    controls: list[Control] = []
+    for path in sorted(directory.glob("*.yaml")):
+        parsed, _ = validate_file(path)
+        if parsed:
+            controls.extend(parsed.controls)
+    return sorted(controls, key=lambda c: c.id)

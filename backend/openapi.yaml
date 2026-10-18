@@ -1,5 +1,90 @@
 components:
   schemas:
+    EvidenceItem:
+      properties:
+        collected_at:
+          format: date
+          title: Collected At
+          type: string
+        fresh:
+          description: Collected within its freshness window.
+          title: Fresh
+          type: boolean
+        id:
+          examples:
+          - E-0001
+          title: Id
+          type: string
+        source:
+          enum:
+          - aws
+          - kubernetes
+          - github
+          - entra
+          - upload
+          title: Source
+          type: string
+        title:
+          title: Title
+          type: string
+      required:
+      - id
+      - title
+      - source
+      - collected_at
+      - fresh
+      title: EvidenceItem
+      type: object
+    Finding:
+      properties:
+        age_days:
+          title: Age Days
+          type: integer
+        control_id:
+          title: Control Id
+          type: string
+        first_seen:
+          format: date
+          title: First Seen
+          type: string
+        framework_id:
+          title: Framework Id
+          type: string
+        id:
+          examples:
+          - F-0001
+          title: Id
+          type: string
+        severity:
+          enum:
+          - critical
+          - high
+          - medium
+          - low
+          title: Severity
+          type: string
+        status:
+          enum:
+          - open
+          - in_progress
+          - accepted_risk
+          - resolved
+          title: Status
+          type: string
+        title:
+          title: Title
+          type: string
+      required:
+      - id
+      - title
+      - severity
+      - status
+      - framework_id
+      - control_id
+      - first_seen
+      - age_days
+      title: Finding
+      type: object
     FrameworkCoverage:
       properties:
         coverage_pct:
@@ -24,6 +109,15 @@ components:
       - coverage_pct
       - delta_vs_previous
       title: FrameworkCoverage
+      type: object
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          title: Detail
+          type: array
+      title: HTTPValidationError
       type: object
     HealthStatus:
       properties:
@@ -95,6 +189,87 @@ components:
       - evidence_freshness_pct
       title: Kpis
       type: object
+    Page_EvidenceItem_:
+      properties:
+        data_source:
+          description: '`synthetic` marks demo rows that are not real results.'
+          enum:
+          - synthetic
+          - catalogue
+          - assessments
+          title: Data Source
+          type: string
+        items:
+          items:
+            $ref: '#/components/schemas/EvidenceItem'
+          title: Items
+          type: array
+        next_cursor:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: Pass as `cursor` for the next page; null at the end.
+          title: Next Cursor
+      required:
+      - items
+      - next_cursor
+      - data_source
+      title: Page[EvidenceItem]
+      type: object
+    Page_Finding_:
+      properties:
+        data_source:
+          description: '`synthetic` marks demo rows that are not real results.'
+          enum:
+          - synthetic
+          - catalogue
+          - assessments
+          title: Data Source
+          type: string
+        items:
+          items:
+            $ref: '#/components/schemas/Finding'
+          title: Items
+          type: array
+        next_cursor:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: Pass as `cursor` for the next page; null at the end.
+          title: Next Cursor
+      required:
+      - items
+      - next_cursor
+      - data_source
+      title: Page[Finding]
+      type: object
+    Page_UnifiedControl_:
+      properties:
+        data_source:
+          description: '`synthetic` marks demo rows that are not real results.'
+          enum:
+          - synthetic
+          - catalogue
+          - assessments
+          title: Data Source
+          type: string
+        items:
+          items:
+            $ref: '#/components/schemas/UnifiedControl'
+          title: Items
+          type: array
+        next_cursor:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: Pass as `cursor` for the next page; null at the end.
+          title: Next Cursor
+      required:
+      - items
+      - next_cursor
+      - data_source
+      title: Page[UnifiedControl]
+      type: object
     PostureDashboard:
       properties:
         data_source:
@@ -125,6 +300,23 @@ components:
       - severity_comparison
       - frameworks
       title: PostureDashboard
+      type: object
+    RequirementRef:
+      properties:
+        framework:
+          examples:
+          - soc2-2017
+          title: Framework
+          type: string
+        ref:
+          examples:
+          - CC6.1
+          title: Ref
+          type: string
+      required:
+      - framework
+      - ref
+      title: RequirementRef
       type: object
     SeverityComparison:
       properties:
@@ -181,6 +373,85 @@ components:
       - not_applicable
       title: StatusDistribution
       type: object
+    UnifiedControl:
+      properties:
+        check_type:
+          enum:
+          - automated
+          - manual
+          - hybrid
+          title: Check Type
+          type: string
+        description:
+          title: Description
+          type: string
+        domain:
+          title: Domain
+          type: string
+        id:
+          examples:
+          - UC-IAM-001
+          title: Id
+          type: string
+        requirements:
+          items:
+            $ref: '#/components/schemas/RequirementRef'
+          title: Requirements
+          type: array
+        severity:
+          enum:
+          - critical
+          - high
+          - medium
+          - low
+          title: Severity
+          type: string
+        status:
+          enum:
+          - draft
+          - approved
+          title: Status
+          type: string
+        title:
+          title: Title
+          type: string
+      required:
+      - id
+      - title
+      - description
+      - domain
+      - severity
+      - check_type
+      - status
+      - requirements
+      title: UnifiedControl
+      type: object
+    ValidationError:
+      properties:
+        ctx:
+          title: Context
+          type: object
+        input:
+          title: Input
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          title: Location
+          type: array
+        msg:
+          title: Message
+          type: string
+        type:
+          title: Error Type
+          type: string
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
+      type: object
   securitySchemes:
     HTTPBearer:
       description: OIDC access token
@@ -215,6 +486,137 @@ paths:
       summary: Posture dashboard
       tags:
       - dashboards
+  /api/v1/evidence:
+    get:
+      description: Evidence items (scope `evidence:read`), filterable by `source`.
+        Until collectors run, rows are synthetic demo data and `data_source` is `synthetic`.
+      operationId: listEvidence
+      parameters:
+      - description: Page size (default 25, maximum 100).
+        in: query
+        name: limit
+        required: false
+        schema:
+          default: 25
+          description: Page size (default 25, maximum 100).
+          maximum: 100
+          minimum: 1
+          title: Limit
+          type: integer
+      - description: Opaque cursor from a previous page.
+        in: query
+        name: cursor
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: Opaque cursor from a previous page.
+          title: Cursor
+      - in: query
+        name: source
+        required: false
+        schema:
+          anyOf:
+          - enum:
+            - aws
+            - kubernetes
+            - github
+            - entra
+            - upload
+            type: string
+          - type: 'null'
+          title: Source
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Page_EvidenceItem_'
+          description: Successful Response
+        '422':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+          description: Validation Error
+      security:
+      - HTTPBearer: []
+      summary: List evidence
+      tags:
+      - lists
+  /api/v1/findings:
+    get:
+      description: Findings (scope `finding:write`), filterable by `severity` and
+        `status`. Until scanners run, rows are synthetic demo data and `data_source`
+        is `synthetic`.
+      operationId: listFindings
+      parameters:
+      - description: Page size (default 25, maximum 100).
+        in: query
+        name: limit
+        required: false
+        schema:
+          default: 25
+          description: Page size (default 25, maximum 100).
+          maximum: 100
+          minimum: 1
+          title: Limit
+          type: integer
+      - description: Opaque cursor from a previous page.
+        in: query
+        name: cursor
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: Opaque cursor from a previous page.
+          title: Cursor
+      - in: query
+        name: severity
+        required: false
+        schema:
+          anyOf:
+          - enum:
+            - critical
+            - high
+            - medium
+            - low
+            type: string
+          - type: 'null'
+          title: Severity
+      - in: query
+        name: status
+        required: false
+        schema:
+          anyOf:
+          - enum:
+            - open
+            - in_progress
+            - accepted_risk
+            - resolved
+            type: string
+          - type: 'null'
+          title: Status
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Page_Finding_'
+          description: Successful Response
+        '422':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+          description: Validation Error
+      security:
+      - HTTPBearer: []
+      summary: List findings
+      tags:
+      - lists
   /api/v1/health:
     get:
       description: Authenticated health summary for operators and monitoring (scope
@@ -250,6 +652,68 @@ paths:
       summary: Request metrics
       tags:
       - health
+  /api/v1/unified-controls:
+    get:
+      description: The owner-authored unified control catalogue (scope `catalog:read`).
+        Filter by `framework` (a requirement maps to it) or `domain`. An empty catalogue
+        returns no items.
+      operationId: listUnifiedControls
+      parameters:
+      - description: Page size (default 25, maximum 100).
+        in: query
+        name: limit
+        required: false
+        schema:
+          default: 25
+          description: Page size (default 25, maximum 100).
+          maximum: 100
+          minimum: 1
+          title: Limit
+          type: integer
+      - description: Opaque cursor from a previous page.
+        in: query
+        name: cursor
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: Opaque cursor from a previous page.
+          title: Cursor
+      - in: query
+        name: framework
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Framework
+      - in: query
+        name: domain
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Domain
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Page_UnifiedControl_'
+          description: Successful Response
+        '422':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+          description: Validation Error
+      security:
+      - HTTPBearer: []
+      summary: List unified controls
+      tags:
+      - lists
 servers:
 - description: Local kind cluster (v1)
   url: http://aucoff.localtest.me
@@ -258,3 +722,5 @@ tags:
   name: health
 - description: Dashboards for signed-in users.
   name: dashboards
+- description: Controls, findings and evidence lists.
+  name: lists

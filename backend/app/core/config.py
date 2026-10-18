@@ -25,6 +25,9 @@ class Settings(BaseSettings):
     service_client_id: str | None = None
     service_client_secret: str | None = None
 
+    # Directory holding the owner-authored control catalogue (data/controls in the repository).
+    controls_dir: str = "data/controls"
+
     # Database connection (constitution ZT-6, DB-5): each service uses its OWN role and password,
     # always over TLS with the server certificate verified against the cluster CA.
     db_host: str | None = None
