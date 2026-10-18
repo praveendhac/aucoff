@@ -31,6 +31,7 @@ DENIED_PATTERN = re.compile(r"agpl|\bgpl|lgpl|sspl|busl|business source|commons 
 # package -> licence accepted as an explicit exception (pending owner decision, see LICENCES.md)
 EXCEPTIONS: dict[str, str] = {
     "typing_extensions": "psf-2.0",  # required by pydantic; permissive, awaiting owner approval
+    "cffi": "mit-0",  # required by cryptography (PyJWT); MIT-0, awaiting owner approval
 }
 
 

@@ -3,6 +3,8 @@ global:
   host: aucoff.localtest.me
 
 backend:
+  # Probes are exec-based on purpose: no anonymous HTTP endpoint exists (constitution ZT-7).
+  probeCommand: ["python", "-m", "app.healthcheck"]
   image:
     repository: aucoff-backend
     tag: dev
@@ -14,6 +16,11 @@ backend:
     limits: { cpu: 500m, memory: 512Mi }
 
 frontend:
+  # Exec probe fetches the public static login shell from inside the container (ZT-2 carve-out).
+  probeCommand:
+    - node
+    - -e
+    - "fetch('http://127.0.0.1:3000/').then(r => process.exit(r.ok ? 0 : 1)).catch(() => process.exit(1))"
   image:
     repository: aucoff-frontend
     tag: dev

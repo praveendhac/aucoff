@@ -26,9 +26,17 @@ spec:
           ports:
             - containerPort: {{ .Values.frontend.port }}
           livenessProbe:
-            httpGet: { path: /, port: {{ .Values.frontend.port }} }
+            exec:
+              command:
+                {{- toYaml .Values.frontend.probeCommand | nindent 16 }}
+            periodSeconds: 20
+            timeoutSeconds: 5
           readinessProbe:
-            httpGet: { path: /, port: {{ .Values.frontend.port }} }
+            exec:
+              command:
+                {{- toYaml .Values.frontend.probeCommand | nindent 16 }}
+            periodSeconds: 10
+            timeoutSeconds: 5
           resources:
             {{- toYaml .Values.frontend.resources | nindent 12 }}
           securityContext:

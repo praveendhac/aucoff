@@ -2,6 +2,7 @@
 
 Usage: uv run python -m scripts.export_openapi [--check]
 With --check, exits non-zero if the committed file differs (CI drift check, APIR-2).
+The app is built with a verifier that rejects every token: it is only used to read the schema.
 """
 
 import sys
@@ -9,13 +10,15 @@ from pathlib import Path
 
 import yaml
 
+from app.core.security import RejectAllResolver, TokenVerifier
 from app.main import create_app
 
 TARGET = Path(__file__).resolve().parent.parent / "openapi.yaml"
 
 
 def render() -> str:
-    spec = create_app().openapi()
+    verifier = TokenVerifier(RejectAllResolver(), "schema-export", "schema-export")
+    spec = create_app(verifier).openapi()
     return yaml.safe_dump(spec, sort_keys=True, allow_unicode=True)
 
 

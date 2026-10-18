@@ -44,13 +44,16 @@ licences: ## Licence gate for Python and npm dependencies (LIC-1, LIC-2, LIC-5)
 	cd backend && uv run python -m scripts.check_licences
 	cd frontend && npm run -s licences && npm run -s audit:prod
 
-helm-lint: ## Lint the Helm chart
+helm-lint: ## Lint the Helm chart and fail on anonymous HTTP probes (ZT-7, ZT-8)
 	helm lint deploy/helm/aucoff -f deploy/helm/aucoff/values-local.yaml
+	@if helm template aucoff deploy/helm/aucoff -f deploy/helm/aucoff/values-local.yaml | grep -n httpGet; then \
+	  echo "ERROR: httpGet probes are not allowed (constitution ZT-7); use exec probes"; exit 1; fi
+	@echo "no httpGet probes: ok"
 
 check: lint typecheck test openapi-check spectral licences helm-lint ## Everything CI runs
 
-backend-run: ## Run the API locally on :8000
-	cd backend && uv run uvicorn app.main:app --reload --port 8000
+backend-run: ## Run the API on :8000 (needs AUCOFF_OIDC_ISSUER, _AUDIENCE, _JWKS_URL; it refuses to start without them)
+	cd backend && uv run uvicorn app.main:create_app --factory --reload --port 8000
 
 frontend-dev: ## Run the web app locally on :3000
 	cd frontend && npm run dev

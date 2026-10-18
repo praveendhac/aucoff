@@ -26,9 +26,17 @@ spec:
           ports:
             - containerPort: {{ .Values.backend.port }}
           livenessProbe:
-            httpGet: { path: /api/v1/health/live, port: {{ .Values.backend.port }} }
+            exec:
+              command:
+                {{- toYaml .Values.backend.probeCommand | nindent 16 }}
+            periodSeconds: 20
+            timeoutSeconds: 5
           readinessProbe:
-            httpGet: { path: /api/v1/health/ready, port: {{ .Values.backend.port }} }
+            exec:
+              command:
+                {{- toYaml .Values.backend.probeCommand | nindent 16 }}
+            periodSeconds: 10
+            timeoutSeconds: 5
           resources:
             {{- toYaml .Values.backend.resources | nindent 12 }}
           securityContext:

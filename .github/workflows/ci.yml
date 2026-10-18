@@ -62,6 +62,11 @@ jobs:
       - uses: actions/checkout@v4
       - uses: azure/setup-helm@v4
       - run: helm lint deploy/helm/aucoff -f deploy/helm/aucoff/values-local.yaml
+      - name: No anonymous HTTP probes (ZT-7, ZT-8)
+        run: |
+          if helm template aucoff deploy/helm/aucoff -f deploy/helm/aucoff/values-local.yaml | grep -n httpGet; then
+            echo "httpGet probes are not allowed"; exit 1
+          fi
 
   secrets:
     runs-on: ubuntu-latest
