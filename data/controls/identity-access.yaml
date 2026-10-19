@@ -1,125 +1,149 @@
-# AI-drafted starter controls (catalogue 0.1.0). Titles and descriptions are written in our
-# own words. Framework references are best-known and UNVERIFIED (refs_verified: false);
-# RBI DPSC 2026 references are not filled in. Review each control before approving.
-catalogue_version: 0.1.0
+# AI-drafted starter controls (catalogue 0.2.0), own words. `verified: true` on a reference means
+# Claude matched it against the owner-supplied document on 2026-10-20; SOC 2 references are
+# unverified (no source supplied). Every control is still a draft awaiting owner review.
+catalogue_version: 0.2.0
 controls:
 - id: UC-IAM-001
   title: Multi-factor authentication for administrators
-  description: Every account with administrative rights on production systems must sign in with at least
-    two independent factors.
+  description: Every account with administrative rights on production systems must sign in with at least two independent
+    factors.
   domain: identity-access
   severity: critical
   check_type: hybrid
   status: draft
   author: Claude (AI draft)
-  refs_verified: false
   requirements:
-  - framework: soc2-2017
-    ref: CC6.1
+  - framework: iso27001-2022
+    ref: A.8.5
+    verified: true
   - framework: pci-dss-4.0.1
     ref: 8.4.1
-  - framework: iso27001-2022
-    ref: A.8.5
+    verified: true
+  - framework: rbi-pso-md-2024
+    ref: 15(e)
+    verified: true
+  - framework: soc2-2017
+    ref: CC6.1
+    verified: false
 - id: UC-IAM-002
   title: Multi-factor authentication for remote access
-  description: Anyone connecting to the environment from outside the trusted network must use more than
-    a password.
+  description: Anyone connecting to the environment from outside the trusted network must use more than a password.
   domain: identity-access
   severity: high
   check_type: hybrid
   status: draft
   author: Claude (AI draft)
-  refs_verified: false
   requirements:
-  - framework: soc2-2017
-    ref: CC6.1
-  - framework: pci-dss-4.0.1
-    ref: 8.4.3
   - framework: iso27001-2022
     ref: A.8.5
-- id: UC-IAM-003
-  title: Unique identity per person
-  description: Each user has their own account; shared or generic logins are not used for interactive
-    access.
-  domain: identity-access
-  severity: high
-  check_type: hybrid
-  status: draft
-  author: Claude (AI draft)
-  refs_verified: false
-  requirements:
+    verified: true
+  - framework: pci-dss-4.0.1
+    ref: 8.4.3
+    verified: true
+  - framework: rbi-pso-md-2024
+    ref: 15(g)
+    verified: true
   - framework: soc2-2017
     ref: CC6.1
-  - framework: pci-dss-4.0.1
-    ref: 8.2.1
-  - framework: iso27001-2022
-    ref: A.5.16
-- id: UC-IAM-004
-  title: Role-based least privilege
-  description: Access is granted through defined roles that give only what the job needs, and broad rights
-    are the exception.
+    verified: false
+- id: UC-IAM-003
+  title: Unique identity per person
+  description: Each user has their own account; shared or generic logins are not used for interactive access.
   domain: identity-access
   severity: high
   check_type: hybrid
   status: draft
   author: Claude (AI draft)
-  refs_verified: false
   requirements:
-  - framework: soc2-2017
-    ref: CC6.3
+  - framework: iso27001-2022
+    ref: A.5.16
+    verified: true
   - framework: pci-dss-4.0.1
-    ref: 7.2.1
+    ref: 8.2.1
+    verified: true
+  - framework: rbi-pso-md-2024
+    ref: 15(b)
+    verified: true
+  - framework: soc2-2017
+    ref: CC6.1
+    verified: false
+- id: UC-IAM-004
+  title: Role-based least privilege
+  description: Access is granted through defined roles that give only what the job needs, and broad rights are the
+    exception.
+  domain: identity-access
+  severity: high
+  check_type: hybrid
+  status: draft
+  author: Claude (AI draft)
+  requirements:
   - framework: iso27001-2022
     ref: A.5.15
+    verified: true
+  - framework: pci-dss-4.0.1
+    ref: 7.2.1
+    verified: true
+  - framework: rbi-pso-md-2024
+    ref: 15(d)
+    verified: true
+  - framework: soc2-2017
+    ref: CC6.3
+    verified: false
 - id: UC-IAM-005
   title: Periodic access reviews
-  description: Owners review who holds access to each system on a fixed schedule and remove what is no
-    longer justified.
+  description: Owners review who holds access to each system on a fixed schedule and remove what is no longer justified.
   domain: identity-access
   severity: medium
   check_type: manual
   status: draft
   author: Claude (AI draft)
-  refs_verified: false
   requirements:
-  - framework: soc2-2017
-    ref: CC6.2
+  - framework: iso27001-2022
+    ref: A.5.18
+    verified: true
   - framework: pci-dss-4.0.1
     ref: 7.2.4
-  - framework: iso27001-2022
-    ref: A.5.18
-- id: UC-IAM-006
-  title: Timely removal of leavers
-  description: Access is withdrawn promptly when someone leaves or changes role, with a record of when
-    it happened.
-  domain: identity-access
-  severity: high
-  check_type: hybrid
-  status: draft
-  author: Claude (AI draft)
-  refs_verified: false
-  requirements:
+    verified: true
+  - framework: rbi-pso-md-2024
+    ref: 15(a)
+    verified: true
   - framework: soc2-2017
     ref: CC6.2
-  - framework: pci-dss-4.0.1
-    ref: 8.2.5
-  - framework: iso27001-2022
-    ref: A.5.18
-- id: UC-IAM-007
-  title: Separation of privileged and everyday accounts
-  description: Administrators use separate, tightly controlled accounts or time-limited elevation for
-    privileged work.
+    verified: false
+- id: UC-IAM-006
+  title: Timely removal of leavers
+  description: Access is withdrawn promptly when someone leaves or changes role, with a record of when it happened.
   domain: identity-access
   severity: high
   check_type: hybrid
   status: draft
   author: Claude (AI draft)
-  refs_verified: false
   requirements:
+  - framework: iso27001-2022
+    ref: A.5.18
+    verified: true
+  - framework: pci-dss-4.0.1
+    ref: 8.2.5
+    verified: true
   - framework: soc2-2017
-    ref: CC6.3
+    ref: CC6.2
+    verified: false
+- id: UC-IAM-007
+  title: Separation of privileged and everyday accounts
+  description: Administrators use separate, tightly controlled accounts or time-limited elevation for privileged
+    work.
+  domain: identity-access
+  severity: high
+  check_type: hybrid
+  status: draft
+  author: Claude (AI draft)
+  requirements:
   - framework: iso27001-2022
     ref: A.8.2
+    verified: true
+  - framework: soc2-2017
+    ref: CC6.3
+    verified: false
 - id: UC-IAM-008
   title: Password and passphrase strength
   description: The identity system enforces minimum length and rejects weak or known-compromised secrets.
@@ -128,14 +152,16 @@ controls:
   check_type: automated
   status: draft
   author: Claude (AI draft)
-  refs_verified: false
   requirements:
-  - framework: soc2-2017
-    ref: CC6.1
-  - framework: pci-dss-4.0.1
-    ref: 8.3.6
   - framework: iso27001-2022
     ref: A.5.17
+    verified: true
+  - framework: pci-dss-4.0.1
+    ref: 8.3.6
+    verified: true
+  - framework: soc2-2017
+    ref: CC6.1
+    verified: false
 - id: UC-IAM-009
   title: Lockout and throttling of failed sign-ins
   description: Repeated failed sign-in attempts slow down or lock the account to blunt guessing attacks.
@@ -144,29 +170,34 @@ controls:
   check_type: automated
   status: draft
   author: Claude (AI draft)
-  refs_verified: false
   requirements:
-  - framework: pci-dss-4.0.1
-    ref: 8.3.4
   - framework: iso27001-2022
     ref: A.8.5
+    verified: true
+  - framework: pci-dss-4.0.1
+    ref: 8.3.4
+    verified: true
 - id: UC-IAM-010
   title: Machine and service credentials managed
-  description: Service accounts and keys are inventoried, owned by a named team, and rotated or revoked
-    on a schedule.
+  description: Service accounts and keys are inventoried, owned by a named team, and rotated or revoked on a schedule.
   domain: identity-access
   severity: high
   check_type: hybrid
   status: draft
   author: Claude (AI draft)
-  refs_verified: false
   requirements:
-  - framework: soc2-2017
-    ref: CC6.1
-  - framework: pci-dss-4.0.1
-    ref: 8.6.3
   - framework: iso27001-2022
     ref: A.5.17
+    verified: true
+  - framework: pci-dss-4.0.1
+    ref: 8.6.3
+    verified: true
+  - framework: rbi-pso-md-2024
+    ref: 15(e)
+    verified: true
+  - framework: soc2-2017
+    ref: CC6.1
+    verified: false
 - id: UC-IAM-011
   title: No default or vendor-supplied credentials
   description: Factory-set accounts and passwords are removed or changed before a system goes live.
@@ -175,27 +206,34 @@ controls:
   check_type: automated
   status: draft
   author: Claude (AI draft)
-  refs_verified: false
   requirements:
-  - framework: soc2-2017
-    ref: CC6.1
   - framework: pci-dss-4.0.1
     ref: 2.2.2
+    verified: true
+  - framework: rbi-pso-md-2024
+    ref: 15(c)
+    verified: true
+  - framework: soc2-2017
+    ref: CC6.1
+    verified: false
 - id: UC-IAM-012
   title: Cloud root and break-glass accounts protected
-  description: The all-powerful cloud account has no routine use, strong multi-factor protection and monitored
-    sign-ins.
+  description: The all-powerful cloud account has no routine use, strong multi-factor protection and monitored sign-ins.
   domain: identity-access
   severity: critical
   check_type: automated
   status: draft
   author: Claude (AI draft)
-  refs_verified: false
   requirements:
-  - framework: soc2-2017
-    ref: CC6.1
   - framework: iso27001-2022
     ref: A.8.2
+    verified: true
+  - framework: rbi-pso-md-2024
+    ref: 15(e)
+    verified: true
+  - framework: soc2-2017
+    ref: CC6.1
+    verified: false
 - id: UC-IAM-013
   title: Idle session timeout
   description: Interactive sessions end or lock after a period of inactivity.
@@ -204,37 +242,41 @@ controls:
   check_type: automated
   status: draft
   author: Claude (AI draft)
-  refs_verified: false
   requirements:
   - framework: pci-dss-4.0.1
     ref: 8.2.8
+    verified: true
+  - framework: rbi-pso-md-2024
+    ref: 15(h)
+    verified: true
 - id: UC-IAM-014
   title: Central identity provider with single sign-on
-  description: Workforce access to business systems goes through one identity provider so policy and removal
-    apply everywhere.
+  description: Workforce access to business systems goes through one identity provider so policy and removal apply
+    everywhere.
   domain: identity-access
   severity: medium
   check_type: hybrid
   status: draft
   author: Claude (AI draft)
-  refs_verified: false
   requirements:
-  - framework: soc2-2017
-    ref: CC6.1
   - framework: iso27001-2022
     ref: A.5.16
+    verified: true
+  - framework: soc2-2017
+    ref: CC6.1
+    verified: false
 - id: UC-IAM-015
   title: Approval and logging for production data access
-  description: Looking at live customer data requires a recorded reason and approval, and the access is
-    logged.
+  description: Looking at live customer data requires a recorded reason and approval, and the access is logged.
   domain: identity-access
   severity: high
   check_type: manual
   status: draft
   author: Claude (AI draft)
-  refs_verified: false
   requirements:
-  - framework: soc2-2017
-    ref: CC6.1
   - framework: iso27001-2022
     ref: A.5.15
+    verified: true
+  - framework: soc2-2017
+    ref: CC6.1
+    verified: false

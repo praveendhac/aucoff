@@ -1,7 +1,7 @@
-# AI-drafted starter controls (catalogue 0.1.0). Titles and descriptions are written in our
-# own words. Framework references are best-known and UNVERIFIED (refs_verified: false);
-# RBI DPSC 2026 references are not filled in. Review each control before approving.
-catalogue_version: 0.1.0
+# AI-drafted starter controls (catalogue 0.2.0), own words. `verified: true` on a reference means
+# Claude matched it against the owner-supplied document on 2026-10-20; SOC 2 references are
+# unverified (no source supplied). Every control is still a draft awaiting owner review.
+catalogue_version: 0.2.0
 controls:
 - id: UC-SDL-001
   title: Protected main branches
@@ -11,14 +11,16 @@ controls:
   check_type: automated
   status: draft
   author: Claude (AI draft)
-  refs_verified: false
   requirements:
-  - framework: soc2-2017
-    ref: CC8.1
-  - framework: pci-dss-4.0.1
-    ref: 6.5.1
   - framework: iso27001-2022
     ref: A.8.32
+    verified: true
+  - framework: pci-dss-4.0.1
+    ref: 6.5.1
+    verified: true
+  - framework: soc2-2017
+    ref: CC8.1
+    verified: false
 - id: UC-SDL-002
   title: Mandatory code review
   description: Every change is reviewed by someone other than its author before it is merged.
@@ -27,12 +29,13 @@ controls:
   check_type: automated
   status: draft
   author: Claude (AI draft)
-  refs_verified: false
   requirements:
-  - framework: soc2-2017
-    ref: CC8.1
   - framework: iso27001-2022
     ref: A.8.32
+    verified: true
+  - framework: soc2-2017
+    ref: CC8.1
+    verified: false
 - id: UC-SDL-003
   title: Secret scanning in repositories
   description: Repositories are scanned for committed credentials and findings are handled.
@@ -41,10 +44,10 @@ controls:
   check_type: automated
   status: draft
   author: Claude (AI draft)
-  refs_verified: false
   requirements:
   - framework: iso27001-2022
     ref: A.8.28
+    verified: true
 - id: UC-SDL-004
   title: Dependency vulnerability scanning
   description: Third-party libraries are checked for known vulnerabilities in the build pipeline.
@@ -53,12 +56,16 @@ controls:
   check_type: automated
   status: draft
   author: Claude (AI draft)
-  refs_verified: false
   requirements:
-  - framework: pci-dss-4.0.1
-    ref: 6.3.3
   - framework: iso27001-2022
     ref: A.8.8
+    verified: true
+  - framework: pci-dss-4.0.1
+    ref: 6.3.3
+    verified: true
+  - framework: rbi-pso-md-2024
+    ref: 18(a)
+    verified: true
 - id: UC-SDL-005
   title: Static analysis in the pipeline
   description: Code is analysed for common security defects on every change.
@@ -67,12 +74,16 @@ controls:
   check_type: automated
   status: draft
   author: Claude (AI draft)
-  refs_verified: false
   requirements:
-  - framework: pci-dss-4.0.1
-    ref: 6.2.4
   - framework: iso27001-2022
     ref: A.8.28
+    verified: true
+  - framework: pci-dss-4.0.1
+    ref: 6.2.4
+    verified: true
+  - framework: rbi-pso-md-2024
+    ref: 18(a)
+    verified: true
 - id: UC-SDL-006
   title: Software component inventory
   description: A list of the components inside each release is produced and kept.
@@ -81,10 +92,10 @@ controls:
   check_type: automated
   status: draft
   author: Claude (AI draft)
-  refs_verified: false
   requirements:
   - framework: pci-dss-4.0.1
     ref: 6.3.2
+    verified: true
 - id: UC-SDL-007
   title: Security considered in design
   description: New features get a lightweight threat review and recorded security requirements.
@@ -93,10 +104,13 @@ controls:
   check_type: manual
   status: draft
   author: Claude (AI draft)
-  refs_verified: false
   requirements:
   - framework: iso27001-2022
     ref: A.8.26
+    verified: true
+  - framework: rbi-pso-md-2024
+    ref: 17(a)
+    verified: true
 - id: UC-SDL-008
   title: Separate environments, no live data in test
   description: Development and test are separate from production and do not hold real customer data.
@@ -105,14 +119,19 @@ controls:
   check_type: hybrid
   status: draft
   author: Claude (AI draft)
-  refs_verified: false
   requirements:
-  - framework: pci-dss-4.0.1
-    ref: 6.5.3
   - framework: iso27001-2022
     ref: A.8.31
+    verified: true
   - framework: iso27001-2022
     ref: A.8.33
+    verified: true
+  - framework: pci-dss-4.0.1
+    ref: 6.5.3
+    verified: true
+  - framework: rbi-pso-md-2024
+    ref: 21(d)
+    verified: true
 - id: UC-SDL-009
   title: Recorded and approved changes
   description: Production changes are requested, approved and recorded with who deployed what.
@@ -121,27 +140,31 @@ controls:
   check_type: hybrid
   status: draft
   author: Claude (AI draft)
-  refs_verified: false
   requirements:
-  - framework: soc2-2017
-    ref: CC8.1
-  - framework: pci-dss-4.0.1
-    ref: 6.5.1
   - framework: iso27001-2022
     ref: A.8.32
+    verified: true
+  - framework: pci-dss-4.0.1
+    ref: 6.5.1
+    verified: true
+  - framework: rbi-pso-md-2024
+    ref: 21(c)
+    verified: true
+  - framework: soc2-2017
+    ref: CC8.1
+    verified: false
 - id: UC-SDL-010
   title: Least-privilege build and deploy credentials
-  description: Pipelines and runners hold only the access they need, with short-lived credentials where
-    possible.
+  description: Pipelines and runners hold only the access they need, with short-lived credentials where possible.
   domain: secure-development
   severity: high
   check_type: hybrid
   status: draft
   author: Claude (AI draft)
-  refs_verified: false
   requirements:
   - framework: soc2-2017
     ref: CC6.1
+    verified: false
 - id: UC-SDL-011
   title: Release artefact integrity
   description: Build outputs are produced by the pipeline and can be traced to a reviewed commit.
@@ -150,10 +173,10 @@ controls:
   check_type: automated
   status: draft
   author: Claude (AI draft)
-  refs_verified: false
   requirements:
   - framework: soc2-2017
     ref: CC8.1
+    verified: false
 - id: UC-SDL-012
   title: Secure coding training
   description: Developers receive secure coding training when they join and on a regular basis.
@@ -162,12 +185,13 @@ controls:
   check_type: manual
   status: draft
   author: Claude (AI draft)
-  refs_verified: false
   requirements:
-  - framework: pci-dss-4.0.1
-    ref: 6.2.2
   - framework: iso27001-2022
     ref: A.6.3
+    verified: true
+  - framework: pci-dss-4.0.1
+    ref: 6.2.2
+    verified: true
 - id: UC-SDL-013
   title: Restricted source code access
   description: Write access to source code is limited to the people who need it.
@@ -176,10 +200,10 @@ controls:
   check_type: automated
   status: draft
   author: Claude (AI draft)
-  refs_verified: false
   requirements:
   - framework: iso27001-2022
     ref: A.8.4
+    verified: true
 - id: UC-SDL-014
   title: Emergency change procedure
   description: Urgent fixes follow a defined shortcut that is still reviewed afterwards.
@@ -188,7 +212,92 @@ controls:
   check_type: manual
   status: draft
   author: Claude (AI draft)
-  refs_verified: false
   requirements:
   - framework: soc2-2017
     ref: CC8.1
+    verified: false
+- id: UC-SDL-015
+  title: 'Procured critical software: source code or escrow'
+  description: For critical bought-in applications the organisation holds the source code or has an escrow arrangement.
+  domain: secure-development
+  severity: medium
+  check_type: manual
+  status: draft
+  author: Claude (AI draft)
+  requirements:
+  - framework: rbi-pso-md-2024
+    ref: 17(c)
+    verified: true
+- id: UC-SDL-016
+  title: Annual authenticated security testing
+  description: Applications get source review, vulnerability assessment and penetration testing by qualified people
+    at least yearly, with authenticated access.
+  domain: secure-development
+  severity: high
+  check_type: hybrid
+  status: draft
+  author: Claude (AI draft)
+  requirements:
+  - framework: iso27001-2022
+    ref: A.8.29
+    verified: true
+  - framework: pci-dss-4.0.1
+    ref: 11.4.2
+    verified: true
+  - framework: rbi-pso-md-2024
+    ref: 18(a)
+    verified: true
+- id: UC-SDL-017
+  title: Vendor assurance for third-party code
+  description: When the organisation does not own the code, the developer certifies freedom from vulnerabilities,
+    malware and covert channels, again after each change.
+  domain: secure-development
+  severity: medium
+  check_type: manual
+  status: draft
+  author: Claude (AI draft)
+  requirements:
+  - framework: rbi-pso-md-2024
+    ref: 18(b)
+    verified: true
+- id: UC-SDL-018
+  title: Test findings fixed on time
+  description: Security test findings are fixed within set times, and recurring ones are escalated to the oversight
+    committee.
+  domain: secure-development
+  severity: high
+  check_type: manual
+  status: draft
+  author: Claude (AI draft)
+  requirements:
+  - framework: rbi-pso-md-2024
+    ref: 18(c)
+    verified: true
+- id: UC-SDL-019
+  title: Security audit before critical deployments
+  description: New or redeployed critical services go live only after a security audit and fixing its findings.
+  domain: secure-development
+  severity: high
+  check_type: manual
+  status: draft
+  author: Claude (AI draft)
+  requirements:
+  - framework: rbi-pso-md-2024
+    ref: 18(d)
+    verified: true
+- id: UC-SDL-020
+  title: API security
+  description: APIs authenticate callers, protect message integrity and confidentiality, stay available, and detect
+    abnormal use.
+  domain: secure-development
+  severity: high
+  check_type: hybrid
+  status: draft
+  author: Claude (AI draft)
+  requirements:
+  - framework: rbi-pso-md-2024
+    ref: 24(a)
+    verified: true
+  - framework: rbi-pso-md-2024
+    ref: 24(b)
+    verified: true

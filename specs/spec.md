@@ -41,6 +41,8 @@ Fintechs must satisfy many overlapping frameworks and regional regulations at on
 | GDPR | EU 2016/679 | EU | Regulation | |
 | DPDP | DPDP Act 2023 and DPDP Rules, 2025 (G.S.R. 846(E), 13 Nov 2025) | India | Regulation | Phased compliance timeline; track milestones |
 | RBI DPSC | RBI (Commercial Banks - Digital Payment Security Controls) Directions, 2026 (updated as on 1 Oct 2026) | India | Regulation | Evolved from 2021 baseline |
+| RBI Cyber Resilience and DPSC Master Directions for non-bank PSOs | RBI/DPSS/2024-25/123, 30 July 2024 | India | Regulation | Supplied by the owner 2026-10-20 as the RBI reference document; phased from April 2025 (large), April 2026 (medium), April 2028 (small PSOs). Not the commercial-bank directions in the row above |
+| RBI Framework on Alternative Authentication Mechanisms (DRAFT) | Draft for comments (undated) | India | Draft regulation | Supplied by the owner 2026-10-20; principles for additional factors of authentication; track the final version |
 | RBI PPI | RBI Master Directions on Prepaid Payment Instruments (MD-PPI) | India | Regulation | Under Payment and Settlement Systems Act, 2007; periodically updated |
 | FFIEC BSA/AML Examination Manual | 2026 reference version | US | Examination guidance | Owner-confirmed version |
 | FFIEC IT Examination Handbook | Current handbook with 2026 updates | US | Examination guidance | Joint supervisory framework (OCC, FDIC, Federal Reserve, NCUA) |
@@ -238,6 +240,7 @@ Detailed definitions and formulas are in the metrics catalogue ([design.md](desi
 - [ ] Pricing/tenant plan limits (if any) affecting quotas.
 - [ ] Which cloud providers and SaaS scanners ship first.
 - [ ] Final list of open-source scanners per source after licence review (Steampipe AGPL-3.0, ScoutSuite GPL-2.0, Semgrep/Opengrep engines LGPL-2.1 and the Semgrep rules licence are not approved per the first-pass audit in LICENCES.md; confirm and finish under T-009).
+- [ ] RBI scope: the supplied RBI documents are the non-bank PSO Master Directions (2024) and a draft authentication framework, not the commercial-bank "DPSC Directions, 2026" listed above. Confirm whether AUCoFF v1 targets non-bank PSOs, commercial banks, or both, and supply the commercial-bank document if needed.
 - [ ] Licence audit (T-009): the tools in use and the scanner/observability candidates are verified (LICENCES.md); the replacements for the object store (MinIO) and observability stack (Grafana/Loki/Tempo) are still to be chosen.
 - [ ] Notification templates and per-event defaults.
 - [ ] Tenant offboarding retention exceptions (legal holds).

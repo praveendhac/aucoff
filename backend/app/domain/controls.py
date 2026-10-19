@@ -17,7 +17,16 @@ from pydantic import BaseModel, ConfigDict, Field, StringConstraints, Validation
 
 # Frameworks the first catalogue release covers (owner decision 2026-10-19). More are added here
 # when the owner extends the set.
-FRAMEWORKS = frozenset({"soc2-2017", "pci-dss-4.0.1", "rbi-dpsc-2026", "iso27001-2022"})
+FRAMEWORKS = frozenset(
+    {
+        "soc2-2017",
+        "pci-dss-4.0.1",
+        "rbi-dpsc-2026",  # RBI controls for commercial banks (not supplied)
+        "rbi-pso-md-2024",  # Master Directions on Cyber Resilience and DPSC for non-bank PSOs
+        "rbi-afa-draft",  # Draft Framework on Alternative Authentication Mechanisms
+        "iso27001-2022",
+    }
+)
 
 # Own-words guard (LIC-6): a control description is a short summary, not a pasted clause.
 MAX_DESCRIPTION_CHARS = 600
@@ -37,6 +46,8 @@ class Requirement(BaseModel):
     model_config = ConfigDict(extra="forbid")
 
     framework: str
+    # True only after the reference was checked against the supplied source document.
+    verified: bool = False
     ref: Annotated[
         str, StringConstraints(min_length=1, max_length=40, pattern=r"^[A-Za-z0-9.()\-_ /]+$")
     ]
@@ -53,8 +64,6 @@ class Control(BaseModel):
     check_type: Literal["automated", "manual", "hybrid"]
     # Draft controls may have no references yet; approved controls need verified ones.
     requirements: list[Requirement] = Field(default_factory=list)
-    # True only after a person checked every reference against the licensed source text.
-    refs_verified: bool = False
     # draft = AI- or colleague-proposed, approved = reviewed and accepted by the owner.
     status: Literal["draft", "approved"] = "draft"
     author: Annotated[str, StringConstraints(min_length=2, max_length=80)]
@@ -75,7 +84,9 @@ def validate_file(path: Path) -> tuple[ControlFile | None, list[str]]:
     except (yaml.YAMLError, ValidationError, OSError) as exc:
         return None, [f"{path}: {exc}"]
     for control in parsed.controls:
-        if control.status == "approved" and not (control.requirements and control.refs_verified):
+        if control.status == "approved" and not (
+            control.requirements and all(r.verified for r in control.requirements)
+        ):
             errors.append(
                 f"{path}: {control.id}: an approved control needs verified requirement references"
             )

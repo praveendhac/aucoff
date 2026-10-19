@@ -1,23 +1,23 @@
-# AI-drafted starter controls (catalogue 0.1.0). Titles and descriptions are written in our
-# own words. Framework references are best-known and UNVERIFIED (refs_verified: false);
-# RBI DPSC 2026 references are not filled in. Review each control before approving.
-catalogue_version: 0.1.0
+# AI-drafted starter controls (catalogue 0.2.0), own words. `verified: true` on a reference means
+# Claude matched it against the owner-supplied document on 2026-10-20; SOC 2 references are
+# unverified (no source supplied). Every control is still a draft awaiting owner review.
+catalogue_version: 0.2.0
 controls:
 - id: UC-RES-001
   title: Scheduled backups of critical data
-  description: Critical data and configuration are backed up automatically on a schedule that meets recovery
-    goals.
+  description: Critical data and configuration are backed up automatically on a schedule that meets recovery goals.
   domain: resilience-response
   severity: high
   check_type: automated
   status: draft
   author: Claude (AI draft)
-  refs_verified: false
   requirements:
-  - framework: soc2-2017
-    ref: A1.2
   - framework: iso27001-2022
     ref: A.8.13
+    verified: true
+  - framework: soc2-2017
+    ref: A1.2
+    verified: false
 - id: UC-RES-002
   title: Restore testing
   description: Restores are tested regularly and the results recorded.
@@ -26,12 +26,16 @@ controls:
   check_type: manual
   status: draft
   author: Claude (AI draft)
-  refs_verified: false
   requirements:
-  - framework: soc2-2017
-    ref: A1.3
   - framework: iso27001-2022
     ref: A.8.13
+    verified: true
+  - framework: rbi-pso-md-2024
+    ref: 20(f)
+    verified: true
+  - framework: soc2-2017
+    ref: A1.3
+    verified: false
 - id: UC-RES-003
   title: Backups kept separately and protected
   description: Backup copies are stored apart from production and protected from deletion or tampering.
@@ -40,10 +44,10 @@ controls:
   check_type: hybrid
   status: draft
   author: Claude (AI draft)
-  refs_verified: false
   requirements:
   - framework: iso27001-2022
     ref: A.8.13
+    verified: true
 - id: UC-RES-004
   title: Continuity and recovery plan with targets
   description: A plan states how critical services are restored, with recovery time and data loss targets.
@@ -52,12 +56,19 @@ controls:
   check_type: manual
   status: draft
   author: Claude (AI draft)
-  refs_verified: false
   requirements:
-  - framework: soc2-2017
-    ref: A1.2
   - framework: iso27001-2022
     ref: A.5.30
+    verified: true
+  - framework: rbi-pso-md-2024
+    ref: 23(a)
+    verified: true
+  - framework: rbi-pso-md-2024
+    ref: 23(b)
+    verified: true
+  - framework: soc2-2017
+    ref: A1.2
+    verified: false
 - id: UC-RES-005
   title: Recovery exercises
   description: The recovery plan is exercised at least yearly and gaps are tracked to closure.
@@ -66,12 +77,16 @@ controls:
   check_type: manual
   status: draft
   author: Claude (AI draft)
-  refs_verified: false
   requirements:
-  - framework: soc2-2017
-    ref: A1.3
   - framework: iso27001-2022
     ref: A.5.30
+    verified: true
+  - framework: rbi-pso-md-2024
+    ref: 23(e)
+    verified: true
+  - framework: soc2-2017
+    ref: A1.3
+    verified: false
 - id: UC-RES-006
   title: Redundancy for critical services
   description: Critical services have no single point of failure that would stop the business.
@@ -80,27 +95,34 @@ controls:
   check_type: hybrid
   status: draft
   author: Claude (AI draft)
-  refs_verified: false
   requirements:
   - framework: iso27001-2022
     ref: A.8.14
+    verified: true
+  - framework: rbi-pso-md-2024
+    ref: 23(d)
+    verified: true
 - id: UC-RES-007
   title: Incident response plan
-  description: A written plan defines how security incidents are detected, handled and closed, and is
-    tested.
+  description: A written plan defines how security incidents are detected, handled and closed, and is tested.
   domain: resilience-response
   severity: high
   check_type: manual
   status: draft
   author: Claude (AI draft)
-  refs_verified: false
   requirements:
-  - framework: soc2-2017
-    ref: CC7.4
-  - framework: pci-dss-4.0.1
-    ref: 12.10.1
   - framework: iso27001-2022
     ref: A.5.24
+    verified: true
+  - framework: pci-dss-4.0.1
+    ref: 12.10.1
+    verified: true
+  - framework: rbi-pso-md-2024
+    ref: 22(a)
+    verified: true
+  - framework: soc2-2017
+    ref: CC7.4
+    verified: false
 - id: UC-RES-008
   title: Incident reporting and escalation
   description: Staff know how to report an incident and escalation paths and contacts are current.
@@ -109,14 +131,19 @@ controls:
   check_type: manual
   status: draft
   author: Claude (AI draft)
-  refs_verified: false
   requirements:
-  - framework: soc2-2017
-    ref: CC7.3
   - framework: iso27001-2022
     ref: A.5.25
+    verified: true
   - framework: iso27001-2022
     ref: A.5.26
+    verified: true
+  - framework: rbi-pso-md-2024
+    ref: 22(a)
+    verified: true
+  - framework: soc2-2017
+    ref: CC7.3
+    verified: false
 - id: UC-RES-009
   title: Post-incident review
   description: After each significant incident the team reviews causes and records improvements.
@@ -125,12 +152,16 @@ controls:
   check_type: manual
   status: draft
   author: Claude (AI draft)
-  refs_verified: false
   requirements:
-  - framework: soc2-2017
-    ref: CC7.5
   - framework: iso27001-2022
     ref: A.5.27
+    verified: true
+  - framework: rbi-pso-md-2024
+    ref: 22(c)
+    verified: true
+  - framework: soc2-2017
+    ref: CC7.5
+    verified: false
 - id: UC-RES-010
   title: Regulator and customer notification
   description: The organisation knows who must be told about an incident, by when, and who sends it.
@@ -139,8 +170,10 @@ controls:
   check_type: manual
   status: draft
   author: Claude (AI draft)
-  refs_verified: false
-  requirements: []
+  requirements:
+  - framework: rbi-pso-md-2024
+    ref: 22(d)
+    verified: true
 - id: UC-RES-011
   title: Capacity and availability monitoring
   description: Capacity and availability of critical services are monitored and trends reviewed.
@@ -149,12 +182,13 @@ controls:
   check_type: automated
   status: draft
   author: Claude (AI draft)
-  refs_verified: false
   requirements:
-  - framework: soc2-2017
-    ref: A1.1
   - framework: iso27001-2022
     ref: A.8.6
+    verified: true
+  - framework: soc2-2017
+    ref: A1.1
+    verified: false
 - id: UC-RES-012
   title: Change management with rollback
   description: Changes to production have a tested way back if they go wrong.
@@ -163,9 +197,53 @@ controls:
   check_type: manual
   status: draft
   author: Claude (AI draft)
-  refs_verified: false
   requirements:
-  - framework: soc2-2017
-    ref: CC8.1
   - framework: iso27001-2022
     ref: A.8.32
+    verified: true
+  - framework: rbi-pso-md-2024
+    ref: 21(c)
+    verified: true
+  - framework: soc2-2017
+    ref: CC8.1
+    verified: false
+- id: UC-RES-013
+  title: Cyber crisis management plan
+  description: A board-approved plan covers how to detect, contain, respond to and recover from cyber attacks.
+  domain: resilience-response
+  severity: high
+  check_type: manual
+  status: draft
+  author: Claude (AI draft)
+  requirements:
+  - framework: rbi-pso-md-2024
+    ref: '9'
+    verified: true
+- id: UC-RES-014
+  title: Near-zero data loss target and distant DR site
+  description: Recovery targets aim for near-zero data loss, with the disaster recovery site in a different seismic
+    zone from the primary site.
+  domain: resilience-response
+  severity: high
+  check_type: manual
+  status: draft
+  author: Claude (AI draft)
+  requirements:
+  - framework: rbi-pso-md-2024
+    ref: 23(c)
+    verified: true
+  - framework: rbi-pso-md-2024
+    ref: 23(d)
+    verified: true
+- id: UC-RES-015
+  title: Data reconciliation on failover
+  description: A defined method reconciles data when operations move to the recovery site, so nothing is lost.
+  domain: resilience-response
+  severity: medium
+  check_type: manual
+  status: draft
+  author: Claude (AI draft)
+  requirements:
+  - framework: rbi-pso-md-2024
+    ref: 23(d)
+    verified: true

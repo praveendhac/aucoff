@@ -95,6 +95,6 @@ def test_draft_may_have_no_references_but_approved_may_not(tmp_path: Path) -> No
 def test_approved_with_unverified_references_fails(tmp_path: Path) -> None:
     write(tmp_path, "a.yaml", GOOD.replace("status: draft", "status: approved"))
     assert any("approved control needs verified" in e for e in validate_directory(tmp_path))
-    verified = GOOD.replace("status: draft", "status: approved") + "    refs_verified: true\n"
+    verified = GOOD.replace("status: draft", "status: approved").replace("}", ", verified: true}")
     write(tmp_path, "a.yaml", verified)
     assert validate_directory(tmp_path) == []

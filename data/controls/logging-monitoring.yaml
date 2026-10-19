@@ -1,25 +1,29 @@
-# AI-drafted starter controls (catalogue 0.1.0). Titles and descriptions are written in our
-# own words. Framework references are best-known and UNVERIFIED (refs_verified: false);
-# RBI DPSC 2026 references are not filled in. Review each control before approving.
-catalogue_version: 0.1.0
+# AI-drafted starter controls (catalogue 0.2.0), own words. `verified: true` on a reference means
+# Claude matched it against the owner-supplied document on 2026-10-20; SOC 2 references are
+# unverified (no source supplied). Every control is still a draft awaiting owner review.
+catalogue_version: 0.2.0
 controls:
 - id: UC-LOG-001
   title: Audit logging on all in-scope systems
-  description: Systems that handle sensitive data or administration produce audit logs that are switched
-    on.
+  description: Systems that handle sensitive data or administration produce audit logs that are switched on.
   domain: logging-monitoring
   severity: high
   check_type: automated
   status: draft
   author: Claude (AI draft)
-  refs_verified: false
   requirements:
-  - framework: soc2-2017
-    ref: CC7.2
-  - framework: pci-dss-4.0.1
-    ref: 10.2.1
   - framework: iso27001-2022
     ref: A.8.15
+    verified: true
+  - framework: pci-dss-4.0.1
+    ref: 10.2.1
+    verified: true
+  - framework: rbi-pso-md-2024
+    ref: 27(e)
+    verified: true
+  - framework: soc2-2017
+    ref: CC7.2
+    verified: false
 - id: UC-LOG-002
   title: Useful audit log content
   description: Each log entry records who did what, to what, when, and with what result.
@@ -28,12 +32,16 @@ controls:
   check_type: hybrid
   status: draft
   author: Claude (AI draft)
-  refs_verified: false
   requirements:
-  - framework: pci-dss-4.0.1
-    ref: 10.2.2
   - framework: iso27001-2022
     ref: A.8.15
+    verified: true
+  - framework: pci-dss-4.0.1
+    ref: 10.2.2
+    verified: true
+  - framework: rbi-pso-md-2024
+    ref: 27(e)
+    verified: true
 - id: UC-LOG-003
   title: Tamper protection for logs
   description: Logs are protected from change and deletion by the people and systems they describe.
@@ -42,12 +50,13 @@ controls:
   check_type: automated
   status: draft
   author: Claude (AI draft)
-  refs_verified: false
   requirements:
-  - framework: pci-dss-4.0.1
-    ref: 10.3.2
   - framework: iso27001-2022
     ref: A.8.15
+    verified: true
+  - framework: pci-dss-4.0.1
+    ref: 10.3.2
+    verified: true
 - id: UC-LOG-004
   title: Log retention period
   description: Logs are kept for the period the organisation requires, with recent history quickly searchable.
@@ -56,12 +65,16 @@ controls:
   check_type: automated
   status: draft
   author: Claude (AI draft)
-  refs_verified: false
   requirements:
-  - framework: pci-dss-4.0.1
-    ref: 10.5.1
   - framework: iso27001-2022
     ref: A.8.15
+    verified: true
+  - framework: pci-dss-4.0.1
+    ref: 10.5.1
+    verified: true
+  - framework: rbi-pso-md-2024
+    ref: 27(e)
+    verified: true
 - id: UC-LOG-005
   title: Central log collection
   description: Logs from all systems flow to one place where they can be searched and correlated.
@@ -70,12 +83,16 @@ controls:
   check_type: hybrid
   status: draft
   author: Claude (AI draft)
-  refs_verified: false
   requirements:
-  - framework: soc2-2017
-    ref: CC7.2
   - framework: iso27001-2022
     ref: A.8.15
+    verified: true
+  - framework: rbi-pso-md-2024
+    ref: 16(c)
+    verified: true
+  - framework: soc2-2017
+    ref: CC7.2
+    verified: false
 - id: UC-LOG-006
   title: Alerting on suspicious activity
   description: Defined suspicious patterns raise alerts that reach a person who can act.
@@ -84,12 +101,19 @@ controls:
   check_type: hybrid
   status: draft
   author: Claude (AI draft)
-  refs_verified: false
   requirements:
-  - framework: soc2-2017
-    ref: CC7.2
   - framework: iso27001-2022
     ref: A.8.16
+    verified: true
+  - framework: rbi-pso-md-2024
+    ref: 16(b)
+    verified: true
+  - framework: rbi-pso-md-2024
+    ref: 16(c)
+    verified: true
+  - framework: soc2-2017
+    ref: CC7.2
+    verified: false
 - id: UC-LOG-007
   title: Synchronised clocks
   description: All systems take time from the same trusted sources so logs line up.
@@ -98,12 +122,13 @@ controls:
   check_type: automated
   status: draft
   author: Claude (AI draft)
-  refs_verified: false
   requirements:
-  - framework: pci-dss-4.0.1
-    ref: 10.6.1
   - framework: iso27001-2022
     ref: A.8.17
+    verified: true
+  - framework: pci-dss-4.0.1
+    ref: 10.6.1
+    verified: true
 - id: UC-LOG-008
   title: Administrator activity reviewed
   description: Actions taken with administrative rights are logged and reviewed.
@@ -112,12 +137,13 @@ controls:
   check_type: hybrid
   status: draft
   author: Claude (AI draft)
-  refs_verified: false
   requirements:
-  - framework: pci-dss-4.0.1
-    ref: 10.2.1.2
   - framework: iso27001-2022
     ref: A.8.15
+    verified: true
+  - framework: pci-dss-4.0.1
+    ref: 10.2.1.2
+    verified: true
 - id: UC-LOG-009
   title: Cloud control-plane activity logged
   description: Management-plane activity in every cloud account and region is recorded and kept.
@@ -126,12 +152,13 @@ controls:
   check_type: automated
   status: draft
   author: Claude (AI draft)
-  refs_verified: false
   requirements:
-  - framework: soc2-2017
-    ref: CC7.2
   - framework: iso27001-2022
     ref: A.8.15
+    verified: true
+  - framework: soc2-2017
+    ref: CC7.2
+    verified: false
 - id: UC-LOG-010
   title: Failed access monitored
   description: Repeated failed sign-ins and denied requests are monitored for attack patterns.
@@ -140,12 +167,13 @@ controls:
   check_type: hybrid
   status: draft
   author: Claude (AI draft)
-  refs_verified: false
   requirements:
-  - framework: pci-dss-4.0.1
-    ref: 10.2.1.4
   - framework: iso27001-2022
     ref: A.8.16
+    verified: true
+  - framework: pci-dss-4.0.1
+    ref: 10.2.1.4
+    verified: true
 - id: UC-LOG-011
   title: Security event triage
   description: A documented routine decides which events become incidents and how fast each is handled.
@@ -154,12 +182,13 @@ controls:
   check_type: manual
   status: draft
   author: Claude (AI draft)
-  refs_verified: false
   requirements:
-  - framework: soc2-2017
-    ref: CC7.3
   - framework: iso27001-2022
     ref: A.5.25
+    verified: true
+  - framework: soc2-2017
+    ref: CC7.3
+    verified: false
 - id: UC-LOG-012
   title: Restricted access to logs
   description: Only people who need to can read or manage logs.
@@ -168,9 +197,48 @@ controls:
   check_type: automated
   status: draft
   author: Claude (AI draft)
-  refs_verified: false
   requirements:
-  - framework: pci-dss-4.0.1
-    ref: 10.3.1
   - framework: iso27001-2022
     ref: A.8.15
+    verified: true
+  - framework: pci-dss-4.0.1
+    ref: 10.3.1
+    verified: true
+- id: UC-LOG-013
+  title: Security operations monitoring
+  description: A security operations function monitors logs from networks and systems, escalates and responds to
+    incidents.
+  domain: logging-monitoring
+  severity: high
+  check_type: manual
+  status: draft
+  author: Claude (AI draft)
+  requirements:
+  - framework: rbi-pso-md-2024
+    ref: 16(b)
+    verified: true
+- id: UC-LOG-014
+  title: Near-real-time fraud monitoring
+  description: Payment activity is watched in real or near real time for suspicious behaviour, with alerts.
+  domain: logging-monitoring
+  severity: high
+  check_type: hybrid
+  status: draft
+  author: Claude (AI draft)
+  requirements:
+  - framework: rbi-pso-md-2024
+    ref: 27(c)
+    verified: true
+- id: UC-LOG-015
+  title: Round-the-clock fraud and law-enforcement desk
+  description: A staffed facility handles reports of unauthorised or fraudulent transactions and requests from law
+    enforcement at all hours.
+  domain: logging-monitoring
+  severity: high
+  check_type: manual
+  status: draft
+  author: Claude (AI draft)
+  requirements:
+  - framework: rbi-pso-md-2024
+    ref: 27(d)
+    verified: true

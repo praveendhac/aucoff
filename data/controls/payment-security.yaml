@@ -1,0 +1,311 @@
+# AI-drafted starter controls (catalogue 0.2.0), own words. `verified: true` on a reference means
+# Claude matched it against the owner-supplied document on 2026-10-20; SOC 2 references are
+# unverified (no source supplied). Every control is still a draft awaiting owner review.
+catalogue_version: 0.2.0
+controls:
+- id: UC-PAY-001
+  title: Strong authentication for every electronic payment
+  description: Debits made through electronic channels need more than one factor, unless a rule explicitly relaxes
+    it.
+  domain: payment-security
+  severity: critical
+  check_type: hybrid
+  status: draft
+  author: Claude (AI draft)
+  requirements:
+  - framework: rbi-afa-draft
+    ref: 3(a)
+    verified: true
+  - framework: rbi-pso-md-2024
+    ref: 27(a)
+    verified: true
+- id: UC-PAY-002
+  title: Dynamic factor for card-not-present payments
+  description: At least one factor is created after the payment starts, is tied to that payment and cannot be reused.
+  domain: payment-security
+  severity: high
+  check_type: hybrid
+  status: draft
+  author: Claude (AI draft)
+  requirements:
+  - framework: rbi-afa-draft
+    ref: 3(b)
+    verified: true
+- id: UC-PAY-003
+  title: Factors from different categories
+  description: 'The first factor and the extra factor come from different categories: something known, held or inherent.'
+  domain: payment-security
+  severity: high
+  check_type: hybrid
+  status: draft
+  author: Claude (AI draft)
+  requirements:
+  - framework: rbi-afa-draft
+    ref: 3(c)
+    verified: true
+- id: UC-PAY-004
+  title: Risk-based choice of extra factor
+  description: The issuer may pick the extra factor based on customer risk, amount and channel, with the rules documented.
+  domain: payment-security
+  severity: medium
+  check_type: manual
+  status: draft
+  author: Claude (AI draft)
+  requirements:
+  - framework: rbi-afa-draft
+    ref: 3(d)
+    verified: true
+- id: UC-PAY-005
+  title: Near-real-time transaction alerts
+  description: Customers are alerted promptly about eligible digital payments, and members can raise alerts on unusual
+    patterns.
+  domain: payment-security
+  severity: high
+  check_type: hybrid
+  status: draft
+  author: Claude (AI draft)
+  requirements:
+  - framework: rbi-afa-draft
+    ref: 3(e)
+    verified: true
+  - framework: rbi-pso-md-2024
+    ref: '28'
+    verified: true
+- id: UC-PAY-006
+  title: Consent for new authentication factors
+  description: A new factor is switched on only with the customer's explicit consent, and they can opt out.
+  domain: payment-security
+  severity: medium
+  check_type: manual
+  status: draft
+  author: Claude (AI draft)
+  requirements:
+  - framework: rbi-afa-draft
+    ref: 3(f)
+    verified: true
+- id: UC-PAY-007
+  title: Issuer verifies authentication technology
+  description: The issuer checks the robustness and integrity of an authentication method before deploying it and
+    owns the liability.
+  domain: payment-security
+  severity: high
+  check_type: manual
+  status: draft
+  author: Claude (AI draft)
+  requirements:
+  - framework: rbi-afa-draft
+    ref: 3(g)
+    verified: true
+- id: UC-PAY-008
+  title: No lock-in on authentication providers
+  description: Contracts do not stop the issuer from using alternative authentication solutions or non-exclusive
+    tokenisation.
+  domain: payment-security
+  severity: medium
+  check_type: manual
+  status: draft
+  author: Claude (AI draft)
+  requirements:
+  - framework: rbi-afa-draft
+    ref: 3(h)
+    verified: true
+- id: UC-PAY-009
+  title: Safe content of customer notifications
+  description: Alerts mask account and card numbers, name the merchant or beneficiary and amount, and place any
+    OTP at the end with the transaction named.
+  domain: payment-security
+  severity: medium
+  check_type: manual
+  status: draft
+  author: Claude (AI draft)
+  requirements:
+  - framework: rbi-pso-md-2024
+    ref: '29'
+    verified: true
+- id: UC-PAY-010
+  title: Customer can flag a fraudulent transaction
+  description: Customers can mark a transaction as fraudulent in the app or site after authenticating, and the issuer
+    is told at once.
+  domain: payment-security
+  severity: high
+  check_type: hybrid
+  status: draft
+  author: Claude (AI draft)
+  requirements:
+  - framework: rbi-pso-md-2024
+    ref: '30'
+    verified: true
+- id: UC-PAY-011
+  title: Mobile app integrity
+  description: A mechanism ensures the payment app does only what it was built to do.
+  domain: payment-security
+  severity: high
+  check_type: hybrid
+  status: draft
+  author: Claude (AI draft)
+  requirements:
+  - framework: rbi-pso-md-2024
+    ref: 31(a)
+    verified: true
+- id: UC-PAY-012
+  title: Session kept intact end to end
+  description: An authenticated session and its encryption stay intact throughout, and interference ends the session
+    and resolves affected payments.
+  domain: payment-security
+  severity: high
+  check_type: hybrid
+  status: draft
+  author: Claude (AI draft)
+  requirements:
+  - framework: rbi-pso-md-2024
+    ref: 31(b)
+    verified: true
+- id: UC-PAY-013
+  title: Device binding
+  description: The app is bound to the device and SIM and is re-bound after a period of non-use.
+  domain: payment-security
+  severity: high
+  check_type: hybrid
+  status: draft
+  author: Claude (AI draft)
+  requirements:
+  - framework: rbi-pso-md-2024
+    ref: 31(c)
+    verified: true
+- id: UC-PAY-014
+  title: Mobile session timeout
+  description: Mobile sessions end automatically after inactivity and the user must log in again.
+  domain: payment-security
+  severity: medium
+  check_type: automated
+  status: draft
+  author: Claude (AI draft)
+  requirements:
+  - framework: rbi-pso-md-2024
+    ref: 31(d)
+    verified: true
+- id: UC-PAY-015
+  title: Failed login limits and notification
+  description: A maximum number of failed attempts blocks the app, with a secure way back in, and the customer is
+    told immediately.
+  domain: payment-security
+  severity: medium
+  check_type: hybrid
+  status: draft
+  author: Claude (AI draft)
+  requirements:
+  - framework: rbi-pso-md-2024
+    ref: 31(e)
+    verified: true
+- id: UC-PAY-016
+  title: Remote-access tools blocked during payments
+  description: The app detects live remote-access tools where possible and blocks payment use while they are active.
+  domain: payment-security
+  severity: medium
+  check_type: hybrid
+  status: draft
+  author: Claude (AI draft)
+  requirements:
+  - framework: rbi-pso-md-2024
+    ref: 31(f)
+    verified: true
+- id: UC-PAY-017
+  title: Cooling period after contact detail change
+  description: After the registered mobile number or email changes, online payments wait at least 12 hours.
+  domain: payment-security
+  severity: high
+  check_type: hybrid
+  status: draft
+  author: Claude (AI draft)
+  requirements:
+  - framework: rbi-pso-md-2024
+    ref: 31(g)
+    verified: true
+- id: UC-PAY-018
+  title: Approved card terminals
+  description: Merchant terminals are validated for point-to-point encryption and PIN terminals are approved under
+    the PIN security programme.
+  domain: payment-security
+  severity: medium
+  check_type: manual
+  status: draft
+  author: Claude (AI draft)
+  requirements:
+  - framework: rbi-pso-md-2024
+    ref: '32'
+    verified: true
+- id: UC-PAY-019
+  title: Card network limits, alerts and protected card data
+  description: Limits are set at the card network switch, suspicious events alert issuers around the clock, and
+    card data is stored encrypted.
+  domain: payment-security
+  severity: high
+  check_type: manual
+  status: draft
+  author: Claude (AI draft)
+  requirements:
+  - framework: rbi-pso-md-2024
+    ref: '33'
+    verified: true
+- id: UC-PAY-020
+  title: Cooling period on prepaid funds
+  description: Transfers and cash withdrawals from newly loaded prepaid balances wait through a cooling period.
+  domain: payment-security
+  severity: medium
+  check_type: manual
+  status: draft
+  author: Claude (AI draft)
+  requirements:
+  - framework: rbi-pso-md-2024
+    ref: '35'
+    verified: true
+- id: UC-PAY-021
+  title: Anti-phishing and rogue-app takedown
+  description: A service identifies and takes down phishing sites and rogue apps.
+  domain: payment-security
+  severity: medium
+  check_type: manual
+  status: draft
+  author: Claude (AI draft)
+  requirements:
+  - framework: rbi-pso-md-2024
+    ref: 27(h)
+    verified: true
+- id: UC-PAY-022
+  title: Secure mail and messaging
+  description: Inbound and outbound mail and messages use secure systems.
+  domain: payment-security
+  severity: medium
+  check_type: manual
+  status: draft
+  author: Claude (AI draft)
+  requirements:
+  - framework: rbi-pso-md-2024
+    ref: 27(g)
+    verified: true
+- id: UC-PAY-023
+  title: Public awareness on fraud
+  description: The organisation, directly or through partners, keeps customers aware of how to protect themselves
+    from fraud.
+  domain: payment-security
+  severity: low
+  check_type: manual
+  status: draft
+  author: Claude (AI draft)
+  requirements:
+  - framework: rbi-pso-md-2024
+    ref: 27(i)
+    verified: true
+- id: UC-PAY-024
+  title: Payment architecture sized for volume
+  description: The payment architecture is robust and scalable for transaction volumes and reviewed by the oversight
+    committee.
+  domain: payment-security
+  severity: medium
+  check_type: manual
+  status: draft
+  author: Claude (AI draft)
+  requirements:
+  - framework: rbi-pso-md-2024
+    ref: 27(f)
+    verified: true

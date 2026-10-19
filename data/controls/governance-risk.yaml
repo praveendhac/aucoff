@@ -1,7 +1,7 @@
-# AI-drafted starter controls (catalogue 0.1.0). Titles and descriptions are written in our
-# own words. Framework references are best-known and UNVERIFIED (refs_verified: false);
-# RBI DPSC 2026 references are not filled in. Review each control before approving.
-catalogue_version: 0.1.0
+# AI-drafted starter controls (catalogue 0.2.0), own words. `verified: true` on a reference means
+# Claude matched it against the owner-supplied document on 2026-10-20; SOC 2 references are
+# unverified (no source supplied). Every control is still a draft awaiting owner review.
+catalogue_version: 0.2.0
 controls:
 - id: UC-GOV-001
   title: Approved information security policy
@@ -11,14 +11,19 @@ controls:
   check_type: manual
   status: draft
   author: Claude (AI draft)
-  refs_verified: false
   requirements:
-  - framework: soc2-2017
-    ref: CC5.3
-  - framework: pci-dss-4.0.1
-    ref: 12.1.1
   - framework: iso27001-2022
     ref: A.5.1
+    verified: true
+  - framework: pci-dss-4.0.1
+    ref: 12.1.1
+    verified: true
+  - framework: rbi-pso-md-2024
+    ref: '8'
+    verified: true
+  - framework: soc2-2017
+    ref: CC5.3
+    verified: false
 - id: UC-GOV-002
   title: Security roles and responsibilities
   description: Named people hold responsibility for security duties and know it.
@@ -27,12 +32,16 @@ controls:
   check_type: manual
   status: draft
   author: Claude (AI draft)
-  refs_verified: false
   requirements:
-  - framework: pci-dss-4.0.1
-    ref: 12.1.3
   - framework: iso27001-2022
     ref: A.5.2
+    verified: true
+  - framework: pci-dss-4.0.1
+    ref: 12.1.3
+    verified: true
+  - framework: rbi-pso-md-2024
+    ref: '10'
+    verified: true
 - id: UC-GOV-003
   title: Annual risk assessment
   description: A structured risk assessment is performed at least yearly and after major change.
@@ -41,25 +50,25 @@ controls:
   check_type: manual
   status: draft
   author: Claude (AI draft)
-  refs_verified: false
   requirements:
+  - framework: rbi-pso-md-2024
+    ref: '13'
+    verified: true
   - framework: soc2-2017
     ref: CC3.2
-  - framework: pci-dss-4.0.1
-    ref: 12.3.1
+    verified: false
 - id: UC-GOV-004
   title: Risk register with treatment decisions
-  description: Identified risks are recorded with an owner and a decision to reduce, accept, transfer
-    or avoid.
+  description: Identified risks are recorded with an owner and a decision to reduce, accept, transfer or avoid.
   domain: governance-risk
   severity: medium
   check_type: manual
   status: draft
   author: Claude (AI draft)
-  refs_verified: false
   requirements:
   - framework: soc2-2017
     ref: CC3.2
+    verified: false
 - id: UC-GOV-005
   title: Security awareness training
   description: Staff complete security awareness training on joining and at least yearly.
@@ -68,14 +77,19 @@ controls:
   check_type: manual
   status: draft
   author: Claude (AI draft)
-  refs_verified: false
   requirements:
-  - framework: soc2-2017
-    ref: CC1.4
-  - framework: pci-dss-4.0.1
-    ref: 12.6.1
   - framework: iso27001-2022
     ref: A.6.3
+    verified: true
+  - framework: pci-dss-4.0.1
+    ref: 12.6.1
+    verified: true
+  - framework: rbi-pso-md-2024
+    ref: 25(a)
+    verified: true
+  - framework: soc2-2017
+    ref: CC1.4
+    verified: false
 - id: UC-GOV-006
   title: Pre-employment screening
   description: Candidates for sensitive roles are screened as the law allows before they start.
@@ -84,12 +98,13 @@ controls:
   check_type: manual
   status: draft
   author: Claude (AI draft)
-  refs_verified: false
   requirements:
-  - framework: soc2-2017
-    ref: CC1.4
   - framework: iso27001-2022
     ref: A.6.1
+    verified: true
+  - framework: soc2-2017
+    ref: CC1.4
+    verified: false
 - id: UC-GOV-007
   title: Vendor risk assessment
   description: Suppliers that touch sensitive data or critical services are assessed before use and periodically.
@@ -98,14 +113,22 @@ controls:
   check_type: manual
   status: draft
   author: Claude (AI draft)
-  refs_verified: false
   requirements:
-  - framework: soc2-2017
-    ref: CC9.2
-  - framework: pci-dss-4.0.1
-    ref: 12.8.2
   - framework: iso27001-2022
     ref: A.5.19
+    verified: true
+  - framework: pci-dss-4.0.1
+    ref: 12.8.3
+    verified: true
+  - framework: pci-dss-4.0.1
+    ref: 12.8.4
+    verified: true
+  - framework: rbi-pso-md-2024
+    ref: 19(c)
+    verified: true
+  - framework: soc2-2017
+    ref: CC9.2
+    verified: false
 - id: UC-GOV-008
   title: Security terms in supplier contracts
   description: Contracts with key suppliers state security duties, incident notice and audit rights.
@@ -114,12 +137,16 @@ controls:
   check_type: manual
   status: draft
   author: Claude (AI draft)
-  refs_verified: false
   requirements:
-  - framework: pci-dss-4.0.1
-    ref: 12.8.2
   - framework: iso27001-2022
     ref: A.5.20
+    verified: true
+  - framework: pci-dss-4.0.1
+    ref: 12.8.2
+    verified: true
+  - framework: rbi-pso-md-2024
+    ref: 19(a)
+    verified: true
 - id: UC-GOV-009
   title: Service provider list and responsibilities
   description: A list shows which suppliers handle in-scope data and who owns which security duty.
@@ -128,10 +155,13 @@ controls:
   check_type: manual
   status: draft
   author: Claude (AI draft)
-  refs_verified: false
   requirements:
   - framework: pci-dss-4.0.1
     ref: 12.8.1
+    verified: true
+  - framework: rbi-pso-md-2024
+    ref: 14(a)
+    verified: true
 - id: UC-GOV-010
   title: Asset ownership and acceptable use
   description: Information assets have owners and users know the rules for using them.
@@ -140,10 +170,10 @@ controls:
   check_type: manual
   status: draft
   author: Claude (AI draft)
-  refs_verified: false
   requirements:
   - framework: iso27001-2022
     ref: A.5.10
+    verified: true
 - id: UC-GOV-011
   title: Legal and regulatory register
   description: Applicable laws, regulations and contractual duties are listed, owned and reviewed.
@@ -152,10 +182,10 @@ controls:
   check_type: manual
   status: draft
   author: Claude (AI draft)
-  refs_verified: false
   requirements:
   - framework: iso27001-2022
     ref: A.5.31
+    verified: true
 - id: UC-GOV-012
   title: Management review of security
   description: Leadership reviews security performance, incidents and risks on a regular cycle.
@@ -164,7 +194,6 @@ controls:
   check_type: manual
   status: draft
   author: Claude (AI draft)
-  refs_verified: false
   requirements: []
 - id: UC-GOV-013
   title: Data subject request process
@@ -174,7 +203,6 @@ controls:
   check_type: manual
   status: draft
   author: Claude (AI draft)
-  refs_verified: false
   requirements: []
 - id: UC-GOV-014
   title: Exception and risk acceptance process
@@ -184,5 +212,121 @@ controls:
   check_type: manual
   status: draft
   author: Claude (AI draft)
-  refs_verified: false
   requirements: []
+- id: UC-GOV-015
+  title: Board oversight of cyber risk
+  description: A board committee with security expertise oversees cyber risk and meets at least every quarter.
+  domain: governance-risk
+  severity: high
+  check_type: manual
+  status: draft
+  author: Claude (AI draft)
+  requirements:
+  - framework: rbi-pso-md-2024
+    ref: '7'
+    verified: true
+- id: UC-GOV-016
+  title: Security risk and performance indicators
+  description: Leaders define indicators for risk events and for how well controls work, and the oversight committee
+    watches them.
+  domain: governance-risk
+  severity: medium
+  check_type: manual
+  status: draft
+  author: Claude (AI draft)
+  requirements:
+  - framework: rbi-pso-md-2024
+    ref: '11'
+    verified: true
+- id: UC-GOV-017
+  title: Assessment reports reach the oversight committee
+  description: System audits and vulnerability or penetration test reports go to the oversight committee at its
+    next meeting.
+  domain: governance-risk
+  severity: medium
+  check_type: manual
+  status: draft
+  author: Claude (AI draft)
+  requirements:
+  - framework: rbi-pso-md-2024
+    ref: '12'
+    verified: true
+- id: UC-GOV-018
+  title: Cyber risk assessment before change
+  description: Launching a product or making a major change to systems or processes triggers a cyber risk assessment,
+    with actions tracked.
+  domain: governance-risk
+  severity: high
+  check_type: manual
+  status: draft
+  author: Claude (AI draft)
+  requirements:
+  - framework: rbi-pso-md-2024
+    ref: '13'
+    verified: true
+- id: UC-GOV-019
+  title: Board and senior management security training
+  description: Directors and senior managers are trained on information security and cyber risk.
+  domain: governance-risk
+  severity: medium
+  check_type: manual
+  status: draft
+  author: Claude (AI draft)
+  requirements:
+  - framework: rbi-pso-md-2024
+    ref: 25(c)
+    verified: true
+- id: UC-GOV-020
+  title: Cloud operation policy
+  description: A policy says what may run in the cloud, who does what with the provider, and how data location,
+    protection and recovery are handled.
+  domain: governance-risk
+  severity: high
+  check_type: manual
+  status: draft
+  author: Claude (AI draft)
+  requirements:
+  - framework: rbi-pso-md-2024
+    ref: 26(a)
+    verified: true
+- id: UC-GOV-021
+  title: Independent audit of cloud providers
+  description: Cloud providers are independently audited at least yearly and the reports are reviewed by the oversight
+    committee.
+  domain: governance-risk
+  severity: high
+  check_type: manual
+  status: draft
+  author: Claude (AI draft)
+  requirements:
+  - framework: rbi-pso-md-2024
+    ref: 26(c)
+    verified: true
+- id: UC-GOV-022
+  title: Information security management system
+  description: An information security management system based on a recognised standard is built and kept running.
+  domain: governance-risk
+  severity: medium
+  check_type: manual
+  status: draft
+  author: Claude (AI draft)
+  requirements:
+  - framework: iso27001-2022
+    ref: A.5.36
+    verified: true
+  - framework: rbi-pso-md-2024
+    ref: 20(c)
+    verified: true
+- id: UC-GOV-023
+  title: Security obligations extend to ecosystem partners
+  description: A board-approved policy requires unregulated partners such as gateways and vendors to follow the
+    same security rules, by agreement.
+  domain: governance-risk
+  severity: medium
+  check_type: manual
+  status: draft
+  author: Claude (AI draft)
+  requirements:
+  - framework: rbi-pso-md-2024
+    ref: '5'
+    verified: true

@@ -56,7 +56,9 @@ export function ControlsView() {
           options: [
             { value: "soc2-2017", label: "SOC 2" },
             { value: "pci-dss-4.0.1", label: "PCI DSS v4.0.1" },
-            { value: "rbi-dpsc-2026", label: "RBI DPSC 2026" },
+            { value: "rbi-pso-md-2024", label: "RBI PSO Master Directions 2024" },
+            { value: "rbi-afa-draft", label: "RBI authentication framework (draft)" },
+            { value: "rbi-dpsc-2026", label: "RBI DPSC 2026 (banks)" },
             { value: "iso27001-2022", label: "ISO/IEC 27001:2022" },
           ],
         },
