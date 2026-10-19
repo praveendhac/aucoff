@@ -3,7 +3,7 @@
 | Field | Value |
 |-------|-------|
 | Status | Approved (v1 baseline, owner sign-off 2026-10-19) |
-| Version | 0.21.0 |
+| Version | 0.22.0 |
 | Owner | Praveen Darshanam |
 | Last updated | 2026-10-19 |
 
@@ -12,6 +12,42 @@
 Related: [spec.md](spec.md) · [design.md](design.md) · [constitution.md](constitution.md)
 
 Status values: `todo` · `in-progress` · `blocked` · `done`
+
+## MVP v1 completion status (assessed 2026-10-19)
+
+**The MVP v1 is not complete.** The platform and security foundation is built; the product (evidence collection, assessment, AI analysis, approval, reporting) is not. Counted from the tables below: 70 tasks, of which 13 are done, 17 in progress, 38 not started and 2 deferred post-v1 (AWS).
+
+### Built and verified (`make check`, `make smoke` and CI green)
+- Specs signed off (constitution and spec 1.0.0); licence register, NOTICE, licence and image-scan gates, SBOMs.
+- Local kind stack: PostgreSQL 18.6 + pgvector 0.8.6 (CloudNativePG), Keycloak, RabbitMQ, cert-manager, Traefik with HTTPS.
+- Security: every endpoint authenticated, role-to-scope mapping, per-service credentials and TLS, row-level security, hash-chained audit log, authenticated metrics.
+- Backend endpoints: health, metrics, posture dashboard (synthetic), unified controls (real, empty), findings and evidence lists (synthetic).
+- Frontend: login (code + PKCE), app shell, light/dark theme with WCAG tests, dashboard, Controls, Findings and Evidence list pages.
+
+### Not built (the core of the product)
+| Area | Missing | Tasks |
+|------|---------|-------|
+| Evidence and scanning | Connector framework, any scanner (cloud, Kubernetes, repo, SaaS), evidence uploads and object store | T-203, T-204, T-405 |
+| Assessment flow | Starting an assessment, control results, approvals, findings from real results, reports | T-305, T-206, T-306 |
+| AI and agents | LLM interface and redaction, LangGraph orchestrator, document analysis, mapping, remediation, reviewer, questionnaire, regulatory-change and copilot agents, evals, budgets | T-201 to T-213 |
+| History and metrics | Snapshot tables and writer, retention, metrics service (M-01..M-20), compare/history/export | T-111 to T-115, T-310 |
+| Backend core | Tenant context and RBAC on real data, messaging layer, most database tables, seed data | T-102, T-103, T-106, T-107, T-110 |
+| Screens | Assessments, results and approvals, reports, audit log, settings/admin, questionnaires, copilot, comparison/history | T-302, T-303, T-305, T-307, T-310, T-311 |
+| Infrastructure | Observability stack, NetworkPolicy/Pod Security completion, backup/restore drill, end-to-end tests in CI, fresh-clone workflow, resource profile | T-404, T-406, T-407, T-408, T-409, T-410 |
+| Owner inputs | The v1 control set (T-006) is not written, so there is nothing real to assess against | T-006 |
+
+### Data honesty
+Findings, evidence and the dashboard show synthetic demo rows and say so in the API (`data_source: synthetic`) and in the UI. Only the Controls list is real, and it is empty. The user interface has been verified through tests and HTTP responses only; nobody has viewed it in a browser yet.
+
+### Rough size
+Platform and security foundation about 80% done; the product itself (evidence to analysis to approval to report) under 10%; by task count about 15 to 20% of the MVP.
+
+### Shortest path to a first working slice
+1. Owner writes a few controls in `data/controls/` (T-006).
+2. Connector framework with one read-only Kubernetes scanner (T-203).
+3. Real tables and an assessment run with control results and a results screen (T-102, T-103, T-305).
+4. Snapshot writer so the dashboard shows real numbers (T-111, T-112, T-114).
+5. Then the LLM interface, redaction and agents (T-201, T-202, T-205, T-206, T-208), followed by the remaining scanners, questionnaires, copilot and reports.
 
 ## Phase 0: Foundations
 | ID | Task | Spec ref | Acceptance criteria | Depends on | Status |
