@@ -1,0 +1,279 @@
+# AI-drafted starter controls (catalogue 0.1.0). Titles and descriptions are written in our
+# own words. Framework references are best-known and UNVERIFIED (refs_verified: false);
+# RBI DPSC 2026 references are not filled in. Review each control before approving.
+catalogue_version: 0.1.0
+controls:
+- id: UC-INF-001
+  title: Production network segmentation
+  description: Production is separated from development, office and other networks by enforced boundaries.
+  domain: infrastructure
+  severity: high
+  check_type: hybrid
+  status: draft
+  author: Claude (AI draft)
+  refs_verified: false
+  requirements:
+  - framework: soc2-2017
+    ref: CC6.6
+  - framework: pci-dss-4.0.1
+    ref: 1.3.1
+  - framework: iso27001-2022
+    ref: A.8.22
+- id: UC-INF-002
+  title: Default-deny network policy
+  description: Network rules start from deny and allow only the flows a workload needs.
+  domain: infrastructure
+  severity: high
+  check_type: automated
+  status: draft
+  author: Claude (AI draft)
+  refs_verified: false
+  requirements:
+  - framework: pci-dss-4.0.1
+    ref: 1.3.1
+  - framework: iso27001-2022
+    ref: A.8.20
+- id: UC-INF-003
+  title: Administrative ports not open to the internet
+  description: Remote administration ports are not reachable from the open internet.
+  domain: infrastructure
+  severity: critical
+  check_type: automated
+  status: draft
+  author: Claude (AI draft)
+  refs_verified: false
+  requirements:
+  - framework: soc2-2017
+    ref: CC6.6
+  - framework: pci-dss-4.0.1
+    ref: 1.3.1
+  - framework: iso27001-2022
+    ref: A.8.20
+- id: UC-INF-004
+  title: Outbound traffic restricted
+  description: Workloads can reach only the destinations they need on the way out.
+  domain: infrastructure
+  severity: medium
+  check_type: hybrid
+  status: draft
+  author: Claude (AI draft)
+  refs_verified: false
+  requirements:
+  - framework: pci-dss-4.0.1
+    ref: 1.3.2
+- id: UC-INF-005
+  title: Cluster API not publicly exposed
+  description: The Kubernetes API endpoint is reachable only from approved networks.
+  domain: infrastructure
+  severity: critical
+  check_type: automated
+  status: draft
+  author: Claude (AI draft)
+  refs_verified: false
+  requirements:
+  - framework: soc2-2017
+    ref: CC6.6
+  - framework: iso27001-2022
+    ref: A.8.20
+- id: UC-INF-006
+  title: Kubernetes RBAC without wildcard rights
+  description: Cluster roles avoid wildcards and cluster-admin is bound to as few identities as possible.
+  domain: infrastructure
+  severity: high
+  check_type: automated
+  status: draft
+  author: Claude (AI draft)
+  refs_verified: false
+  requirements:
+  - framework: soc2-2017
+    ref: CC6.3
+  - framework: iso27001-2022
+    ref: A.8.2
+- id: UC-INF-007
+  title: Pod security standard enforced
+  description: Namespaces enforce a restrictive pod security level so unsafe pods are rejected.
+  domain: infrastructure
+  severity: high
+  check_type: automated
+  status: draft
+  author: Claude (AI draft)
+  refs_verified: false
+  requirements:
+  - framework: iso27001-2022
+    ref: A.8.9
+- id: UC-INF-008
+  title: No privileged containers
+  description: Containers do not run privileged or gain extra host capabilities.
+  domain: infrastructure
+  severity: high
+  check_type: automated
+  status: draft
+  author: Claude (AI draft)
+  refs_verified: false
+  requirements:
+  - framework: iso27001-2022
+    ref: A.8.9
+- id: UC-INF-009
+  title: Containers run as non-root
+  description: Container processes run as an unprivileged user.
+  domain: infrastructure
+  severity: medium
+  check_type: automated
+  status: draft
+  author: Claude (AI draft)
+  refs_verified: false
+  requirements:
+  - framework: iso27001-2022
+    ref: A.8.9
+- id: UC-INF-010
+  title: Read-only container filesystems
+  description: Containers use a read-only root filesystem except for declared writable paths.
+  domain: infrastructure
+  severity: low
+  check_type: automated
+  status: draft
+  author: Claude (AI draft)
+  refs_verified: false
+  requirements:
+  - framework: iso27001-2022
+    ref: A.8.9
+- id: UC-INF-011
+  title: Resource limits on workloads
+  description: Workloads declare CPU and memory limits so one cannot starve others.
+  domain: infrastructure
+  severity: low
+  check_type: automated
+  status: draft
+  author: Claude (AI draft)
+  refs_verified: false
+  requirements:
+  - framework: iso27001-2022
+    ref: A.8.6
+- id: UC-INF-012
+  title: Trusted image sources pinned by digest
+  description: Images come from approved registries and are referenced by immutable digest.
+  domain: infrastructure
+  severity: medium
+  check_type: automated
+  status: draft
+  author: Claude (AI draft)
+  refs_verified: false
+  requirements:
+  - framework: iso27001-2022
+    ref: A.5.21
+- id: UC-INF-013
+  title: Image vulnerability scanning
+  description: Images are scanned before deployment and fixable critical findings block release.
+  domain: infrastructure
+  severity: high
+  check_type: automated
+  status: draft
+  author: Claude (AI draft)
+  refs_verified: false
+  requirements:
+  - framework: soc2-2017
+    ref: CC7.1
+  - framework: pci-dss-4.0.1
+    ref: 6.3.3
+  - framework: iso27001-2022
+    ref: A.8.8
+- id: UC-INF-014
+  title: Secrets kept in a secret store
+  description: Cluster secrets come from a protected store and are not plain values in manifests.
+  domain: infrastructure
+  severity: high
+  check_type: automated
+  status: draft
+  author: Claude (AI draft)
+  refs_verified: false
+  requirements:
+  - framework: iso27001-2022
+    ref: A.8.24
+- id: UC-INF-015
+  title: Cluster data encrypted at rest
+  description: The cluster datastore and persistent volumes are encrypted at rest.
+  domain: infrastructure
+  severity: medium
+  check_type: automated
+  status: draft
+  author: Claude (AI draft)
+  refs_verified: false
+  requirements:
+  - framework: pci-dss-4.0.1
+    ref: 3.5.1
+  - framework: iso27001-2022
+    ref: A.8.24
+- id: UC-INF-016
+  title: Cluster audit logging
+  description: Requests to the cluster API are audit-logged and shipped off the cluster.
+  domain: infrastructure
+  severity: high
+  check_type: automated
+  status: draft
+  author: Claude (AI draft)
+  refs_verified: false
+  requirements:
+  - framework: pci-dss-4.0.1
+    ref: 10.2.1
+  - framework: iso27001-2022
+    ref: A.8.15
+- id: UC-INF-017
+  title: Hardened baseline configuration
+  description: Servers and nodes start from a documented hardened baseline and drift is detected.
+  domain: infrastructure
+  severity: medium
+  check_type: hybrid
+  status: draft
+  author: Claude (AI draft)
+  refs_verified: false
+  requirements:
+  - framework: pci-dss-4.0.1
+    ref: 2.2.1
+  - framework: iso27001-2022
+    ref: A.8.9
+- id: UC-INF-018
+  title: Timely patching
+  description: Operating systems and runtimes are patched within defined windows by severity.
+  domain: infrastructure
+  severity: high
+  check_type: hybrid
+  status: draft
+  author: Claude (AI draft)
+  refs_verified: false
+  requirements:
+  - framework: soc2-2017
+    ref: CC7.1
+  - framework: pci-dss-4.0.1
+    ref: 6.3.3
+  - framework: iso27001-2022
+    ref: A.8.8
+- id: UC-INF-019
+  title: Complete asset inventory
+  description: A current inventory lists the systems and services in scope with owners.
+  domain: infrastructure
+  severity: medium
+  check_type: hybrid
+  status: draft
+  author: Claude (AI draft)
+  refs_verified: false
+  requirements:
+  - framework: pci-dss-4.0.1
+    ref: 12.5.1
+  - framework: iso27001-2022
+    ref: A.5.9
+- id: UC-INF-020
+  title: Regular vulnerability scans
+  description: Internal and external systems are scanned for vulnerabilities on a regular schedule.
+  domain: infrastructure
+  severity: high
+  check_type: automated
+  status: draft
+  author: Claude (AI draft)
+  refs_verified: false
+  requirements:
+  - framework: soc2-2017
+    ref: CC7.1
+  - framework: pci-dss-4.0.1
+    ref: 11.3.1
+  - framework: iso27001-2022
+    ref: A.8.8

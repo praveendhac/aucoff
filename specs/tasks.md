@@ -3,7 +3,7 @@
 | Field | Value |
 |-------|-------|
 | Status | Approved (v1 baseline, owner sign-off 2026-10-19) |
-| Version | 0.22.0 |
+| Version | 0.23.0 |
 | Owner | Praveen Darshanam |
 | Last updated | 2026-10-19 |
 
@@ -34,7 +34,7 @@ Status values: `todo` · `in-progress` · `blocked` · `done`
 | Backend core | Tenant context and RBAC on real data, messaging layer, most database tables, seed data | T-102, T-103, T-106, T-107, T-110 |
 | Screens | Assessments, results and approvals, reports, audit log, settings/admin, questionnaires, copilot, comparison/history | T-302, T-303, T-305, T-307, T-310, T-311 |
 | Infrastructure | Observability stack, NetworkPolicy/Pod Security completion, backup/restore drill, end-to-end tests in CI, fresh-clone workflow, resource profile | T-404, T-406, T-407, T-408, T-409, T-410 |
-| Owner inputs | The v1 control set (T-006) is not written, so there is nothing real to assess against | T-006 |
+| Owner inputs | The v1 control set exists only as an AI-drafted, unreviewed starter set (101 draft controls, unverified references); nothing is approved | T-006 |
 
 ### Data honesty
 Findings, evidence and the dashboard show synthetic demo rows and say so in the API (`data_source: synthetic`) and in the UI. Only the Controls list is real, and it is empty. The user interface has been verified through tests and HTTP responses only; nobody has viewed it in a browser yet.
@@ -43,7 +43,7 @@ Findings, evidence and the dashboard show synthetic demo rows and say so in the 
 Platform and security foundation about 80% done; the product itself (evidence to analysis to approval to report) under 10%; by task count about 15 to 20% of the MVP.
 
 ### Shortest path to a first working slice
-1. Owner writes a few controls in `data/controls/` (T-006).
+1. Owner reviews and approves controls in `data/controls/` (T-006); a starter set of 101 drafts exists.
 2. Connector framework with one read-only Kubernetes scanner (T-203).
 3. Real tables and an assessment run with control results and a results screen (T-102, T-103, T-305).
 4. Snapshot writer so the dashboard shows real numbers (T-111, T-112, T-114).
@@ -57,7 +57,7 @@ Platform and security foundation about 80% done; the product itself (evidence to
 | T-003 | Repo conventions: root README, CLAUDE.md, CODEOWNERS, PR template, branch protection, commit conventions, pre-commit hooks (keep Gitleaks) | constitution.md §4, COD-10 | Files committed; rules documented | T-001 | done (2026-10-19); branch protection rules agreed and saved in `.github/branch-protection.json`; **not yet applied** (see Blockers) |
 | T-004 | Pre-build verification: CloudNativePG supports PostgreSQL 18.6 and a pgvector 0.8.6 image exists or can be built (PostgreSQL 18.6 + pgvector 0.8.6 compatibility is owner-confirmed), Python 3.13 compatibility of LangGraph/asyncpg/SQLAlchemy | database-spec.md §1, §12 | Findings recorded in the specs; versions pinned or fallbacks chosen | T-001 | in progress: verified 2026-10-19 - kind node `kindest/node:v1.37.0` runs Kubernetes v1.37.0 with containerd 2.3.4 (meets CloudNativePG image-volume needs of K8s >= 1.35 / containerd >= 2.1); pgvector 0.8.6 PostgreSQL 18 support and CloudNativePG PG18 extensions confirmed by web search; still to check: CloudNativePG operator version and a pgvector extension image, Python 3.13 compatibility of LangGraph/asyncpg |
 | T-005 | Verify owner-supplied framework instruments/versions against official sources | spec.md §4 | Table updated with source links | T-001 | done (2026-10-19): owner confirmed the names and versions as the product's reference versions; no independent source check was run, re-confirm when a publisher issues a new edition |
-| T-006 | Author v1 unified control set (owner) and versioning scheme; decide licensing for source texts | spec.md §10a | Control set v1 reviewed and checked in as data | T-001 | in progress: format, validator and CI gate done (`data/controls/*.yaml`, `app.domain.controls`, `make controls`, 8 tests; clause identifiers only, own words, 600-character limit). First scope: SOC 2, PCI DSS v4.0.1, RBI DPSC 2026, ISO 27001:2022. **Owner action:** write the controls; none exist yet |
+| T-006 | Author v1 unified control set (owner) and versioning scheme; decide licensing for source texts | spec.md §10a | Control set v1 reviewed and checked in as data | T-001 | in progress: format, validator and CI gate done. AI-drafted starter set of 101 controls in 7 domains checked in at catalogue 0.1.0 (2026-10-19, owner request): all `draft`, own words, references best-known and UNVERIFIED (`refs_verified: false`), no RBI DPSC references. **Owner action:** review each control (severity, check type, wording), verify references against licensed texts, then mark `approved`; the validator blocks approval without verified references |
 | T-007 | Tool vetting for scanners (maintenance, supply chain; licence per T-009) and chosen list per source | backend-spec.md §4a, constitution SEC-17 | Approved tool list with versions | T-009 | todo |
 | T-008 | Per-connector least-privilege permission policies (AWS, GCP, Azure, Kubernetes, GitHub, Bitbucket, Entra, Metabase) | backend-spec.md §7 | Policies documented and testable | T-007 | todo |
 | T-009 | Licence and provenance audit of every named dependency, tool, container image, font, icon, dataset and content source: verify licence from the official source, apply the permissive allow-list (LIC-1, LIC-2), choose alternatives for failures (object store, observability stack, scanners, Redis if used), create the licence register and NOTICE file | constitution LIC-1 to LIC-8, spec.md NFR-15, R-7 | Licence register committed; no disallowed or unknown licence remains; replacements recorded in the specs | T-001 | in progress: owner approved MIT-0, 0BSD, BlueOak-1.0.0, PSF-2.0, CC0-1.0, CC-BY-3.0/4.0 (2026-10-19, LIC-1 updated, gates and NOTICE done); licences of Traefik, CloudNativePG, PostgreSQL, pgvector, Jaeger, Prometheus and kubescape read from their LICENSE files; still to do: choose replacements for the object store and observability stack, replace the create-next-app favicon |

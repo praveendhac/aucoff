@@ -1,0 +1,194 @@
+# AI-drafted starter controls (catalogue 0.1.0). Titles and descriptions are written in our
+# own words. Framework references are best-known and UNVERIFIED (refs_verified: false);
+# RBI DPSC 2026 references are not filled in. Review each control before approving.
+catalogue_version: 0.1.0
+controls:
+- id: UC-SDL-001
+  title: Protected main branches
+  description: Release branches cannot be changed directly, force-pushed or deleted.
+  domain: secure-development
+  severity: high
+  check_type: automated
+  status: draft
+  author: Claude (AI draft)
+  refs_verified: false
+  requirements:
+  - framework: soc2-2017
+    ref: CC8.1
+  - framework: pci-dss-4.0.1
+    ref: 6.5.1
+  - framework: iso27001-2022
+    ref: A.8.32
+- id: UC-SDL-002
+  title: Mandatory code review
+  description: Every change is reviewed by someone other than its author before it is merged.
+  domain: secure-development
+  severity: high
+  check_type: automated
+  status: draft
+  author: Claude (AI draft)
+  refs_verified: false
+  requirements:
+  - framework: soc2-2017
+    ref: CC8.1
+  - framework: iso27001-2022
+    ref: A.8.32
+- id: UC-SDL-003
+  title: Secret scanning in repositories
+  description: Repositories are scanned for committed credentials and findings are handled.
+  domain: secure-development
+  severity: high
+  check_type: automated
+  status: draft
+  author: Claude (AI draft)
+  refs_verified: false
+  requirements:
+  - framework: iso27001-2022
+    ref: A.8.28
+- id: UC-SDL-004
+  title: Dependency vulnerability scanning
+  description: Third-party libraries are checked for known vulnerabilities in the build pipeline.
+  domain: secure-development
+  severity: high
+  check_type: automated
+  status: draft
+  author: Claude (AI draft)
+  refs_verified: false
+  requirements:
+  - framework: pci-dss-4.0.1
+    ref: 6.3.3
+  - framework: iso27001-2022
+    ref: A.8.8
+- id: UC-SDL-005
+  title: Static analysis in the pipeline
+  description: Code is analysed for common security defects on every change.
+  domain: secure-development
+  severity: medium
+  check_type: automated
+  status: draft
+  author: Claude (AI draft)
+  refs_verified: false
+  requirements:
+  - framework: pci-dss-4.0.1
+    ref: 6.2.4
+  - framework: iso27001-2022
+    ref: A.8.28
+- id: UC-SDL-006
+  title: Software component inventory
+  description: A list of the components inside each release is produced and kept.
+  domain: secure-development
+  severity: medium
+  check_type: automated
+  status: draft
+  author: Claude (AI draft)
+  refs_verified: false
+  requirements:
+  - framework: pci-dss-4.0.1
+    ref: 6.3.2
+- id: UC-SDL-007
+  title: Security considered in design
+  description: New features get a lightweight threat review and recorded security requirements.
+  domain: secure-development
+  severity: medium
+  check_type: manual
+  status: draft
+  author: Claude (AI draft)
+  refs_verified: false
+  requirements:
+  - framework: iso27001-2022
+    ref: A.8.26
+- id: UC-SDL-008
+  title: Separate environments, no live data in test
+  description: Development and test are separate from production and do not hold real customer data.
+  domain: secure-development
+  severity: high
+  check_type: hybrid
+  status: draft
+  author: Claude (AI draft)
+  refs_verified: false
+  requirements:
+  - framework: pci-dss-4.0.1
+    ref: 6.5.3
+  - framework: iso27001-2022
+    ref: A.8.31
+  - framework: iso27001-2022
+    ref: A.8.33
+- id: UC-SDL-009
+  title: Recorded and approved changes
+  description: Production changes are requested, approved and recorded with who deployed what.
+  domain: secure-development
+  severity: medium
+  check_type: hybrid
+  status: draft
+  author: Claude (AI draft)
+  refs_verified: false
+  requirements:
+  - framework: soc2-2017
+    ref: CC8.1
+  - framework: pci-dss-4.0.1
+    ref: 6.5.1
+  - framework: iso27001-2022
+    ref: A.8.32
+- id: UC-SDL-010
+  title: Least-privilege build and deploy credentials
+  description: Pipelines and runners hold only the access they need, with short-lived credentials where
+    possible.
+  domain: secure-development
+  severity: high
+  check_type: hybrid
+  status: draft
+  author: Claude (AI draft)
+  refs_verified: false
+  requirements:
+  - framework: soc2-2017
+    ref: CC6.1
+- id: UC-SDL-011
+  title: Release artefact integrity
+  description: Build outputs are produced by the pipeline and can be traced to a reviewed commit.
+  domain: secure-development
+  severity: low
+  check_type: automated
+  status: draft
+  author: Claude (AI draft)
+  refs_verified: false
+  requirements:
+  - framework: soc2-2017
+    ref: CC8.1
+- id: UC-SDL-012
+  title: Secure coding training
+  description: Developers receive secure coding training when they join and on a regular basis.
+  domain: secure-development
+  severity: medium
+  check_type: manual
+  status: draft
+  author: Claude (AI draft)
+  refs_verified: false
+  requirements:
+  - framework: pci-dss-4.0.1
+    ref: 6.2.2
+  - framework: iso27001-2022
+    ref: A.6.3
+- id: UC-SDL-013
+  title: Restricted source code access
+  description: Write access to source code is limited to the people who need it.
+  domain: secure-development
+  severity: medium
+  check_type: automated
+  status: draft
+  author: Claude (AI draft)
+  refs_verified: false
+  requirements:
+  - framework: iso27001-2022
+    ref: A.8.4
+- id: UC-SDL-014
+  title: Emergency change procedure
+  description: Urgent fixes follow a defined shortcut that is still reviewed afterwards.
+  domain: secure-development
+  severity: low
+  check_type: manual
+  status: draft
+  author: Claude (AI draft)
+  refs_verified: false
+  requirements:
+  - framework: soc2-2017
+    ref: CC8.1

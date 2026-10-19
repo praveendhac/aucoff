@@ -78,3 +78,23 @@ def test_mixed_catalogue_versions_fail(tmp_path: Path) -> None:
     write(tmp_path, "a.yaml", GOOD)
     write(tmp_path, "b.yaml", GOOD.replace("UC-IAM-001", "UC-IAM-002").replace("0.1.0", "0.2.0"))
     assert any("catalogue_version" in e for e in validate_directory(tmp_path))
+
+
+def test_draft_may_have_no_references_but_approved_may_not(tmp_path: Path) -> None:
+    no_refs = GOOD.replace(
+        "    requirements:\n      - {framework: soc2-2017, ref: CC6.1}\n"
+        '      - {framework: pci-dss-4.0.1, ref: "8.4.2"}\n',
+        "    requirements: []\n",
+    )
+    write(tmp_path, "a.yaml", no_refs)
+    assert validate_directory(tmp_path) == []
+    write(tmp_path, "a.yaml", no_refs.replace("status: draft", "status: approved"))
+    assert any("approved control needs verified" in e for e in validate_directory(tmp_path))
+
+
+def test_approved_with_unverified_references_fails(tmp_path: Path) -> None:
+    write(tmp_path, "a.yaml", GOOD.replace("status: draft", "status: approved"))
+    assert any("approved control needs verified" in e for e in validate_directory(tmp_path))
+    verified = GOOD.replace("status: draft", "status: approved") + "    refs_verified: true\n"
+    write(tmp_path, "a.yaml", verified)
+    assert validate_directory(tmp_path) == []

@@ -51,7 +51,10 @@ class Control(BaseModel):
     domain: Annotated[str, StringConstraints(pattern=r"^[a-z][a-z0-9-]{1,40}$")]
     severity: Severity
     check_type: Literal["automated", "manual", "hybrid"]
-    requirements: list[Requirement] = Field(min_length=1)
+    # Draft controls may have no references yet; approved controls need verified ones.
+    requirements: list[Requirement] = Field(default_factory=list)
+    # True only after a person checked every reference against the licensed source text.
+    refs_verified: bool = False
     # draft = AI- or colleague-proposed, approved = reviewed and accepted by the owner.
     status: Literal["draft", "approved"] = "draft"
     author: Annotated[str, StringConstraints(min_length=2, max_length=80)]
@@ -72,6 +75,10 @@ def validate_file(path: Path) -> tuple[ControlFile | None, list[str]]:
     except (yaml.YAMLError, ValidationError, OSError) as exc:
         return None, [f"{path}: {exc}"]
     for control in parsed.controls:
+        if control.status == "approved" and not (control.requirements and control.refs_verified):
+            errors.append(
+                f"{path}: {control.id}: an approved control needs verified requirement references"
+            )
         for req in control.requirements:
             if req.framework not in FRAMEWORKS:
                 errors.append(f"{path}: {control.id}: unknown framework '{req.framework}'")

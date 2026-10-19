@@ -202,6 +202,8 @@ Detailed definitions and formulas are in the metrics catalogue ([design.md](desi
 | Finding remediation cycle time | Median time from finding opened to resolved | TODO |
 
 ## 10a. Control Catalogue Authorship and Notification Events
+
+> Status 2026-10-19: a 101-control AI-drafted starter catalogue (0.1.0, all `draft`, references unverified) is checked in at `data/controls/`. The owner remains the author of record: nothing becomes `approved` until the owner has reviewed it and verified its references (enforced by the validator).
 - **Unified control catalogue:** the owner authors the v1 unified control set; the `mapping-agent` proposes mappings of framework requirements to those controls, and experts approve them (FR-2). Catalogue and mappings are versioned. Licensing of source texts remains an open question.
 - **Notification events (stub):** finding opened/escalated, approval requested/expiring, assessment completed/failed, drift detected, budget threshold reached, regulatory change proposed, questionnaire ready for review, auditor invitation expiring. Channels: in-app, email, Slack, Microsoft Teams (per-user and per-tenant preferences). Templates TODO.
 - **Scheduling:** cron-style schedules per scope with timezone; a drift is any change in a control result status or a new/changed failing check between consecutive scans of the same scope.

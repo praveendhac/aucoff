@@ -1,0 +1,188 @@
+# AI-drafted starter controls (catalogue 0.1.0). Titles and descriptions are written in our
+# own words. Framework references are best-known and UNVERIFIED (refs_verified: false);
+# RBI DPSC 2026 references are not filled in. Review each control before approving.
+catalogue_version: 0.1.0
+controls:
+- id: UC-GOV-001
+  title: Approved information security policy
+  description: A security policy is approved by management, communicated, and reviewed at least yearly.
+  domain: governance-risk
+  severity: medium
+  check_type: manual
+  status: draft
+  author: Claude (AI draft)
+  refs_verified: false
+  requirements:
+  - framework: soc2-2017
+    ref: CC5.3
+  - framework: pci-dss-4.0.1
+    ref: 12.1.1
+  - framework: iso27001-2022
+    ref: A.5.1
+- id: UC-GOV-002
+  title: Security roles and responsibilities
+  description: Named people hold responsibility for security duties and know it.
+  domain: governance-risk
+  severity: medium
+  check_type: manual
+  status: draft
+  author: Claude (AI draft)
+  refs_verified: false
+  requirements:
+  - framework: pci-dss-4.0.1
+    ref: 12.1.3
+  - framework: iso27001-2022
+    ref: A.5.2
+- id: UC-GOV-003
+  title: Annual risk assessment
+  description: A structured risk assessment is performed at least yearly and after major change.
+  domain: governance-risk
+  severity: high
+  check_type: manual
+  status: draft
+  author: Claude (AI draft)
+  refs_verified: false
+  requirements:
+  - framework: soc2-2017
+    ref: CC3.2
+  - framework: pci-dss-4.0.1
+    ref: 12.3.1
+- id: UC-GOV-004
+  title: Risk register with treatment decisions
+  description: Identified risks are recorded with an owner and a decision to reduce, accept, transfer
+    or avoid.
+  domain: governance-risk
+  severity: medium
+  check_type: manual
+  status: draft
+  author: Claude (AI draft)
+  refs_verified: false
+  requirements:
+  - framework: soc2-2017
+    ref: CC3.2
+- id: UC-GOV-005
+  title: Security awareness training
+  description: Staff complete security awareness training on joining and at least yearly.
+  domain: governance-risk
+  severity: medium
+  check_type: manual
+  status: draft
+  author: Claude (AI draft)
+  refs_verified: false
+  requirements:
+  - framework: soc2-2017
+    ref: CC1.4
+  - framework: pci-dss-4.0.1
+    ref: 12.6.1
+  - framework: iso27001-2022
+    ref: A.6.3
+- id: UC-GOV-006
+  title: Pre-employment screening
+  description: Candidates for sensitive roles are screened as the law allows before they start.
+  domain: governance-risk
+  severity: low
+  check_type: manual
+  status: draft
+  author: Claude (AI draft)
+  refs_verified: false
+  requirements:
+  - framework: soc2-2017
+    ref: CC1.4
+  - framework: iso27001-2022
+    ref: A.6.1
+- id: UC-GOV-007
+  title: Vendor risk assessment
+  description: Suppliers that touch sensitive data or critical services are assessed before use and periodically.
+  domain: governance-risk
+  severity: high
+  check_type: manual
+  status: draft
+  author: Claude (AI draft)
+  refs_verified: false
+  requirements:
+  - framework: soc2-2017
+    ref: CC9.2
+  - framework: pci-dss-4.0.1
+    ref: 12.8.2
+  - framework: iso27001-2022
+    ref: A.5.19
+- id: UC-GOV-008
+  title: Security terms in supplier contracts
+  description: Contracts with key suppliers state security duties, incident notice and audit rights.
+  domain: governance-risk
+  severity: medium
+  check_type: manual
+  status: draft
+  author: Claude (AI draft)
+  refs_verified: false
+  requirements:
+  - framework: pci-dss-4.0.1
+    ref: 12.8.2
+  - framework: iso27001-2022
+    ref: A.5.20
+- id: UC-GOV-009
+  title: Service provider list and responsibilities
+  description: A list shows which suppliers handle in-scope data and who owns which security duty.
+  domain: governance-risk
+  severity: medium
+  check_type: manual
+  status: draft
+  author: Claude (AI draft)
+  refs_verified: false
+  requirements:
+  - framework: pci-dss-4.0.1
+    ref: 12.8.1
+- id: UC-GOV-010
+  title: Asset ownership and acceptable use
+  description: Information assets have owners and users know the rules for using them.
+  domain: governance-risk
+  severity: low
+  check_type: manual
+  status: draft
+  author: Claude (AI draft)
+  refs_verified: false
+  requirements:
+  - framework: iso27001-2022
+    ref: A.5.10
+- id: UC-GOV-011
+  title: Legal and regulatory register
+  description: Applicable laws, regulations and contractual duties are listed, owned and reviewed.
+  domain: governance-risk
+  severity: medium
+  check_type: manual
+  status: draft
+  author: Claude (AI draft)
+  refs_verified: false
+  requirements:
+  - framework: iso27001-2022
+    ref: A.5.31
+- id: UC-GOV-012
+  title: Management review of security
+  description: Leadership reviews security performance, incidents and risks on a regular cycle.
+  domain: governance-risk
+  severity: low
+  check_type: manual
+  status: draft
+  author: Claude (AI draft)
+  refs_verified: false
+  requirements: []
+- id: UC-GOV-013
+  title: Data subject request process
+  description: People can exercise their privacy rights and requests are answered within the legal time.
+  domain: governance-risk
+  severity: high
+  check_type: manual
+  status: draft
+  author: Claude (AI draft)
+  refs_verified: false
+  requirements: []
+- id: UC-GOV-014
+  title: Exception and risk acceptance process
+  description: Deviations from policy need a documented, time-limited approval by the right owner.
+  domain: governance-risk
+  severity: medium
+  check_type: manual
+  status: draft
+  author: Claude (AI draft)
+  refs_verified: false
+  requirements: []

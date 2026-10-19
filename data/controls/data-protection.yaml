@@ -1,0 +1,207 @@
+# AI-drafted starter controls (catalogue 0.1.0). Titles and descriptions are written in our
+# own words. Framework references are best-known and UNVERIFIED (refs_verified: false);
+# RBI DPSC 2026 references are not filled in. Review each control before approving.
+catalogue_version: 0.1.0
+controls:
+- id: UC-CRY-001
+  title: Strong encryption for public endpoints
+  description: Every internet-facing service accepts only modern TLS versions and strong cipher suites.
+  domain: data-protection
+  severity: high
+  check_type: automated
+  status: draft
+  author: Claude (AI draft)
+  refs_verified: false
+  requirements:
+  - framework: soc2-2017
+    ref: CC6.7
+  - framework: pci-dss-4.0.1
+    ref: 4.2.1
+  - framework: iso27001-2022
+    ref: A.8.24
+- id: UC-CRY-002
+  title: Encryption of internal service traffic
+  description: Traffic between internal services that carries sensitive data is encrypted, not sent in
+    clear text.
+  domain: data-protection
+  severity: medium
+  check_type: hybrid
+  status: draft
+  author: Claude (AI draft)
+  refs_verified: false
+  requirements:
+  - framework: soc2-2017
+    ref: CC6.7
+  - framework: iso27001-2022
+    ref: A.8.24
+- id: UC-CRY-003
+  title: Obsolete protocols and ciphers disabled
+  description: Old protocol versions and weak ciphers are switched off on servers and load balancers.
+  domain: data-protection
+  severity: high
+  check_type: automated
+  status: draft
+  author: Claude (AI draft)
+  refs_verified: false
+  requirements:
+  - framework: pci-dss-4.0.1
+    ref: 4.2.1
+  - framework: iso27001-2022
+    ref: A.8.24
+- id: UC-CRY-004
+  title: Encryption at rest
+  description: Disks, object storage and databases holding business data are encrypted at rest.
+  domain: data-protection
+  severity: high
+  check_type: automated
+  status: draft
+  author: Claude (AI draft)
+  refs_verified: false
+  requirements:
+  - framework: soc2-2017
+    ref: CC6.1
+  - framework: pci-dss-4.0.1
+    ref: 3.5.1
+  - framework: iso27001-2022
+    ref: A.8.24
+- id: UC-CRY-005
+  title: Card data minimised and unreadable
+  description: Payment card data is kept only when needed and is rendered unreadable wherever it is stored.
+  domain: data-protection
+  severity: critical
+  check_type: hybrid
+  status: draft
+  author: Claude (AI draft)
+  refs_verified: false
+  requirements:
+  - framework: pci-dss-4.0.1
+    ref: 3.2.1
+  - framework: pci-dss-4.0.1
+    ref: 3.5.1
+- id: UC-CRY-006
+  title: Keys held in a managed key service
+  description: Encryption keys live in a key management service with narrow access and usage logging.
+  domain: data-protection
+  severity: high
+  check_type: hybrid
+  status: draft
+  author: Claude (AI draft)
+  refs_verified: false
+  requirements:
+  - framework: pci-dss-4.0.1
+    ref: 3.6.1
+  - framework: iso27001-2022
+    ref: A.8.24
+- id: UC-CRY-007
+  title: Key rotation
+  description: Keys are rotated on a defined schedule and after any suspected exposure.
+  domain: data-protection
+  severity: medium
+  check_type: automated
+  status: draft
+  author: Claude (AI draft)
+  refs_verified: false
+  requirements:
+  - framework: pci-dss-4.0.1
+    ref: 3.7.4
+  - framework: iso27001-2022
+    ref: A.8.24
+- id: UC-CRY-008
+  title: No secrets in code, configuration or images
+  description: Passwords, tokens and keys are not committed to repositories or baked into images or plain
+    configuration.
+  domain: data-protection
+  severity: critical
+  check_type: automated
+  status: draft
+  author: Claude (AI draft)
+  refs_verified: false
+  requirements:
+  - framework: soc2-2017
+    ref: CC6.1
+  - framework: pci-dss-4.0.1
+    ref: 8.6.2
+- id: UC-CRY-009
+  title: Certificate expiry monitoring
+  description: Certificates are inventoried and monitored so none expires unnoticed.
+  domain: data-protection
+  severity: medium
+  check_type: automated
+  status: draft
+  author: Claude (AI draft)
+  refs_verified: false
+  requirements:
+  - framework: iso27001-2022
+    ref: A.8.24
+- id: UC-CRY-010
+  title: Encrypted backups
+  description: Backup copies of business data are encrypted and their keys are protected separately.
+  domain: data-protection
+  severity: high
+  check_type: automated
+  status: draft
+  author: Claude (AI draft)
+  refs_verified: false
+  requirements:
+  - framework: soc2-2017
+    ref: A1.2
+  - framework: iso27001-2022
+    ref: A.8.13
+- id: UC-CRY-011
+  title: Data classification in use
+  description: Information is labelled by sensitivity and handling rules follow the label.
+  domain: data-protection
+  severity: medium
+  check_type: manual
+  status: draft
+  author: Claude (AI draft)
+  refs_verified: false
+  requirements:
+  - framework: soc2-2017
+    ref: C1.1
+  - framework: iso27001-2022
+    ref: A.5.12
+- id: UC-CRY-012
+  title: Retention and secure deletion
+  description: Data is kept only as long as needed and is deleted securely afterwards, with evidence of
+    deletion.
+  domain: data-protection
+  severity: medium
+  check_type: hybrid
+  status: draft
+  author: Claude (AI draft)
+  refs_verified: false
+  requirements:
+  - framework: soc2-2017
+    ref: C1.2
+  - framework: pci-dss-4.0.1
+    ref: 3.2.1
+  - framework: iso27001-2022
+    ref: A.8.10
+- id: UC-CRY-013
+  title: Personal data masked outside production
+  description: Test and analytics environments use masked or synthetic data instead of real personal data.
+  domain: data-protection
+  severity: high
+  check_type: hybrid
+  status: draft
+  author: Claude (AI draft)
+  refs_verified: false
+  requirements:
+  - framework: iso27001-2022
+    ref: A.8.11
+- id: UC-CRY-014
+  title: No public exposure of storage
+  description: Storage buckets and file shares holding business data cannot be read anonymously from the
+    internet.
+  domain: data-protection
+  severity: critical
+  check_type: automated
+  status: draft
+  author: Claude (AI draft)
+  refs_verified: false
+  requirements:
+  - framework: soc2-2017
+    ref: CC6.1
+  - framework: iso27001-2022
+    ref: A.8.3

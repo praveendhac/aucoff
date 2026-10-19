@@ -1,0 +1,176 @@
+# AI-drafted starter controls (catalogue 0.1.0). Titles and descriptions are written in our
+# own words. Framework references are best-known and UNVERIFIED (refs_verified: false);
+# RBI DPSC 2026 references are not filled in. Review each control before approving.
+catalogue_version: 0.1.0
+controls:
+- id: UC-LOG-001
+  title: Audit logging on all in-scope systems
+  description: Systems that handle sensitive data or administration produce audit logs that are switched
+    on.
+  domain: logging-monitoring
+  severity: high
+  check_type: automated
+  status: draft
+  author: Claude (AI draft)
+  refs_verified: false
+  requirements:
+  - framework: soc2-2017
+    ref: CC7.2
+  - framework: pci-dss-4.0.1
+    ref: 10.2.1
+  - framework: iso27001-2022
+    ref: A.8.15
+- id: UC-LOG-002
+  title: Useful audit log content
+  description: Each log entry records who did what, to what, when, and with what result.
+  domain: logging-monitoring
+  severity: medium
+  check_type: hybrid
+  status: draft
+  author: Claude (AI draft)
+  refs_verified: false
+  requirements:
+  - framework: pci-dss-4.0.1
+    ref: 10.2.2
+  - framework: iso27001-2022
+    ref: A.8.15
+- id: UC-LOG-003
+  title: Tamper protection for logs
+  description: Logs are protected from change and deletion by the people and systems they describe.
+  domain: logging-monitoring
+  severity: high
+  check_type: automated
+  status: draft
+  author: Claude (AI draft)
+  refs_verified: false
+  requirements:
+  - framework: pci-dss-4.0.1
+    ref: 10.3.2
+  - framework: iso27001-2022
+    ref: A.8.15
+- id: UC-LOG-004
+  title: Log retention period
+  description: Logs are kept for the period the organisation requires, with recent history quickly searchable.
+  domain: logging-monitoring
+  severity: medium
+  check_type: automated
+  status: draft
+  author: Claude (AI draft)
+  refs_verified: false
+  requirements:
+  - framework: pci-dss-4.0.1
+    ref: 10.5.1
+  - framework: iso27001-2022
+    ref: A.8.15
+- id: UC-LOG-005
+  title: Central log collection
+  description: Logs from all systems flow to one place where they can be searched and correlated.
+  domain: logging-monitoring
+  severity: medium
+  check_type: hybrid
+  status: draft
+  author: Claude (AI draft)
+  refs_verified: false
+  requirements:
+  - framework: soc2-2017
+    ref: CC7.2
+  - framework: iso27001-2022
+    ref: A.8.15
+- id: UC-LOG-006
+  title: Alerting on suspicious activity
+  description: Defined suspicious patterns raise alerts that reach a person who can act.
+  domain: logging-monitoring
+  severity: high
+  check_type: hybrid
+  status: draft
+  author: Claude (AI draft)
+  refs_verified: false
+  requirements:
+  - framework: soc2-2017
+    ref: CC7.2
+  - framework: iso27001-2022
+    ref: A.8.16
+- id: UC-LOG-007
+  title: Synchronised clocks
+  description: All systems take time from the same trusted sources so logs line up.
+  domain: logging-monitoring
+  severity: low
+  check_type: automated
+  status: draft
+  author: Claude (AI draft)
+  refs_verified: false
+  requirements:
+  - framework: pci-dss-4.0.1
+    ref: 10.6.1
+  - framework: iso27001-2022
+    ref: A.8.17
+- id: UC-LOG-008
+  title: Administrator activity reviewed
+  description: Actions taken with administrative rights are logged and reviewed.
+  domain: logging-monitoring
+  severity: high
+  check_type: hybrid
+  status: draft
+  author: Claude (AI draft)
+  refs_verified: false
+  requirements:
+  - framework: pci-dss-4.0.1
+    ref: 10.2.1.2
+  - framework: iso27001-2022
+    ref: A.8.15
+- id: UC-LOG-009
+  title: Cloud control-plane activity logged
+  description: Management-plane activity in every cloud account and region is recorded and kept.
+  domain: logging-monitoring
+  severity: high
+  check_type: automated
+  status: draft
+  author: Claude (AI draft)
+  refs_verified: false
+  requirements:
+  - framework: soc2-2017
+    ref: CC7.2
+  - framework: iso27001-2022
+    ref: A.8.15
+- id: UC-LOG-010
+  title: Failed access monitored
+  description: Repeated failed sign-ins and denied requests are monitored for attack patterns.
+  domain: logging-monitoring
+  severity: medium
+  check_type: hybrid
+  status: draft
+  author: Claude (AI draft)
+  refs_verified: false
+  requirements:
+  - framework: pci-dss-4.0.1
+    ref: 10.2.1.4
+  - framework: iso27001-2022
+    ref: A.8.16
+- id: UC-LOG-011
+  title: Security event triage
+  description: A documented routine decides which events become incidents and how fast each is handled.
+  domain: logging-monitoring
+  severity: medium
+  check_type: manual
+  status: draft
+  author: Claude (AI draft)
+  refs_verified: false
+  requirements:
+  - framework: soc2-2017
+    ref: CC7.3
+  - framework: iso27001-2022
+    ref: A.5.25
+- id: UC-LOG-012
+  title: Restricted access to logs
+  description: Only people who need to can read or manage logs.
+  domain: logging-monitoring
+  severity: medium
+  check_type: automated
+  status: draft
+  author: Claude (AI draft)
+  refs_verified: false
+  requirements:
+  - framework: pci-dss-4.0.1
+    ref: 10.3.1
+  - framework: iso27001-2022
+    ref: A.8.15
