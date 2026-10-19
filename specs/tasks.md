@@ -3,7 +3,7 @@
 | Field | Value |
 |-------|-------|
 | Status | Approved (v1 baseline, owner sign-off 2026-10-19) |
-| Version | 0.24.0 |
+| Version | 0.25.0 |
 | Owner | Praveen Darshanam |
 | Last updated | 2026-10-19 |
 
@@ -27,7 +27,7 @@ Status values: `todo` · `in-progress` · `blocked` · `done`
 ### Not built (the core of the product)
 | Area | Missing | Tasks |
 |------|---------|-------|
-| Evidence and scanning | Connector framework, any scanner (cloud, Kubernetes, repo, SaaS), evidence uploads and object store | T-203, T-204, T-405 |
+| Evidence and scanning | Connector framework and the Kubernetes scanner exist (command-line, results not stored in the database); missing: cloud, repo and SaaS scanners, wrapping open-source scanners, evidence uploads, object store | T-203 (in progress), T-204, T-405 |
 | Assessment flow | Starting an assessment, control results, approvals, findings from real results, reports | T-305, T-206, T-306 |
 | AI and agents | LLM interface and redaction, LangGraph orchestrator, document analysis, mapping, remediation, reviewer, questionnaire, regulatory-change and copilot agents, evals, budgets | T-201 to T-213 |
 | History and metrics | Snapshot tables and writer, retention, metrics service (M-01..M-20), compare/history/export | T-111 to T-115, T-310 |
@@ -44,7 +44,7 @@ Platform and security foundation about 80% done; the product itself (evidence to
 
 ### Shortest path to a first working slice
 1. Owner reviews and approves controls in `data/controls/` (T-006); a starter set of 101 drafts exists.
-2. Connector framework with one read-only Kubernetes scanner (T-203).
+2. Connector framework with one read-only Kubernetes scanner (T-203): done as a command-line run (2026-10-20); next is persisting its results.
 3. Real tables and an assessment run with control results and a results screen (T-102, T-103, T-305).
 4. Snapshot writer so the dashboard shows real numbers (T-111, T-112, T-114).
 5. Then the LLM interface, redaction and agents (T-201, T-202, T-205, T-206, T-208), followed by the remaining scanners, questionnaires, copilot and reports.
@@ -96,7 +96,7 @@ Platform and security foundation about 80% done; the product itself (evidence to
 |----|------|----------|---------------------|------------|--------|
 | T-201 | LLM provider interface, redaction pipeline, cost budgets | backend-spec.md §9, constitution AI-8, AI-12 | Mocked-provider tests; PII redaction tests pass | T-102 | todo |
 | T-202 | LangGraph orchestrator + approval interrupts + Postgres checkpointer | agent.md §3 | Run pauses and resumes on approval | T-110, T-201 | todo |
-| T-203 | Connector framework (read-only) + first scanner | backend-spec.md §7 | Connector validates read-only access; evidence stored | T-110 | todo |
+| T-203 | Connector framework (read-only) + first scanner | backend-spec.md §7 | Connector validates read-only access; evidence stored | T-110 | in progress (2026-10-20): framework (contracts, rule packs in `data/checks`, rollup to proposed control results, content-addressed evidence store, read-only connector validation) and the first scanner, Kubernetes (9 own checks, 8 unified controls), built with 18 tests; ran against the kind cluster with the read-only identity: 233 results, 8 proposed control results, no collection errors, token absent from the report; a cluster-admin credential was refused. Not done: PostgreSQL persistence (T-102/T-103), queue and worker (T-110), assessments and approval (T-305), wrapping an open-source scanner (kubescape/Trivy) behind the adapter |
 | T-204 | Remaining scanners (cloud, k8s, repo, saas) | spec.md §5.2, §5.6 | Each service passes contract and eval tests | T-203 | todo |
 | T-205 | document-analyzer (RAG, tenant-filtered pgvector) | agent.md §6, DB-6 | Cross-tenant retrieval test passes | T-201 | todo |
 | T-206 | mapping-agent, remediation-advisor, report-generator | spec.md §5.6 | Outputs validate against schemas and cite sources | T-202 | todo |
@@ -161,3 +161,4 @@ Platform and security foundation about 80% done; the product itself (evidence to
 - **CI correction (2026-10-19):** earlier notes said the workflow had never run; it had, and the frontend job failed from the Session 4 push until now because `frontend/src/lib/` was hidden by the `lib/` rule in `.gitignore` and Next's generated route types were missing in a clean checkout. Both are fixed; all four jobs are green on commit `29a3e85`. Lesson: check `gh run list` after each push.
 - **Findings during Session 6 (2026-10-19):** (1) the dashboard numbers are fixed demo values and say so in the API and the UI - replace them when assessment snapshots exist (T-309); (2) adding an npm dependency drops the macOS native binding of the test runner until `node_modules` and the lockfile are regenerated; (3) an `&&` chain aborted by a failed `sed` left old files in place and the build served the old page - the smoke test now asserts the new page title, which would have caught it; (4) the user interface was verified through tests and HTTP responses only, nobody has looked at it in a browser yet.
 - **Findings during Session 7 (2026-10-19):** (1) the Controls page shows the REAL catalogue, which is empty until the owner writes controls, so it correctly shows an empty state; Findings and Evidence rows are synthetic and labelled; (2) the backend image is now built from the repository root so `data/controls` ships with it (PyYAML became a runtime dependency - found when the pod crashed, since tests ran with dev dependencies); (3) Testing Library does not unmount between tests without Vitest globals, so cleanup was added to `vitest.setup.ts`; (4) lists page sorting is client-side over the loaded pages only; server-side sort and the remaining filters come with the database-backed implementation.
+- **Findings during Session 8 (2026-10-20):** (1) the first Kubernetes adapter uses AUCoFF's own rules, not a wrapped open-source scanner as decided in A1 - owner to confirm that is acceptable as a baseline; (2) the live scan of the local cluster found real gaps (for example 11 of 13 namespaces without a default-deny ingress policy, 19 of 22 containers without a digest-pinned image), which are expected on a development cluster and are proposals, not approved results; (3) `rbac-defaults` objects are reported not-applicable so Kubernetes' own wildcard roles do not count as failures; (4) results are not stored in the database yet, so the dashboard and Findings screens still show synthetic data.

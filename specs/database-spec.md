@@ -3,7 +3,7 @@
 | Field | Value |
 |-------|-------|
 | Status | Approved (v1 baseline, owner sign-off 2026-10-19) |
-| Version | 0.7.0 |
+| Version | 0.8.0 |
 | Owner | Praveen Darshanam |
 | Last updated | 2026-10-19 |
 
@@ -266,3 +266,7 @@ No role is superuser; `aucoff_app` and every per-service role have `NOBYPASSRLS`
 - [ ] Retention periods and RPO/RTO targets.
 - [ ] Tenant region model: one database per region vs per tenant.
 - [ ] Licensing for storing framework text (PCI DSS, ISO standards are copyrighted).
+
+## Implementation note: check definitions and results (2026-10-20)
+
+Until the tables in section 3.7 exist, `check_definitions` and `rule_packs` live as reviewed files in `data/checks/` (the rule pack carries tool, tool version, rule pack version and licence; each definition maps a tool check to unified control IDs with a severity and rationale) and are validated against `data/controls` in tests. Scanner output (`check_results`, `evidence`) is currently written as `report.json` plus content-addressed files by the scanner run; the migration that moves all of it into PostgreSQL with row-level security and `tenant_id` is still to do (T-102, T-103).

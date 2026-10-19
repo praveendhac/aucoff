@@ -3,7 +3,7 @@
 | Field | Value |
 |-------|-------|
 | Status | Approved (v1 baseline, owner sign-off 2026-10-19) |
-| Version | 0.10.0 |
+| Version | 0.11.0 |
 | Owner | Praveen Darshanam |
 | Last updated | 2026-10-19 |
 
@@ -176,3 +176,8 @@ Controls referenced from constitution section 6: network policies, image scannin
 - Remaining plain-HTTP hop: ingress to the Next.js frontend (no TLS listener in the standalone server).
 - Traefik runs with a Recreate strategy because its hostPorts 80/443 prevent a surge pod.
 - `scripts/reset-realm.sh` re-imports the Keycloak realm after a realm change.
+
+## Implementation status: Kubernetes scanner identity (Build Session 8, 2026-10-20)
+
+- `deploy/scanner/k8s-readonly-rbac.yaml` creates namespace `aucoff-scanner`, service account `aucoff-k8s-scanner` (no auto-mounted token) and a ClusterRole that can only `list` namespaces, pods, network policies, cluster roles and cluster role bindings. `make k8s-scan` applies it, creates a 15-minute token, runs the scanner against the current kubectl cluster and writes `build/k8s-scan/` (git-ignored). The scanner is a command-line run for now, not a deployed workload.
+- The scanner refuses any credential that can read secrets or change objects; this was checked against a temporary cluster-admin service account (refused, nothing collected, account removed).

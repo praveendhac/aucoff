@@ -3,7 +3,7 @@
 | Field | Value |
 |-------|-------|
 | Status | Approved (v1 baseline, owner sign-off 2026-10-19) |
-| Version | 0.7.0 |
+| Version | 0.8.0 |
 | Owner | Praveen Darshanam |
 | Last updated | 2026-10-19 |
 
@@ -106,6 +106,18 @@ Decision (owner): **wrap proven open-source scanners behind our own scanner inte
 - **Gaps:** controls with no automated check are assessed from documents/evidence uploads or marked `unknown`; custom checks (OPA/Rego or Python) may be added behind the same interface when OSS coverage is missing.
 - **Supply chain:** tools pinned by digest, scanned, SBOM'd; licence verified against the permissive allow-list (constitution LIC-1 to LIC-5); tools failing it are replaced, not used - constitution SEC-17.
 - **Least privilege:** each connector documents the exact read-only permissions it needs (appendix, filled per connector); `validate()` rejects broader grants where detectable.
+
+#### Implementation status (Build Session 8, 2026-10-20, T-203)
+- **Contracts (`app/domain/scanning.py`, pure):** `CheckResult` (the normalised schema above plus a short `detail` that never holds secrets; `status` is pass, fail, error or not_applicable), `Evidence`, `RawDocument`, `Collection` (documents plus recorded partial failures), `ValidationReport`, `ScannerInfo`, and the `Connector` and `ScannerAdapter` protocols. `RulePack` and `CheckDefinition` are loaded from `data/checks/*.yaml`; `validate_rule_pack` rejects a mapping to a unified control that does not exist in `data/controls`.
+- **Rollup:** `rollup(results, pack)` combines results per unified control into a PROPOSED control result: all pass -> pass; all fail -> fail; a mix -> partial; errors never count as a pass (errors without failures -> unknown); not-applicable results are ignored. Proposals are advisory; a person approves the final result (AI-2).
+- **Evidence store:** `services/common/evidence_store.py` defines `put`/`get`. `FilesystemEvidenceStore` is content-addressed by SHA-256, stores identical evidence once and re-checks the hash on every read (tamper or corruption raises `IntegrityError`). The S3-compatible store chosen under T-009 will implement the same interface.
+- **Kubernetes scanner (`services/k8s_scanner/`):** `client.py` is a standard-library read-only API client (https only, token never in errors); `connector.py` validates the credential with SelfSubjectAccessReview (every required `list` allowed; no secret access and no write verbs, else `validate()` fails and nothing is collected), then collects namespaces, pods, network policies, cluster roles and cluster role bindings, with an optional namespace scope; `checks.py` and `adapter.py` implement the rule pack; `run.py` runs one scan and writes `report.json` plus hashed evidence.
+- **Rule pack `aucoff-k8s` 0.1.0 (MIT, `data/checks/kubernetes.yaml`):** 9 checks mapped to UC-INF-002, 006, 007, 008, 009, 010, 011, 012: privileged containers, run as non-root, read-only root filesystem, CPU and memory limits, image pinned by digest, default-deny ingress network policy per namespace, Pod Security enforcement per namespace, wildcard cluster roles, cluster-admin bindings. Objects shipped by Kubernetes itself (label `kubernetes.io/bootstrapping: rbac-defaults`) are reported `not_applicable` with a reason. A document that could not be collected makes its checks `error`, never `pass`.
+- **Deviation from the owner decision to wrap proven open-source scanners:** this first adapter uses AUCoFF's own rules because they are deterministic, testable with fixtures and needed no extra container. Wrapping kubescape (Apache-2.0, LICENCES.md) or Trivy behind the same adapter interface remains planned (T-204/T-007); the owner should confirm whether the own rules stay as a baseline.
+- **Not built yet:** persistence of check results and evidence in PostgreSQL (tables in database-spec 3.7 do not exist), the `scan.k8s` queue and worker (T-110), assessments that group results, and approval of proposed results.
+
+#### Appendix: Kubernetes connector permissions
+Required (all `list`, cluster-wide): namespaces, pods, `networking.k8s.io` networkpolicies, `rbac.authorization.k8s.io` clusterroles and clusterrolebindings. Must NOT be granted (the connector refuses the credential): get or list secrets; create or delete pods; update configmaps; create clusterrolebindings; create deployments; delete namespaces. The identity manifest is `deploy/scanner/k8s-readonly-rbac.yaml`.
 
 ## 5. Messaging
 - Broker: RabbitMQ; durable topic exchange `aucoff.jobs`, per-service queues, dead-letter exchange `aucoff.dlx` with per-queue DLQs.
