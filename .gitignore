@@ -221,3 +221,6 @@ __marimo__/
 
 # Python build dirs are ignored above; the web app has a real source folder named lib
 !frontend/src/lib/
+
+# Licensed framework documents stay on the laptop and are never committed (constitution LIC-6)
+reference/

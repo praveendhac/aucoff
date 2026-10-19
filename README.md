@@ -47,6 +47,10 @@ Local login: `make idp-forward` (leave it running) exposes Keycloak at `https://
 
 The API never runs without authentication: `make backend-run` needs `AUCOFF_OIDC_ISSUER`, `AUCOFF_OIDC_AUDIENCE` and `AUCOFF_OIDC_JWKS_URL` and refuses to start otherwise. There is no anonymous endpoint (health, docs and OpenAPI included); see constitution section 7d.
 
+## Local reference documents (never committed)
+
+Licensed framework documents go in `reference/<framework>/` (for example `reference/pci-dss-4.0.1/`). The whole folder is in `.gitignore` and must never be committed; it is used locally to read clause identifiers, and the control catalogue stores our own wording only (constitution LIC-6). Create the folder yourself on a fresh clone.
+
 ## Branch protection (main)
 
 The agreed rules are in `.github/branch-protection.json`: pull request required (no approval count), checks `backend`, `frontend`, `helm`, `secrets` must pass, no force-push, no deletion, admins not enforced. They must be applied by an account with admin rights on the repository:
