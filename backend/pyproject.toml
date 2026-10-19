@@ -45,7 +45,7 @@ extend-immutable-calls = ["fastapi.Depends", "fastapi.Security"]
 [tool.mypy]
 python_version = "3.13"
 strict = true
-files = ["app", "scripts", "tests"]
+files = ["app", "scripts", "services", "tests"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]

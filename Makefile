@@ -98,6 +98,9 @@ certs: ## Install cert-manager and the local CA issuer (in-cluster TLS, ZT-4)
 scan: ## Vulnerability scan + SBOM (Trivy) of every image the stack runs; fails on fixable HIGH/CRITICAL
 	scripts/scan-images.sh
 
+k8s-scan: ## Scan the kubectl cluster with the read-only scanner identity (report in build/k8s-scan)
+	scripts/k8s-scan.sh
+
 secrets: ## Generate unique per-service credentials in the cluster (idempotent; nothing is stored in git)
 	scripts/make-secrets.sh
 

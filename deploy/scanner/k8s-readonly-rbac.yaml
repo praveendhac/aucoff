@@ -1,0 +1,42 @@
+# Read-only identity for the Kubernetes scanner (backend-spec 7, least privilege). It can list the
+# objects the scanner checks and nothing else: no secrets, no write verbs. The connector refuses to
+# run if the credential it is given can do more than this.
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: aucoff-scanner
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: aucoff-k8s-scanner
+  namespace: aucoff-scanner
+automountServiceAccountToken: false
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: aucoff-k8s-scanner-readonly
+rules:
+  - apiGroups: [""]
+    resources: ["namespaces", "pods"]
+    verbs: ["list"]
+  - apiGroups: ["networking.k8s.io"]
+    resources: ["networkpolicies"]
+    verbs: ["list"]
+  - apiGroups: ["rbac.authorization.k8s.io"]
+    resources: ["clusterroles", "clusterrolebindings"]
+    verbs: ["list"]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: aucoff-k8s-scanner-readonly
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: aucoff-k8s-scanner-readonly
+subjects:
+  - kind: ServiceAccount
+    name: aucoff-k8s-scanner
+    namespace: aucoff-scanner

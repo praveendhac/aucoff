@@ -1,0 +1,45 @@
+# Check definitions for the built-in Kubernetes scanner: tool check -> unified control(s).
+# Mappings are reviewed like control mappings (backend-spec 4a). Severity is the severity of the
+# result when the check fails. The rules are AUCoFF's own (MIT); wrapping an open-source scanner
+# such as kubescape behind the same interface is a planned addition.
+tool: aucoff-k8s
+tool_version: 0.1.0
+rule_pack_version: 0.1.0
+licence: MIT
+checks:
+  - tool_check_id: k8s.pod.privileged
+    unified_control_ids: [UC-INF-008]
+    severity: high
+    rationale: A privileged container has almost the same access as the host it runs on.
+  - tool_check_id: k8s.pod.run-as-non-root
+    unified_control_ids: [UC-INF-009]
+    severity: medium
+    rationale: Container processes should run as an unprivileged user.
+  - tool_check_id: k8s.pod.read-only-rootfs
+    unified_control_ids: [UC-INF-010]
+    severity: low
+    rationale: A read-only root filesystem limits what an attacker can change inside a container.
+  - tool_check_id: k8s.pod.resource-limits
+    unified_control_ids: [UC-INF-011]
+    severity: low
+    rationale: CPU and memory limits stop one workload from starving others.
+  - tool_check_id: k8s.pod.image-digest
+    unified_control_ids: [UC-INF-012]
+    severity: medium
+    rationale: An image referenced by digest cannot be swapped for different content.
+  - tool_check_id: k8s.namespace.default-deny-ingress
+    unified_control_ids: [UC-INF-002]
+    severity: high
+    rationale: Without a default-deny ingress policy every pod in the namespace accepts any traffic.
+  - tool_check_id: k8s.namespace.pod-security-enforced
+    unified_control_ids: [UC-INF-007]
+    severity: high
+    rationale: Pod Security admission must enforce at least the baseline level.
+  - tool_check_id: k8s.rbac.wildcard-rules
+    unified_control_ids: [UC-INF-006]
+    severity: high
+    rationale: Wildcard verbs or resources in a cluster role grant far more than is needed.
+  - tool_check_id: k8s.rbac.cluster-admin-binding
+    unified_control_ids: [UC-INF-006]
+    severity: high
+    rationale: Binding cluster-admin to non-system subjects gives them full control of the cluster.
