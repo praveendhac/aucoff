@@ -1,0 +1,4 @@
+# Licensed reference documents are never committed (constitution LIC-6).
+*
+!.gitignore
+!README.md
